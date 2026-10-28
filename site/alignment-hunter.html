@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alignment Hunter — Œil Studio</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..500,0..1,0&amp;display=swap" rel="stylesheet"/>
+<script>document.documentElement.classList.add("js")</script>
+<script src="assets/seed.js"></script>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="assets/tailwind-config.js"></script>
+<link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body class="bg-ground text-ink">
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] btn" href="#contenu">Aller au contenu</a>
+<header class="fixed top-0 inset-x-0 z-50 bg-ground">
+<div class="h-16 max-w-[1440px] mx-auto px-4 sm:px-8 grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-6">
+<a aria-label="Œil Studio, accueil" class="flex items-center gap-2.5 text-[18px] font-medium tracking-[-0.03em] w-max" href="index.html"><svg aria-hidden="true" class="h-7 w-7 shrink-0" viewBox="0 0 32 32"><rect fill="#141413" height="32" rx="6" width="32"/><path d="M5 16c3-5 6.8-7.5 11-7.5S24 11 27 16c-3 5-6.8 7.5-11 7.5S8 21 5 16Z" fill="#F7F6F2"/><circle cx="16" cy="16" fill="#F0447A" r="4.6"/><circle cx="17.6" cy="14.4" fill="#141413" r="1.3"/></svg><span>Œil Studio</span></a>
+<nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-8 text-[15px]"><a class="nav-link" aria-current="page" href="jeux.html">Jeux</a><a class="nav-link" href="defi.html">Défi du jour</a><a class="nav-link" href="live.html">En direct</a><a class="nav-link" href="parcours.html">Parcours</a><a class="nav-link" href="profs.html">Écoles</a><a class="nav-link" href="tarifs.html">Tarifs</a></nav>
+<div class="flex items-center justify-end gap-2">
+<a aria-label="Mon compte" class="nav-link inline-flex items-center gap-1.5 text-[15px] px-2 sm:px-3 h-9 rounded hover:bg-surface-container" data-account-link="" href="connexion.html"><span aria-hidden="true" class="material-symbols-outlined text-[22px]">account_circle</span><span class="hidden sm:inline" data-account-name="">Connexion</span></a>
+<a class="btn btn-sm" href="jeux.html">Jouer</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu" class="lg:hidden w-9 h-9 rounded-lg hover:bg-surface-container flex items-center justify-center" data-menu-toggle="" type="button"><span class="material-symbols-outlined text-[22px]">menu</span></button>
+</div>
+</div>
+<nav aria-label="Navigation mobile" class="hidden lg:hidden flex-col px-4 sm:px-8 pt-2 pb-6 bg-ground" id="mobile-menu"><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" aria-current="page" href="jeux.html">Jeux</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="defi.html">Défi du jour</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="live.html">En direct</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="parcours.html">Parcours</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="profs.html">Écoles</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="tarifs.html">Tarifs</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em] text-text-muted" data-account-link="" href="connexion.html">Connexion</a></nav>
+</header>
+<main class="pt-16" id="contenu">
+<div class="game-app" id="game-app">
+<div class="game-head w-full max-w-[1440px] mx-auto px-4 sm:px-8">
+<div class="min-w-0">
+<a class="game-crumb" href="jeux.html"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_back</span>Bibliothèque</a>
+<div class="flex items-center gap-4 min-w-0">
+<span aria-hidden="true" class="game-chip"></span>
+<div class="min-w-0"><h1 class="game-title">Alignment Hunter</h1><p class="game-sub">Composition · Débutant · 5 manches · environ 3 min · gratuit</p></div>
+</div>
+</div>
+<div class="flex items-center gap-3 sm:gap-4">
+<div aria-label="Manches" class="round-dots" id="round-dots"></div>
+<p class="session-score">Moyenne<b id="session-score">–</b></p>
+<button class="btn-line btn-sm hidden sm:inline-flex" id="btn-howto" type="button">Comment jouer ?</button>
+<button aria-label="Recommencer la session" class="icon-btn" id="btn-reset-session" title="Recommencer la session" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[20px]">restart_alt</span></button>
+</div>
+</div>
+<div class="game-main w-full max-w-[1440px] mx-auto px-4 sm:px-8">
+<p class="challenge-banner" hidden="" id="challenge-banner"></p>
+<section aria-label="Plateau de jeu" class="stage" id="stage" tabindex="-1">
+<p class="stage-brief" id="brief"></p>
+<div class="board" id="board"></div>
+<div aria-labelledby="coach-title" aria-modal="true" class="coach" hidden="" id="coach" role="dialog">
+<div class="coach-card">
+<p class="coach-kicker" id="coach-kicker">Comment jouer</p>
+<h2 id="coach-title"></h2>
+<p class="coach-goal" id="coach-goal"></p>
+<ol id="coach-steps"></ol>
+<button class="btn w-full" id="btn-coach-go" type="button">C'est parti<kbd>Entrée</kbd></button>
+</div>
+</div>
+<div aria-labelledby="paywall-title" class="coach" hidden="" id="paywall" role="dialog">
+<div class="coach-card">
+<p class="coach-kicker"><span class="pro-badge">Pro</span> Jeu réservé à Œil Pro</p>
+<h2 id="paywall-title">Alignment Hunter</h2>
+<p class="coach-goal">Ce jeu fait partie d'Œil Pro. Les 10 jeux gratuits restent ouverts à tous, et ce jeu peut aussi tomber dans le défi du jour.</p>
+<ul class="paywall-list"><li>Les 44 jeux, sans limite</li><li>Historique et progression par discipline</li><li>Résiliable à tout moment</li></ul>
+<a class="btn w-full" href="tarifs.html#pro">Passer à Pro · 3 €/mois</a>
+<a class="btn-line w-full mt-2" href="jeux.html">Jouer à un jeu gratuit</a>
+</div>
+</div>
+<div aria-live="polite" class="result" hidden="" id="result" role="status">
+<div class="result-card">
+<div class="result-top"><span id="result-round"></span><button aria-label="Réduire pour voir le plateau" class="result-toggle" id="btn-result-toggle" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[20px]">expand_more</span></button></div>
+<div class="result-head"><b id="result-score"></b><span id="result-verdict"></span></div>
+<div class="result-body">
+<dl class="result-metrics" id="result-metrics"></dl>
+<p class="result-principle" id="result-principle"></p>
+</div>
+<div class="result-actions"><button class="btn-line btn-sm" id="btn-retry" type="button">Rejouer</button><button class="btn btn-sm" id="btn-next" type="button">Suivante<kbd>Entrée</kbd></button></div>
+</div>
+</div>
+<div class="summary" hidden="" id="summary">
+<div class="summary-card">
+<div class="sum-left">
+<p class="coach-kicker">Bilan de la session</p>
+<div class="sum-top"><b id="sum-score"></b><span id="sum-grade"></span></div>
+<p class="text-body-sm text-text-muted" id="sum-record"></p>
+<p class="sum-versus" hidden="" id="sum-versus"></p>
+<div class="summary-actions"><button class="btn-line" id="btn-restart" type="button">Rejouer</button><a class="btn" href="whitespace-budget.html">Jeu suivant : Whitespace Budget<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
+</div>
+<div class="sum-right">
+<ol id="sum-rounds"></ol>
+<div class="sum-share">
+<p class="font-medium">Défier un ami sur les mêmes manches</p>
+<div class="sum-share-row"><input aria-label="Ton prénom" autocomplete="given-name" id="sum-name" maxlength="24" placeholder="Ton prénom" type="text"/><button class="btn" id="btn-share" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">link</span>Copier le lien</button></div>
+<div class="sum-share-out" hidden="" id="sum-share-out"><span></span><input aria-label="Lien de défi" readonly="" type="text"/></div>
+<div hidden="" id="sum-class">
+<button class="btn w-full" id="btn-class-code" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">school</span>Copier mon code résultat pour l'enseignant</button>
+<div class="sum-share-out mt-2" hidden="" id="sum-class-out"><span></span><input aria-label="Code résultat" readonly="" type="text"/></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div class="game-bar">
+<div class="controls" id="controls"></div>
+<div class="bar-actions">
+<button class="btn-line" hidden="" id="btn-hint" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">lightbulb</span><span>Indice</span></button>
+<button class="btn" id="btn-submit" type="button">Valider<kbd>Entrée</kbd></button>
+</div>
+</div>
+<nav aria-label="Autres jeux" class="game-more">
+<a class="game-more-card" href="pixel-guess.html" style="--card:#B9D9FF"><small><span aria-hidden="true" class="material-symbols-outlined text-[16px]">arrow_back</span>Jeu précédent · Composition</small><b>Pixel Guess</b><p>Estime la taille d'un élément en pixels, sans règle.</p></a>
+<a class="game-more-card is-next" href="whitespace-budget.html" style="--card:#B9D9FF"><small>Jeu suivant · Composition<span aria-hidden="true" class="material-symbols-outlined text-[16px]">arrow_forward</span></small><b>Whitespace Budget</b><p>Répartis un budget fixe d'espace pour créer une hiérarchie.</p></a>
+<div class="game-more-same"><span>Aussi en composition :</span><a href="spacing-repair.html">Spacing Repair</a><a href="grid-snap.html">Grid Snap</a><a href="pixel-guess.html">Pixel Guess</a><a href="whitespace-budget.html">Whitespace Budget</a><a href="crop-it.html">Crop It</a><a href="balance-lab.html">Balance Lab</a><a href="responsive-rescue.html">Responsive Rescue</a><a href="five-second-layout.html">Five-Second Layout</a><a class="more-all" href="jeux.html">Les 44 jeux</a></div>
+</nav>
+</div>
+</div>
+</main>
+<footer class="bg-ink text-ground pt-16 lg:pt-24 overflow-hidden">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-8">
+<div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
+<p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+</div>
+<p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+</div>
+</footer>
+<script src="assets/catalog.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/account.js"></script>
+<script src="assets/engine.js"></script>
+<script src="assets/kits.js"></script>
+<script src="assets/games/alignment-hunter.js"></script>
+<script src="assets/site.js"></script>
+</body></html>

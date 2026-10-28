@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"primary-container":"#4d46e8","on-tertiary-fixed":"#1b1c18","surface-canvas":"#F6F4EF","outline-variant":"#c7c4d8","tertiary-fixed":"#e4e2db","on-primary":"#ffffff","surface-container-low":"#f5f3ee","surface-container-lowest":"#ffffff","domain-typography":"#F2B8CE","on-surface":"#1b1c19","on-secondary-container":"#656461","error-container":"#ffdad6","on-primary-fixed":"#0d006a","domain-color":"#D8EF71","on-error":"#ffffff","primary":"#3325d1","on-tertiary":"#ffffff","secondary-fixed":"#e5e2de","border-subtle":"#DCDAD3","background":"#fbf9f4","secondary-container":"#e5e2de","surface-variant":"#e4e2dd","on-surface-variant":"#464555","on-tertiary-fixed-variant":"#474742","on-secondary":"#ffffff","domain-vector":"#FFBC8A","tertiary":"#494944","surface":"#fbf9f4","on-secondary-fixed-variant":"#474744","inverse-surface":"#30312e","primary-fixed-dim":"#c2c1ff","inverse-on-surface":"#f2f1ec","on-error-container":"#93000a","domain-composition":"#B9D9FF","inverse-primary":"#c2c1ff","surface-card":"#FFFFFF","surface-tint":"#4b43e6","outline":"#777587","on-secondary-fixed":"#1c1c1a","text-primary":"#1C1C1A","surface-bright":"#fbf9f4","tertiary-container":"#61615b","text-muted":"#62625D","surface-dim":"#dbdad5","tertiary-fixed-dim":"#c8c6c0","on-background":"#1b1c19","surface-container-highest":"#e4e2dd","on-tertiary-container":"#dedcd5","primary-fixed":"#e2dfff","on-primary-fixed-variant":"#3021cf","error":"#ba1a1a","secondary":"#5f5e5c","surface-container-high":"#eae8e3","accent-electric":"#4D46E8","on-primary-container":"#dad8ff","surface-container":"#f0eee9"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin":"3rem","space-xs":"0.25rem","space-md":"1rem","space-xl":"2.5rem","space-sm":"0.5rem","margin-mobile":"1.25rem","gutter":"1.5rem","gutter-mobile":"1rem","space-lg":"1.5rem"},"fontFamily":{"mono-metric":["Space Mono"],"headline-xl":["Newsreader"],"headline-md":["Newsreader"],"mono-sm":["Space Mono"],"body-md":["Manrope"],"body-sm":["Manrope"],"body-lg":["Manrope"],"label-caps":["Manrope"],"label-md":["Manrope"],"headline-xl-mobile":["Newsreader"],"headline-sm":["Manrope"],"headline-lg-mobile":["Newsreader"],"headline-lg":["Newsreader"]},"fontSize":{"mono-metric":["14px",{"lineHeight":"20px","letterSpacing":"-0.02em","fontWeight":"400"}],"headline-xl":["56px",{"lineHeight":"64px","letterSpacing":"-0.02em","fontWeight":"400"}],"headline-md":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"400"}],"mono-sm":["11px",{"lineHeight":"16px","fontWeight":"400"}],"body-md":["15px",{"lineHeight":"24px","fontWeight":"400"}],"body-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"label-caps":["11px",{"lineHeight":"16px","letterSpacing":"0.08em","fontWeight":"700"}],"label-md":["13px",{"lineHeight":"18px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl-mobile":["36px",{"lineHeight":"42px","letterSpacing":"-0.02em","fontWeight":"400"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg-mobile":["28px",{"lineHeight":"34px","letterSpacing":"-0.01em","fontWeight":"400"}],"headline-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.015em","fontWeight":"400"}]}}}}</script></head><body class="bg-surface-canvas font-body-md text-body-md text-text-primary antialiased selection:bg-domain-color selection:text-text-primary"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-canvas/90 backdrop-blur-md border-b border-border-subtle"><div class="h-16 max-w-7xl mx-auto px-6 lg:px-margin flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><a class="flex items-center gap-space-sm" data-path="accueil" href="#"><img alt="Logo Œil Studio" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UedQGF6QIg2MYnw9IrtRbfyqSOOFV30VNyKC2BHb9-z1XyyEsekeOL_dU3lUbBjOA9bOi2ykCV5Nmj1-sI5s7-T22mulVQmJK22Mz6d2Sw5wy3gLISa_1-UDUb2naRE1y-ZXBoeomMdFmt_rTRMuGjm44sgVj4RCqopCDDYHpCzQeb3JzOsuNtvYHBca_ZjN5ePFrGoHczkJ8KMCF_ux5PXxffy55UgUlBU6i8TGdL"/><span class="font-headline-md text-headline-md tracking-tight text-text-primary">Œil Studio</span></a><span class="hidden lg:inline-flex items-center px-space-sm py-0.5 rounded text-mono-sm font-mono-sm bg-domain-color text-text-primary border border-text-primary/10">ATELIER VISUEL</span></div><nav class="hidden md:flex items-center gap-space-lg" data-active-classes="text-text-primary font-semibold border-b-2 border-primary-container pb-0.5"><a aria-current="page" class="transition-colors text-text-primary font-semibold border-b-2 border-primary-container pb-0.5" data-path="jouer" href="#">Jouer</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-text-primary transition-colors" data-path="defi-du-jour" href="#">Défi du jour</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-text-primary transition-colors" data-path="parcours" href="#">Parcours</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-text-primary transition-colors" data-path="pour-les-profs" href="#">Pour les profs</a></nav><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center px-space-md py-space-sm font-label-md text-label-md text-text-muted hover:text-text-primary transition-colors" data-path="connexion" href="#">Connexion</a><a class="inline-flex items-center justify-center px-space-md py-2.5 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all active:scale-[0.98]" data-path="jouer" href="#">Jouer gratuitement</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface-canvas min-h-screen"><div class="flex flex-col w-full">
+<!-- Subtle decorative ambient background elements -->
+<div class="relative w-full max-w-7xl mx-auto px-6 lg:px-margin pt-10 pb-20">
+<div class="absolute top-12 right-12 w-96 h-96 rounded-full bg-domain-color/15 blur-3xl pointer-events-none -z-10"></div>
+<div class="absolute top-48 left-10 w-80 h-80 rounded-full bg-domain-composition/20 blur-3xl pointer-events-none -z-10"></div>
+<!-- Bannière Défi du jour (Atelier Live Callout) -->
+<section class="mb-12">
+<div class="relative bg-surface-card rounded-xl shadow-sm p-6 sm:p-8 overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all duration-300 hover:shadow-md">
+<div class="absolute -right-16 -top-16 w-56 h-56 bg-domain-typography/25 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 z-10">
+<div class="w-14 h-14 rounded-lg bg-surface-canvas flex flex-col items-center justify-center shrink-0 text-text-primary shadow-inner">
+<span class="font-mono-sm text-mono-sm text-text-muted leading-none">MAI</span>
+<span class="font-headline-md text-headline-md font-bold leading-none mt-0.5">24</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-mono-sm font-mono-sm bg-domain-color text-text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-text-primary animate-pulse"></span>
+                DÉFI QUOTIDIEN DU JOUR
+              </span>
+<span class="font-mono-sm text-mono-sm text-text-muted hidden sm:inline">· Session #142</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-text-primary">Le Crénage de « Minimalist »</h2>
+<p class="font-body-sm text-body-sm text-text-muted">Ajuste le rythme optique des capitales en moins de 90 secondes. Étalonnage moyen aujourd'hui : 89.4%.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 z-10 w-full sm:w-auto shrink-0">
+<div class="hidden xl:flex flex-col text-right font-mono-sm text-mono-sm text-text-muted">
+<span>2 418 participants</span>
+<span class="text-text-primary font-medium">Record : 99.2%</span>
+</div>
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-space-md py-3 rounded-lg bg-text-primary text-surface font-label-md text-label-md hover:bg-primary transition-all active:scale-[0.98] shadow-sm" data-path="defi-du-jour" href="#">
+<span>Relever le défi</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<!-- En-tête éditorial principal -->
+<header class="flex flex-col gap-3 mb-10">
+<div class="flex items-center gap-3">
+<span class="font-mono-sm text-mono-sm text-text-muted uppercase tracking-widest">[ BIBLIOTHÈQUE D'EXERCICES ]</span>
+<span class="w-8 h-px bg-border-subtle"></span>
+<span class="font-mono-sm text-mono-sm text-primary font-medium">ACCÈS LIBRE</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-text-primary max-w-4xl tracking-tight">
+        À quoi veux-tu entraîner ton œil ?
+      </h1>
+<p class="font-body-lg text-body-lg text-text-muted max-w-2xl">
+        Des exercices de 3 à 5 minutes pour développer des réflexes visuels précis. Essaye sans inscription.
+      </p>
+</header>
+<!-- Zone de Filtrage & Outils de sélection -->
+<div class="flex flex-col gap-5 mb-10">
+<!-- Onglets thématiques majeurs -->
+<div class="flex flex-wrap items-center gap-2 pb-1" id="skill-tabs-container">
+<button class="skill-tab active-tab px-4 py-2 rounded-lg font-label-md text-label-md bg-text-primary text-surface transition-all" data-filter-domain="all" type="button">
+          Tout <span class="ml-1 opacity-70 font-mono-sm text-mono-sm">(3)</span>
+</button>
+<button class="skill-tab px-4 py-2 rounded-lg font-label-md text-label-md bg-surface-card text-text-primary hover:bg-surface-container-high transition-all" data-filter-domain="typography" type="button">
+          Typographie
+        </button>
+<button class="skill-tab px-4 py-2 rounded-lg font-label-md text-label-md bg-surface-card text-text-primary hover:bg-surface-container-high transition-all" data-filter-domain="color" type="button">
+          Couleur
+        </button>
+<button class="skill-tab px-4 py-2 rounded-lg font-label-md text-label-md bg-surface-card text-text-primary hover:bg-surface-container-high transition-all" data-filter-domain="composition" type="button">
+          Composition
+        </button>
+<button class="skill-tab px-4 py-2 rounded-lg font-label-md text-label-md bg-surface-card text-text-primary hover:bg-surface-container-high transition-all" data-filter-domain="ui" type="button">
+          UI
+        </button>
+<div class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-low text-text-muted opacity-60 cursor-not-allowed select-none">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span class="font-label-md text-label-md">Bientôt : UX &amp; Vectoriel</span>
+</div>
+</div>
+<!-- Filtres secondaires fins -->
+<div class="bg-surface-card rounded-lg p-3 sm:px-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+<div class="flex flex-wrap items-center gap-4 sm:gap-6">
+<!-- Niveau -->
+<div class="flex items-center gap-2">
+<span class="font-mono-sm text-mono-sm text-text-muted">NIVEAU :</span>
+<div class="inline-flex bg-surface-canvas p-0.5 rounded-lg" id="level-filter-group">
+<button class="level-btn active-sub px-2.5 py-1 rounded text-mono-sm font-mono-sm bg-surface-card text-text-primary font-semibold shadow-xs" data-filter-level="all" type="button">Tous</button>
+<button class="level-btn px-2.5 py-1 rounded text-mono-sm font-mono-sm text-text-muted hover:text-text-primary" data-filter-level="debutant" type="button">Débutant</button>
+<button class="level-btn px-2.5 py-1 rounded text-mono-sm font-mono-sm text-text-muted hover:text-text-primary" data-filter-level="intermediaire" type="button">Intermédiaire</button>
+</div>
+</div>
+<!-- Durée -->
+<div class="flex items-center gap-2">
+<span class="font-mono-sm text-mono-sm text-text-muted">DURÉE :</span>
+<div class="inline-flex bg-surface-canvas p-0.5 rounded-lg" id="duration-filter-group">
+<button class="duration-btn active-sub px-2.5 py-1 rounded text-mono-sm font-mono-sm bg-surface-card text-text-primary font-semibold shadow-xs" data-filter-duration="all" type="button">Toutes</button>
+<button class="duration-btn px-2.5 py-1 rounded text-mono-sm font-mono-sm text-text-muted hover:text-text-primary" data-filter-duration="lt5" type="button">&lt; 5 min</button>
+</div>
+</div>
+<!-- Compatibilité -->
+<div class="flex items-center gap-2">
+<span class="font-mono-sm text-mono-sm text-text-muted">DISPOSITIF :</span>
+<div class="inline-flex bg-surface-canvas p-0.5 rounded-lg" id="device-filter-group">
+<button class="device-btn active-sub px-2.5 py-1 rounded text-mono-sm font-mono-sm bg-surface-card text-text-primary font-semibold shadow-xs" data-filter-device="all" type="button">Tous</button>
+<button class="device-btn px-2.5 py-1 rounded text-mono-sm font-mono-sm text-text-muted hover:text-text-primary" data-filter-device="mobile" type="button">Mobile</button>
+<button class="device-btn px-2.5 py-1 rounded text-mono-sm font-mono-sm text-text-muted hover:text-text-primary" data-filter-device="desktop" type="button">Ordinateur</button>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-mono-sm text-mono-sm text-text-muted" id="filtered-count-indicator">3 exercices actifs</span>
+</div>
+</div>
+</div>
+<!-- Grille des Mini-Jeux Disponibles (MVP) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16" id="games-grid">
+<!-- Carte 1 : Color Recall -->
+<article class="game-card flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200" data-device="mobile desktop" data-domain="color" data-duration="3" data-level="debutant">
+<!-- Visual Work Plate (Simulated mini-engine) -->
+<div class="h-48 bg-surface-canvas p-5 flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between z-10">
+<span class="px-2 py-0.5 rounded text-label-caps font-label-caps bg-domain-color text-text-primary">COULEUR</span>
+<span class="font-mono-sm text-mono-sm text-text-muted bg-surface-card/80 px-2 py-0.5 rounded">3 MIN</span>
+</div>
+<!-- Interactive Micro Visual Illustration -->
+<div class="flex items-center justify-center gap-4 my-auto z-10">
+<div class="w-16 h-16 rounded-xl bg-[#598468] shadow-md flex items-center justify-center text-on-primary">
+<span class="font-mono-sm text-mono-sm opacity-60">CIBLE</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-text-muted text-[18px]">compare_arrows</span>
+<span class="font-mono-sm text-mono-sm text-text-muted">ΔE 1.2</span>
+</div>
+<div class="w-16 h-16 rounded-xl bg-[#618D6F] shadow-sm flex items-center justify-center text-on-primary relative">
+<div class="absolute -bottom-2 -right-2 bg-text-primary text-surface rounded px-1 text-[9px] font-mono-sm">98%</div>
+</div>
+</div>
+<div class="flex items-center justify-between z-10 text-text-muted font-mono-sm text-mono-sm">
+<span>5 manches</span>
+<span class="inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-domain-color"></span>Débutant</span>
+</div>
+</div>
+<!-- Corps de la carte -->
+<div class="p-6 flex flex-col flex-1 justify-between gap-5 bg-surface-card">
+<div class="flex flex-col gap-2">
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-md text-headline-md text-text-primary">Color Recall</h3>
+<span class="font-mono-sm text-mono-sm text-primary">#CR-01</span>
+</div>
+<p class="font-body-md text-body-md text-text-muted">
+              Reconstitue une nuance de mémoire après une courte exposition.
+            </p>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3 pt-2 font-mono-sm text-mono-sm text-text-muted">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">devices</span> Mobile &amp; Bureau
+              </span>
+<span>·</span>
+<span>Sans prérequis</span>
+</div>
+<a class="w-full inline-flex items-center justify-center gap-2 px-space-md py-3 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all active:scale-[0.98]" data-path="jouer" href="#">
+<span>Jouer</span>
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Carte 2 : Spacing Repair -->
+<article class="game-card flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200" data-device="desktop" data-domain="composition" data-duration="4" data-level="intermediaire">
+<!-- Visual Work Plate -->
+<div class="h-48 bg-surface-canvas p-5 flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between z-10">
+<span class="px-2 py-0.5 rounded text-label-caps font-label-caps bg-domain-composition text-text-primary">COMPOSITION</span>
+<span class="font-mono-sm text-mono-sm text-text-muted bg-surface-card/80 px-2 py-0.5 rounded">4 MIN</span>
+</div>
+<!-- Micro Layout Alignment Playground -->
+<div class="w-full max-w-[200px] mx-auto my-auto bg-surface-card p-3 rounded-lg shadow-sm flex flex-col gap-2 z-10">
+<div class="flex items-center justify-between">
+<div class="h-2 w-12 bg-domain-composition rounded"></div>
+<span class="font-mono-sm text-[9px] text-text-muted">Δx: 0px</span>
+</div>
+<div class="grid grid-cols-3 gap-2 py-1">
+<div class="h-6 bg-surface-canvas rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-text-muted/40 rounded-full"></div>
+</div>
+<div class="h-6 bg-surface-canvas rounded flex items-center justify-center relative">
+<div class="w-2 h-2 bg-primary rounded-full"></div>
+<div class="absolute inset-0 bg-primary/10 rounded"></div>
+</div>
+<div class="h-6 bg-surface-canvas rounded flex items-center justify-center">
+<div class="w-2 h-2 bg-text-muted/40 rounded-full"></div>
+</div>
+</div>
+<div class="h-1.5 w-16 bg-surface-container-high rounded"></div>
+</div>
+<div class="flex items-center justify-between z-10 text-text-muted font-mono-sm text-mono-sm">
+<span>3 niveaux</span>
+<span class="inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-domain-composition"></span>Intermédiaire</span>
+</div>
+</div>
+<!-- Corps de la carte -->
+<div class="p-6 flex flex-col flex-1 justify-between gap-5 bg-surface-card">
+<div class="flex flex-col gap-2">
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-md text-headline-md text-text-primary">Spacing Repair</h3>
+<span class="font-mono-sm text-mono-sm text-primary">#SR-02</span>
+</div>
+<p class="font-body-md text-body-md text-text-muted">
+              Répare les marges et alignements d'une interface brisée.
+            </p>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3 pt-2 font-mono-sm text-mono-sm text-text-muted">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">desktop_windows</span> Ordinateur conseillé
+              </span>
+<span>·</span>
+<span>8pt Grid</span>
+</div>
+<a class="w-full inline-flex items-center justify-center gap-2 px-space-md py-3 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all active:scale-[0.98]" data-path="jouer" href="#">
+<span>Jouer</span>
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</a>
+</div>
+</div>
+</article>
+<!-- Carte 3 : Kern Clinic -->
+<article class="game-card flex flex-col bg-surface-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200" data-device="desktop" data-domain="typography" data-duration="5" data-level="all">
+<!-- Visual Work Plate -->
+<div class="h-48 bg-surface-canvas p-5 flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between z-10">
+<span class="px-2 py-0.5 rounded text-label-caps font-label-caps bg-domain-typography text-text-primary">TYPOGRAPHIE</span>
+<span class="font-mono-sm text-mono-sm text-text-muted bg-surface-card/80 px-2 py-0.5 rounded">5 MIN</span>
+</div>
+<!-- Micro Kern Lettering Visual -->
+<div class="flex items-center justify-center gap-1 my-auto z-10 select-none">
+<span class="font-headline-xl text-headline-xl text-text-primary leading-none">A</span>
+<div class="h-10 w-4 border-b border-primary relative flex items-center justify-center">
+<span class="text-[9px] font-mono-sm text-primary absolute -bottom-3.5">-18</span>
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+</div>
+<span class="font-headline-xl text-headline-xl text-text-primary leading-none">V</span>
+<div class="h-10 w-2.5 border-b border-border-subtle relative flex items-center justify-center">
+<div class="w-1.5 h-1.5 rounded-full bg-text-muted"></div>
+</div>
+<span class="font-headline-xl text-headline-xl text-text-primary leading-none">A</span>
+</div>
+<div class="flex items-center justify-between z-10 text-text-muted font-mono-sm text-mono-sm">
+<span>4 mots</span>
+<span class="inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-domain-typography"></span>Tous niveaux</span>
+</div>
+</div>
+<!-- Corps de la carte -->
+<div class="p-6 flex flex-col flex-1 justify-between gap-5 bg-surface-card">
+<div class="flex flex-col gap-2">
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-md text-headline-md text-text-primary">Kern Clinic</h3>
+<span class="font-mono-sm text-mono-sm text-primary">#KC-03</span>
+</div>
+<p class="font-body-md text-body-md text-text-muted">
+              Équilibre les espaces optiques entre les lettres pour un texte limpide.
+            </p>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3 pt-2 font-mono-sm text-mono-sm text-text-muted">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">desktop_windows</span> Ordinateur conseillé
+              </span>
+<span>·</span>
+<span>Précision optique</span>
+</div>
+<a class="w-full inline-flex items-center justify-center gap-2 px-space-md py-3 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all active:scale-[0.98]" data-path="jouer" href="#">
+<span>Jouer</span>
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</a>
+</div>
+</div>
+</article>
+</div>
+<!-- État aucun résultat (affiché dynamiquement si filtre vide) -->
+<div class="hidden bg-surface-card rounded-xl p-12 text-center mb-16 shadow-sm" id="no-results-panel">
+<span class="material-symbols-outlined text-4xl text-text-muted mb-2">filter_alt_off</span>
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Aucun exercice ne correspond à ce filtre</h3>
+<p class="font-body-sm text-body-sm text-text-muted mt-1 max-w-sm mx-auto">Essaie de réinitialiser le filtre de niveau ou de discipline pour afficher l'ensemble de la bibliothèque.</p>
+<button class="mt-4 px-4 py-2 bg-surface-canvas hover:bg-surface-container-high rounded-lg font-label-md text-label-md text-text-primary" id="reset-filters-btn" type="button">Réinitialiser les filtres</button>
+</div>
+<!-- Section Éditoriale des Futurs Exercices (Laboratoire de recherche) -->
+<section class="bg-surface-card rounded-xl p-8 sm:p-10 shadow-sm relative overflow-hidden">
+<div class="max-w-3xl flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-domain-vector"></span>
+<span class="font-label-caps text-label-caps text-text-muted uppercase tracking-wider">LABORATOIRE DE RECHERCHE &amp; INCUBATION</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-text-primary tracking-tight">
+          L'Atelier s'agrandit chaque semaine.
+        </h3>
+<p class="font-body-md text-body-md text-text-muted leading-relaxed">
+          Nous concevons des micro-exercices chirurgicaux pour affûter chaque composante du discernement visuel. Les prochains modules sont actuellement soumis au banc d'essai auprès d'écoles d'art et de directeurs artistiques partenaires.
+        </p>
+<!-- Liste des prototypes en cours -->
+<div class="mt-4 pt-6 bg-surface-canvas rounded-lg p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex flex-col gap-1">
+<span class="font-mono-sm text-mono-sm text-primary font-bold">EN COURS D'ATELIER</span>
+<p class="font-body-sm text-body-sm text-text-primary font-medium">
+              Bézier Letters · Optical Center · Contrast Rescue · Token Detective
+            </p>
+</div>
+<span class="shrink-0 px-3 py-1.5 rounded bg-surface-card text-mono-sm font-mono-sm text-text-muted shadow-xs">
+            Disponibilité : T3 2025
+          </span>
+</div>
+</div>
+</section>
+</div>
+</div>
+<script>
+  (function() {
+    // Current filter state
+    const state = {
+      domain: 'all',
+      level: 'all',
+      duration: 'all',
+      device: 'all'
+    };
+
+    const cards = document.querySelectorAll('.game-card');
+    const domainTabs = document.querySelectorAll('.skill-tab');
+    const levelBtns = document.querySelectorAll('.level-btn');
+    const durationBtns = document.querySelectorAll('.duration-btn');
+    const deviceBtns = document.querySelectorAll('.device-btn');
+    const counterIndicator = document.getElementById('filtered-count-indicator');
+    const noResultsPanel = document.getElementById('no-results-panel');
+    const resetFiltersBtn = document.getElementById('reset-filters-btn');
+
+    function applyFilters() {
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardDomain = card.getAttribute('data-domain');
+        const cardLevel = card.getAttribute('data-level');
+        const cardDuration = parseInt(card.getAttribute('data-duration') || '0', 10);
+        const cardDevices = card.getAttribute('data-device') || '';
+
+        const matchDomain = state.domain === 'all' || 
+          (state.domain === 'ui' && (cardDomain === 'composition' || cardDomain === 'typography')) ||
+          cardDomain === state.domain;
+
+        const matchLevel = state.level === 'all' || cardLevel === 'all' || cardLevel === state.level;
+
+        const matchDuration = state.duration === 'all' || (state.duration === 'lt5' && cardDuration <= 5);
+
+        const matchDevice = state.device === 'all' || cardDevices.includes(state.device);
+
+        if (matchDomain && matchLevel && matchDuration && matchDevice) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (counterIndicator) {
+        counterIndicator.textContent = visibleCount + (visibleCount > 1 ? ' exercices actifs' : ' exercice actif');
+      }
+
+      if (noResultsPanel) {
+        if (visibleCount === 0) {
+          noResultsPanel.classList.remove('hidden');
+        } else {
+          noResultsPanel.classList.add('hidden');
+        }
+      }
+    }
+
+    // Domain Tab Switcher
+    domainTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        domainTabs.forEach(t => {
+          t.classList.remove('bg-text-primary', 'text-surface');
+          t.classList.add('bg-surface-card', 'text-text-primary');
+        });
+        tab.classList.add('bg-text-primary', 'text-surface');
+        tab.classList.remove('bg-surface-card', 'text-text-primary');
+
+        state.domain = tab.getAttribute('data-filter-domain') || 'all';
+        applyFilters();
+      });
+    });
+
+    // Level filter buttons
+    levelBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        levelBtns.forEach(b => {
+          b.classList.remove('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+          b.classList.add('text-text-muted');
+        });
+        btn.classList.add('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+        btn.classList.remove('text-text-muted');
+
+        state.level = btn.getAttribute('data-filter-level') || 'all';
+        applyFilters();
+      });
+    });
+
+    // Duration filter buttons
+    durationBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        durationBtns.forEach(b => {
+          b.classList.remove('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+          b.classList.add('text-text-muted');
+        });
+        btn.classList.add('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+        btn.classList.remove('text-text-muted');
+
+        state.duration = btn.getAttribute('data-filter-duration') || 'all';
+        applyFilters();
+      });
+    });
+
+    // Device filter buttons
+    deviceBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        deviceBtns.forEach(b => {
+          b.classList.remove('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+          b.classList.add('text-text-muted');
+        });
+        btn.classList.add('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+        btn.classList.remove('text-text-muted');
+
+        state.device = btn.getAttribute('data-filter-device') || 'all';
+        applyFilters();
+      });
+    });
+
+    // Reset filters
+    if (resetFiltersBtn) {
+      resetFiltersBtn.addEventListener('click', () => {
+        state.domain = 'all';
+        state.level = 'all';
+        state.duration = 'all';
+        state.device = 'all';
+
+        // Reset UI tabs
+        domainTabs.forEach(t => {
+          if (t.getAttribute('data-filter-domain') === 'all') {
+            t.classList.add('bg-text-primary', 'text-surface');
+            t.classList.remove('bg-surface-card', 'text-text-primary');
+          } else {
+            t.classList.remove('bg-text-primary', 'text-surface');
+            t.classList.add('bg-surface-card', 'text-text-primary');
+          }
+        });
+
+        // Reset Level
+        levelBtns.forEach(b => {
+          if (b.getAttribute('data-filter-level') === 'all') {
+            b.classList.add('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+            b.classList.remove('text-text-muted');
+          } else {
+            b.classList.remove('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+            b.classList.add('text-text-muted');
+          }
+        });
+
+        // Reset Duration
+        durationBtns.forEach(b => {
+          if (b.getAttribute('data-filter-duration') === 'all') {
+            b.classList.add('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+            b.classList.remove('text-text-muted');
+          } else {
+            b.classList.remove('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+            b.classList.add('text-text-muted');
+          }
+        });
+
+        // Reset Device
+        deviceBtns.forEach(b => {
+          if (b.getAttribute('data-filter-device') === 'all') {
+            b.classList.add('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+            b.classList.remove('text-text-muted');
+          } else {
+            b.classList.remove('bg-surface-card', 'text-text-primary', 'font-semibold', 'shadow-xs');
+            b.classList.add('text-text-muted');
+          }
+        });
+
+        applyFilters();
+      });
+    }
+
+    // Initialize
+    applyFilters();
+  })();
+</script></main><footer class="w-full bg-surface-canvas border-t border-border-subtle mt-space-xl"><div class="max-w-7xl mx-auto px-6 lg:px-margin py-space-xl"><div class="grid grid-cols-1 md:grid-cols-12 gap-space-lg mb-space-xl"><div class="md:col-span-5 flex flex-col gap-space-sm"><div class="flex items-center gap-space-sm"><span class="font-headline-md text-headline-md text-text-primary">Œil Studio</span><span class="font-mono-sm text-mono-sm text-text-muted">v1.2 atelier</span></div><p class="font-body-sm text-body-sm text-text-muted max-w-sm">Plateforme d'entraînement du regard typographique, chromatique et géométrique. Ni scores vaniteux, ni promesses creuses : uniquement l'exercice patient du geste et du discernement.</p><div class="mt-space-sm flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-domain-color"></span><span class="font-mono-sm text-mono-sm text-text-muted">Étalonnage optique en accès libre</span></div></div><div class="md:col-span-2 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps text-text-muted uppercase tracking-wider">Disciplines</span><ul class="flex flex-col gap-space-xs font-body-sm text-body-sm"><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Typométrie &amp; Crénage</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Nuances &amp; Saturation</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Courbes de Bézier</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Alignement &amp; Rythme</li></ul></div><div class="md:col-span-2 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps text-text-muted uppercase tracking-wider">Pédagogie</span><ul class="flex flex-col gap-space-xs font-body-sm text-body-sm"><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Pour les enseignants</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Ateliers scolaires</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Guide d'évaluation</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Manifeste de l'œil</li></ul></div><div class="md:col-span-3 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps text-text-muted uppercase tracking-wider">Engagement</span><p class="font-body-sm text-body-sm text-text-muted">Conçu selon les critères RGAA et WCAG 2.1 AA pour l'entraînement visuel inclusif avec profils pour daltonisme et navigation clavier intégrale.</p></div></div><div class="pt-space-md border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-space-sm font-mono-sm text-mono-sm text-text-muted"><p>© 2025 Œil Studio. Exercices visuels pensés avec rigueur et bienveillance.</p><div class="flex items-center gap-space-md"><span class="hover:text-text-primary cursor-pointer transition-colors">Accessibilité certifiée</span><span class="hover:text-text-primary cursor-pointer transition-colors">Mentions légales</span><span class="hover:text-text-primary cursor-pointer transition-colors">Confidentialité sobre</span></div></div></div></footer></body></html>

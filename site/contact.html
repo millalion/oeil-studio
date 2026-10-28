@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contact et devis — Œil Studio</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..500,0..1,0&amp;display=swap" rel="stylesheet"/>
+<script>document.documentElement.classList.add("js")</script>
+<script src="assets/seed.js"></script>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="assets/tailwind-config.js"></script>
+<link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body class="bg-ground text-ink">
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] btn" href="#contenu">Aller au contenu</a>
+<header class="fixed top-0 inset-x-0 z-50 bg-ground">
+<div class="h-16 max-w-[1440px] mx-auto px-4 sm:px-8 grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-6">
+<a aria-label="Œil Studio, accueil" class="flex items-center gap-2.5 text-[18px] font-medium tracking-[-0.03em] w-max" href="index.html"><svg aria-hidden="true" class="h-7 w-7 shrink-0" viewBox="0 0 32 32"><rect fill="#141413" height="32" rx="6" width="32"/><path d="M5 16c3-5 6.8-7.5 11-7.5S24 11 27 16c-3 5-6.8 7.5-11 7.5S8 21 5 16Z" fill="#F7F6F2"/><circle cx="16" cy="16" fill="#F0447A" r="4.6"/><circle cx="17.6" cy="14.4" fill="#141413" r="1.3"/></svg><span>Œil Studio</span></a>
+<nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-8 text-[15px]"><a class="nav-link" href="jeux.html">Jeux</a><a class="nav-link" href="defi.html">Défi du jour</a><a class="nav-link" href="live.html">En direct</a><a class="nav-link" href="parcours.html">Parcours</a><a class="nav-link" href="profs.html">Écoles</a><a class="nav-link" href="tarifs.html">Tarifs</a></nav>
+<div class="flex items-center justify-end gap-2">
+<a aria-label="Mon compte" class="nav-link inline-flex items-center gap-1.5 text-[15px] px-2 sm:px-3 h-9 rounded hover:bg-surface-container" data-account-link="" href="connexion.html"><span aria-hidden="true" class="material-symbols-outlined text-[22px]">account_circle</span><span class="hidden sm:inline" data-account-name="">Connexion</span></a>
+<a class="btn btn-sm" href="jeux.html">Jouer</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu" class="lg:hidden w-9 h-9 rounded-lg hover:bg-surface-container flex items-center justify-center" data-menu-toggle="" type="button"><span class="material-symbols-outlined text-[22px]">menu</span></button>
+</div>
+</div>
+<nav aria-label="Navigation mobile" class="hidden lg:hidden flex-col px-4 sm:px-8 pt-2 pb-6 bg-ground" id="mobile-menu"><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="jeux.html">Jeux</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="defi.html">Défi du jour</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="live.html">En direct</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="parcours.html">Parcours</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="profs.html">Écoles</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="tarifs.html">Tarifs</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em] text-text-muted" data-account-link="" href="connexion.html">Connexion</a></nav>
+</header>
+<main class="pt-16" id="contenu">
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-6 lg:pt-10 pb-20">
+<div class="dot-board">
+<p class="board-strip"><span class="board-dot" style="background:#B9D9FF"></span>Contact, essai et devis</p>
+<div class="px-5 sm:px-10 pt-16 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+<div class="lg:col-span-5">
+<h1 class="text-big max-w-[10ch]">Parlons de ton projet.</h1>
+<p class="mt-5 text-body-lg max-w-[30rem]">Un essai pour ta classe, un devis pour ton école ou une simple question : on te répond sous deux jours ouvrés.</p>
+<div class="estimate panel-line mt-8 p-5" id="estimate" hidden="">
+<p class="text-body-sm text-text-muted">Estimation indicative</p>
+<p class="offer-price mt-1" id="est-price">690 €</p>
+<p class="text-body-sm mt-1" id="est-detail"></p>
+</div>
+</div>
+<form class="lg:col-span-7 join-card" id="contact-form">
+<fieldset><legend class="text-body-sm text-text-muted mb-2">Ta demande concerne</legend><span class="flex flex-wrap items-center gap-2"><span class="seg-pick" role="radiogroup"><label><input name="offre" type="radio" value="etudiant"/><span>Étudiant</span></label><label><input name="offre" type="radio" value="parcours"/><span>Parcours</span></label><label><input checked="" name="offre" type="radio" value="classe"/><span>Classe</span></label><label><input name="offre" type="radio" value="ecole"/><span>École</span></label><label><input name="offre" type="radio" value="autre"/><span>Autre</span></label></span></span></fieldset>
+<div class="grid sm:grid-cols-2 gap-4">
+<label class="grid gap-1 text-body-sm text-text-muted">Nom<input autocomplete="name" class="field" id="c-name" required="" type="text"/></label>
+<label class="grid gap-1 text-body-sm text-text-muted">Adresse e-mail<input autocomplete="email" class="field" id="c-email" required="" type="email"/></label>
+</div>
+<label class="grid gap-1 text-body-sm text-text-muted" data-for="classe ecole">Établissement<input autocomplete="organization" class="field" id="c-org" type="text"/></label>
+<label class="grid gap-2 text-body-sm text-text-muted" data-for="classe ecole">Nombre d'étudiants : <b class="text-ink tabular" id="c-n-out">120</b><input aria-describedby="c-n-help" class="w-full accent-ink" id="c-n" max="2000" min="1" step="1" type="range" value="120"/></label>
+<label class="grid gap-1 text-body-sm text-text-muted" data-for="classe ecole">Ou tape le nombre exact<input class="field w-40" id="c-n-num" inputmode="numeric" max="20000" min="1" type="number" value="120"/><span id="c-n-help" class="text-[12px]">De 1 à 20 000 étudiants.</span></label>
+<label class="grid gap-1 text-body-sm text-text-muted">Message<textarea class="field min-h-[120px] py-2" id="c-msg" placeholder="Tes besoins, tes dates, tes questions…"></textarea></label>
+<button class="btn w-full" type="submit">Envoyer la demande</button>
+<p class="text-body-sm text-text-muted">Le bouton ouvre ton logiciel de messagerie avec le message prérempli, à envoyer à bonjour@oeil.studio.</p>
+</form>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-ink text-ground pt-16 lg:pt-24 overflow-hidden">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-8">
+<div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
+<p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+</div>
+<p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+</div>
+</footer>
+<script>
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const radios = [...document.querySelectorAll('input[name="offre"]')];
+    const q = new URLSearchParams(location.search).get("offre");
+    if (q) radios.forEach((r) => (r.checked = r.value === q));
+    const offer = () => (radios.find((r) => r.checked) || {}).value;
+    // Grille indicative : école = 290 € + 4,50 € par étudiant et par an, au moins 690 € ; classe = 9 € par mois et par enseignant (≈ 40 étudiants).
+    function update(exact) {
+      const o = offer(), n = typeof exact === "number" ? exact : +$("c-n-num").value || +$("c-n").value;
+      $("c-n-out").textContent = n;
+      document.querySelectorAll("[data-for]").forEach((el) => (el.hidden = !el.dataset.for.split(" ").includes(o)));
+      const est = $("estimate");
+      if (o === "ecole") { const p = Math.max(690, Math.round((290 + 4.5 * n) / 10) * 10); est.hidden = false; $("est-price").textContent = `${p.toLocaleString("fr-FR")} €/an`; $("est-detail").textContent = `Pour ${n} étudiants, soit ${(p / n).toFixed(2).replace(".", ",")} € par étudiant et par an. Le devis final dépend du nombre de campus et des options (SSO, exports).`; }
+      else if (o === "classe") { const t = Math.max(1, Math.ceil(n / 40)); est.hidden = false; $("est-price").textContent = `${9 * t} €/mois`; $("est-detail").textContent = `${t} enseignant${t > 1 ? "s" : ""} pour ${n} étudiants (jusqu'à 40 par enseignant).`; }
+      else if (o === "parcours") { est.hidden = false; $("est-price").textContent = "19 €"; $("est-detail").textContent = "Payé une fois, accès à vie au parcours de 14 jours."; }
+      else if (o === "etudiant") { est.hidden = false; $("est-price").textContent = "3 €/mois"; $("est-detail").textContent = "Ou 24 € par an, résiliable à tout moment."; }
+      else est.hidden = true;
+    }
+    radios.forEach((r) => r.addEventListener("change", update));
+    $("c-n").addEventListener("input", () => { $("c-n-num").value = $("c-n").value; update(); });
+    $("c-n-num").addEventListener("input", () => { const v = Math.max(1, Math.min(20000, +$("c-n-num").value || 1)); $("c-n").value = Math.min(2000, v); update(v); });
+    update();
+    $("contact-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const o = offer(), labels = { etudiant: "Offre étudiant", parcours: "Parcours intensif", classe: "Offre classe", ecole: "Devis école", autre: "Question" };
+      const body = [`Nom : ${$("c-name").value}`, `E-mail : ${$("c-email").value}`, $("c-org").value && !$("c-org").parentElement.hidden ? `Établissement : ${$("c-org").value}` : "", !$("c-n").parentElement.hidden ? `Nombre d'étudiants : ${$("c-n-num").value}` : "", "", $("c-msg").value].filter((x) => x !== "").join("\n");
+      location.href = `mailto:bonjour@oeil.studio?subject=${encodeURIComponent(labels[o] + " — Œil Studio")}&body=${encodeURIComponent(body)}`;
+    });
+  })();
+</script>
+<script src="assets/site.js"></script>
+</body></html>

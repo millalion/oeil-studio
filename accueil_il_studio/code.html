@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"primary-container":"#4d46e8","on-tertiary-fixed":"#1b1c18","surface-canvas":"#F6F4EF","outline-variant":"#c7c4d8","tertiary-fixed":"#e4e2db","on-primary":"#ffffff","surface-container-low":"#f5f3ee","surface-container-lowest":"#ffffff","domain-typography":"#F2B8CE","on-surface":"#1b1c19","on-secondary-container":"#656461","error-container":"#ffdad6","on-primary-fixed":"#0d006a","domain-color":"#D8EF71","on-error":"#ffffff","primary":"#3325d1","on-tertiary":"#ffffff","secondary-fixed":"#e5e2de","border-subtle":"#DCDAD3","background":"#fbf9f4","secondary-container":"#e5e2de","surface-variant":"#e4e2dd","on-surface-variant":"#464555","on-tertiary-fixed-variant":"#474742","on-secondary":"#ffffff","domain-vector":"#FFBC8A","tertiary":"#494944","surface":"#fbf9f4","on-secondary-fixed-variant":"#474744","inverse-surface":"#30312e","primary-fixed-dim":"#c2c1ff","inverse-on-surface":"#f2f1ec","on-error-container":"#93000a","domain-composition":"#B9D9FF","inverse-primary":"#c2c1ff","surface-card":"#FFFFFF","surface-tint":"#4b43e6","outline":"#777587","on-secondary-fixed":"#1c1c1a","text-primary":"#1C1C1A","surface-bright":"#fbf9f4","tertiary-container":"#61615b","text-muted":"#62625D","surface-dim":"#dbdad5","tertiary-fixed-dim":"#c8c6c0","on-background":"#1b1c19","surface-container-highest":"#e4e2dd","on-tertiary-container":"#dedcd5","primary-fixed":"#e2dfff","on-primary-fixed-variant":"#3021cf","error":"#ba1a1a","secondary":"#5f5e5c","surface-container-high":"#eae8e3","accent-electric":"#4D46E8","on-primary-container":"#dad8ff","surface-container":"#f0eee9"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin":"3rem","space-xs":"0.25rem","space-md":"1rem","space-xl":"2.5rem","space-sm":"0.5rem","margin-mobile":"1.25rem","gutter":"1.5rem","gutter-mobile":"1rem","space-lg":"1.5rem"},"fontFamily":{"mono-metric":["Space Mono"],"headline-xl":["Newsreader"],"headline-md":["Newsreader"],"mono-sm":["Space Mono"],"body-md":["Manrope"],"body-sm":["Manrope"],"body-lg":["Manrope"],"label-caps":["Manrope"],"label-md":["Manrope"],"headline-xl-mobile":["Newsreader"],"headline-sm":["Manrope"],"headline-lg-mobile":["Newsreader"],"headline-lg":["Newsreader"]},"fontSize":{"mono-metric":["14px",{"lineHeight":"20px","letterSpacing":"-0.02em","fontWeight":"400"}],"headline-xl":["56px",{"lineHeight":"64px","letterSpacing":"-0.02em","fontWeight":"400"}],"headline-md":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"400"}],"mono-sm":["11px",{"lineHeight":"16px","fontWeight":"400"}],"body-md":["15px",{"lineHeight":"24px","fontWeight":"400"}],"body-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"label-caps":["11px",{"lineHeight":"16px","letterSpacing":"0.08em","fontWeight":"700"}],"label-md":["13px",{"lineHeight":"18px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl-mobile":["36px",{"lineHeight":"42px","letterSpacing":"-0.02em","fontWeight":"400"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg-mobile":["28px",{"lineHeight":"34px","letterSpacing":"-0.01em","fontWeight":"400"}],"headline-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.015em","fontWeight":"400"}]}}}}</script></head><body class="bg-surface-canvas font-body-md text-body-md text-text-primary antialiased selection:bg-domain-color selection:text-text-primary"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-canvas/90 backdrop-blur-md border-b border-border-subtle"><div class="h-16 max-w-7xl mx-auto px-6 lg:px-margin flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><a class="flex items-center gap-space-sm" data-path="accueil" href="#"><img alt="Logo Œil Studio" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UedQGF6QIg2MYnw9IrtRbfyqSOOFV30VNyKC2BHb9-z1XyyEsekeOL_dU3lUbBjOA9bOi2ykCV5Nmj1-sI5s7-T22mulVQmJK22Mz6d2Sw5wy3gLISa_1-UDUb2naRE1y-ZXBoeomMdFmt_rTRMuGjm44sgVj4RCqopCDDYHpCzQeb3JzOsuNtvYHBca_ZjN5ePFrGoHczkJ8KMCF_ux5PXxffy55UgUlBU6i8TGdL"/><span class="font-headline-md text-headline-md tracking-tight text-text-primary">Œil Studio</span></a><span class="hidden lg:inline-flex items-center px-space-sm py-0.5 rounded text-mono-sm font-mono-sm bg-domain-color text-text-primary border border-text-primary/10">ATELIER VISUEL</span></div><nav class="hidden md:flex items-center gap-space-lg" data-active-classes="text-text-primary font-semibold border-b-2 border-primary-container pb-0.5"><a class="font-label-md text-label-md text-on-surface-variant hover:text-text-primary transition-colors" data-path="jouer" href="#">Jouer</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-text-primary transition-colors" data-path="defi-du-jour" href="#">Défi du jour</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-text-primary transition-colors" data-path="parcours" href="#">Parcours</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-text-primary transition-colors" data-path="pour-les-profs" href="#">Pour les profs</a></nav><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center px-space-md py-space-sm font-label-md text-label-md text-text-muted hover:text-text-primary transition-colors" data-path="connexion" href="#">Connexion</a><a class="inline-flex items-center justify-center px-space-md py-2.5 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all active:scale-[0.98]" data-path="jouer" href="#">Jouer gratuitement</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface-canvas min-h-screen"><div class="flex flex-col w-full">
+<!-- SECTION HERO EDITORIAL & TEST INSTANTANÉ -->
+<section class="w-full max-w-7xl mx-auto px-6 lg:px-margin pt-space-lg pb-space-xl">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg lg:gap-gutter items-center">
+<!-- Colonne Titre & Discours (7 cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="inline-flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-domain-color"></span>
+<span class="font-mono-sm text-mono-sm text-text-muted tracking-widest uppercase">LE TERRAIN DE JEU DES DESIGNERS</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl tracking-tight text-text-primary">
+          Affine ton œil.<br/>
+<span class="italic font-headline-xl text-headline-xl text-primary-container">Un défi à la fois.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+          Typographie, couleur, interfaces : entraîne-toi avec des mini-jeux et comprends chaque détail grâce aux corrections optiques.
+        </p>
+<!-- CTA & Assurances -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm pt-space-xs">
+<a class="inline-flex items-center justify-center gap-space-xs px-space-lg py-3 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary transition-all active:scale-[0.98]" data-path="jouer" href="#">
+<span>Jouer gratuitement</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+<a class="inline-flex items-center justify-center px-space-lg py-3 rounded-lg bg-surface-card text-text-primary font-label-md text-label-md shadow-sm hover:bg-surface-canvas transition-all" href="#parcours-offre">
+            Découvrir les parcours
+          </a>
+</div>
+<div class="flex items-center gap-2 text-text-muted font-mono-sm text-mono-sm pt-space-xs">
+<span class="material-symbols-outlined text-[16px] text-text-muted">bolt</span>
+<span>Sans compte pour commencer · Des défis de 5 minutes</span>
+</div>
+<!-- Mini badge communautaire -->
+<div class="flex items-center gap-3 pt-space-sm">
+<div class="flex -space-x-2">
+<div class="w-7 h-7 rounded-full bg-domain-color flex items-center justify-center text-text-primary font-mono-sm text-[10px] font-bold ring-2 ring-surface-canvas">É</div>
+<div class="w-7 h-7 rounded-full bg-domain-composition flex items-center justify-center text-text-primary font-mono-sm text-[10px] font-bold ring-2 ring-surface-canvas">L</div>
+<div class="w-7 h-7 rounded-full bg-domain-typography flex items-center justify-center text-text-primary font-mono-sm text-[10px] font-bold ring-2 ring-surface-canvas">M</div>
+</div>
+<p class="font-body-sm text-body-sm text-text-muted">
+            Déjà plus de <span class="font-semibold text-text-primary">12 400 micro-calibrations</span> réussies ce mois-ci.
+          </p>
+</div>
+</div>
+<!-- Colonne Défi Instantané (5 cols) -->
+<div class="lg:col-span-5">
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-mono-sm text-mono-sm text-text-muted uppercase">TEST ÉCLAIR #01</span>
+<span class="px-space-xs py-0.5 rounded text-mono-sm font-mono-sm bg-domain-composition text-text-primary font-medium">ALIGNEMENT OPTIQUE</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-text-primary">Lequel te semble le mieux centré ?</h2>
+<p class="font-body-sm text-body-sm text-text-muted mt-1">
+              Fais confiance à ta première impression visuelle.
+            </p>
+</div>
+<!-- Zone de test A vs B -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs" id="quick-quiz">
+<!-- Option A (Centrage Mathématique / Flottant optiquement) -->
+<button class="group relative flex flex-col items-center justify-center h-32 p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container transition-all active:scale-[0.99] text-left" id="quiz-btn-a" onclick="testEye('A')">
+<span class="absolute top-2 left-2 font-mono-sm text-mono-sm text-text-muted font-bold">A</span>
+<!-- Bouton simulé A : centrage strict mathématique où l'icône semble déportée à droite -->
+<div class="w-full py-2.5 px-3 rounded bg-text-primary text-surface-card flex items-center justify-center gap-1.5 shadow-sm">
+<span class="font-body-sm text-body-sm font-medium">Valider</span>
+<span class="material-symbols-outlined text-[16px] text-domain-color pl-2">check</span>
+</div>
+<span class="font-mono-sm text-[10px] text-text-muted mt-3 group-hover:text-text-primary">Option A</span>
+</button>
+<!-- Option B (Centrage Optique Corrigé) -->
+<button class="group relative flex flex-col items-center justify-center h-32 p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container transition-all active:scale-[0.99] text-left" id="quiz-btn-b" onclick="testEye('B')">
+<span class="absolute top-2 left-2 font-mono-sm text-mono-sm text-text-muted font-bold">B</span>
+<!-- Bouton simulé B : compensation optique équilibrée -->
+<div class="w-full py-2.5 px-3 rounded bg-text-primary text-surface-card flex items-center justify-center gap-1.5 shadow-sm">
+<span class="font-body-sm text-body-sm font-medium">Valider</span>
+<span class="material-symbols-outlined text-[16px] text-domain-color">check</span>
+</div>
+<span class="font-mono-sm text-[10px] text-text-muted mt-3 group-hover:text-text-primary">Option B</span>
+</button>
+</div>
+<!-- Résultat injecté après clic -->
+<div class="hidden p-space-md rounded-lg bg-surface-canvas flex flex-col gap-2" id="quiz-feedback">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[20px]" id="feedback-icon">verified</span>
+<span class="font-label-md text-label-md text-text-primary" id="feedback-verdict"></span>
+</div>
+<p class="font-body-sm text-body-sm text-text-muted leading-relaxed" id="feedback-expl"></p>
+<div class="flex items-center justify-between pt-2">
+<span class="font-mono-sm text-mono-sm text-primary-container">Δ Décalage : +3px corrigés</span>
+<a class="font-label-caps text-label-caps text-primary-container underline uppercase hover:text-primary" data-path="jouer" href="#">Tester d'autres cas →</a>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs text-text-muted font-mono-sm text-mono-sm">
+<span>Aucune inscription requise</span>
+<span>Résultat en temps réel</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- BANDEAU DÉFI DU JOUR -->
+<section class="w-full bg-surface-container-low py-space-md">
+<div class="max-w-7xl mx-auto px-6 lg:px-margin">
+<div class="bg-surface-card rounded-xl p-space-md lg:p-space-lg shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-start md:items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-domain-color text-text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[26px]">calendar_today</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-primary-container uppercase">Édition quotidienne</span>
+<span class="w-1.5 h-1.5 rounded-full bg-text-muted"></span>
+<span class="font-mono-sm text-mono-sm text-text-muted">Gratuit pour tous</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-text-primary mt-0.5">
+              Défi du mardi 28 octobre — 3 épreuves rapides pour échauffer ton regard
+            </h2>
+<p class="font-body-sm text-body-sm text-text-muted mt-0.5">
+              1 crénage délicat, 1 saturation à équilibrer et 1 grille asymétrique à recalibrer.
+            </p>
+</div>
+</div>
+<div class="flex items-center gap-space-md shrink-0">
+<div class="hidden xl:flex flex-col text-right font-mono-sm text-mono-sm text-text-muted">
+<span class="text-text-primary font-semibold">5 minutes max</span>
+<span>Mise à jour à minuit</span>
+</div>
+<a class="inline-flex items-center justify-center gap-2 px-space-lg py-2.5 rounded-lg bg-text-primary text-surface-card font-label-md text-label-md hover:bg-secondary transition-all active:scale-[0.98]" data-path="defi-du-jour" href="#">
+<span>Lancer l'échauffement</span>
+<span class="material-symbols-outlined text-[16px]">play_arrow</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- LES 3 JEUX PHARES DU MVP -->
+<section class="w-full max-w-7xl mx-auto px-6 lg:px-margin py-space-xl">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-lg">
+<div>
+<div class="inline-flex items-center gap-space-xs mb-1">
+<span class="font-mono-sm text-mono-sm text-text-muted uppercase">ENTRAÎNEMENT CIBLÉ</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-text-primary">
+          Trois ateliers pour muscler ta précision.
+        </h2>
+</div>
+<p class="font-body-md text-body-md text-text-muted max-w-md">
+        Chaque discipline teste un capteur optique précis de ton cerveau créatif. Zéro score vaniteux : uniquement le plaisir du réglage juste.
+      </p>
+</div>
+<!-- Grille des 3 Cartes -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- JEU 1 : Color Recall -->
+<div class="bg-surface-card rounded-xl shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="px-space-xs py-0.5 rounded text-mono-sm font-mono-sm bg-domain-color text-text-primary font-bold">COULEUR</span>
+<div class="flex items-center gap-1 font-mono-sm text-mono-sm text-text-muted">
+<span class="material-symbols-outlined text-[14px]">timer</span>
+<span>3 min</span>
+</div>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Color Recall</h3>
+<p class="font-body-sm text-body-sm text-text-muted mt-1">Reconstitue une nuance de mémoire.</p>
+</div>
+<!-- Module graphique interactif : Nuancier / Slider de saturation -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between font-mono-sm text-mono-sm text-text-muted">
+<span>NUANCE CIBLE</span>
+<span class="text-text-primary font-semibold">HSL(210, 85%, 52%)</span>
+</div>
+<div class="h-16 rounded-md bg-[#3b82f6] relative flex items-center justify-center overflow-hidden">
+<span class="px-2 py-0.5 rounded bg-surface-card/80 text-text-primary font-mono-sm text-mono-sm">Mémorise 3s...</span>
+</div>
+<div class="flex flex-col gap-1 pt-1">
+<div class="flex justify-between font-mono-sm text-mono-sm text-text-muted">
+<span>Ta réponse</span>
+<span class="text-text-primary" id="color-val">82% saturation</span>
+</div>
+<input class="w-full accent-primary-container cursor-pointer" max="100" min="10" oninput="document.getElementById('color-val').textContent = this.value + '% saturation'" type="range" value="82"/>
+</div>
+</div>
+</div>
+<div class="p-space-lg pt-0 flex items-center justify-between">
+<span class="font-mono-sm text-mono-sm text-text-muted">Niveau débutant</span>
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-primary-container hover:text-primary transition-colors" data-path="jouer" href="#">
+<span>Démarrer</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- JEU 2 : Spacing Repair -->
+<div class="bg-surface-card rounded-xl shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="px-space-xs py-0.5 rounded text-mono-sm font-mono-sm bg-domain-composition text-text-primary font-bold">COMPOSITION</span>
+<div class="flex items-center gap-1 font-mono-sm text-mono-sm text-text-muted">
+<span class="material-symbols-outlined text-[14px]">timer</span>
+<span>4 min</span>
+</div>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Spacing Repair</h3>
+<p class="font-body-sm text-body-sm text-text-muted mt-1">Répare les écarts d'une interface.</p>
+</div>
+<!-- Module graphique interactif : Grille UI avec spacers en px -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between font-mono-sm text-mono-sm text-text-muted">
+<span>RYTHME VERTICAL</span>
+<span class="text-primary-container font-semibold">Grille 8px</span>
+</div>
+<!-- UI maquette miniature en détresse d'espacement -->
+<div class="bg-surface-card rounded p-3 flex flex-col gap-2">
+<div class="h-3 w-1/3 bg-surface-container-highest rounded"></div>
+<!-- Espacement erroné visible avec callout -->
+<div class="h-4 bg-domain-composition/30 rounded flex items-center justify-center font-mono-sm text-[10px] text-text-primary font-bold">
+                22px → anormal
+              </div>
+<div class="h-6 w-full bg-surface-container-highest rounded flex items-center px-2">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+</div>
+</div>
+<div class="flex items-center justify-between font-mono-sm text-mono-sm text-text-muted pt-1">
+<span>Écart moyen : ± 6px</span>
+<span class="text-text-primary font-medium">Tolérance 2px</span>
+</div>
+</div>
+</div>
+<div class="p-space-lg pt-0 flex items-center justify-between">
+<span class="font-mono-sm text-mono-sm text-text-muted">Niveau intermédiaire</span>
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-primary-container hover:text-primary transition-colors" data-path="jouer" href="#">
+<span>Démarrer</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- JEU 3 : Kern Clinic -->
+<div class="bg-surface-card rounded-xl shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="px-space-xs py-0.5 rounded text-mono-sm font-mono-sm bg-domain-typography text-text-primary font-bold">TYPOGRAPHIE</span>
+<div class="flex items-center gap-1 font-mono-sm text-mono-sm text-text-muted">
+<span class="material-symbols-outlined text-[14px]">timer</span>
+<span>5 min</span>
+</div>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Kern Clinic</h3>
+<p class="font-body-sm text-body-sm text-text-muted mt-1">Équilibre les espaces optiques entre les lettres.</p>
+</div>
+<!-- Module graphique interactif : Lettrage à crénage ajustable -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between font-mono-sm text-mono-sm text-text-muted">
+<span>MOT EN COURS</span>
+<span class="text-text-primary font-semibold">Newsreader Bold</span>
+</div>
+<div class="bg-surface-card rounded py-3 px-4 flex items-center justify-center font-headline-lg text-headline-lg text-text-primary select-none">
+<span>A</span>
+<span class="w-3 bg-domain-typography/40 h-8 inline-block mx-0.5" id="kern-gap"></span>
+<span>V</span>
+<span class="w-1 inline-block"></span>
+<span>A</span>
+<span class="w-1 inline-block"></span>
+<span>N</span>
+<span class="w-1 inline-block"></span>
+<span>T</span>
+</div>
+<div class="flex items-center justify-between font-mono-sm text-mono-sm text-text-muted pt-1">
+<span>Position V : -18/100</span>
+<span class="text-text-primary font-medium">Boutons flèches ← →</span>
+</div>
+</div>
+</div>
+<div class="p-space-lg pt-0 flex items-center justify-between">
+<span class="font-mono-sm text-mono-sm text-text-muted">Tous niveaux</span>
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-primary-container hover:text-primary transition-colors" data-path="jouer" href="#">
+<span>Démarrer</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- MÉTHODE : JOUE → COMPARE → PROGRESSE (COMPARATEUR AVANT / APRÈS) -->
+<section class="w-full bg-surface-container-low py-space-xl">
+<div class="max-w-7xl mx-auto px-6 lg:px-margin">
+<!-- En-tête de la méthode -->
+<div class="text-center max-w-2xl mx-auto mb-space-lg">
+<span class="font-mono-sm text-mono-sm text-text-muted uppercase">LA MÉTHODE DE L'ATELIER</span>
+<h2 class="font-headline-lg text-headline-lg text-text-primary mt-1">
+          Joue. Compare. Comprends pour de bon.
+        </h2>
+<p class="font-body-md text-body-md text-text-muted mt-2">
+          La plupart des cours t'assomment de théorie. Chez Œil Studio, tu fais d'abord le geste, puis tu observes la différence optique au millimètre près.
+        </p>
+</div>
+<!-- Bloc Comparateur Avant / Après interactif -->
+<div class="bg-surface-card rounded-xl p-space-lg lg:p-space-xl shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
+<!-- Colonne Démonstrateur Interactif (7 cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-domain-composition"></span>
+<span class="font-label-caps text-label-caps text-text-primary">ÉTUDE DE CAS : CARTE PRODUIT &amp; HIÉRARCHIE</span>
+</div>
+<!-- Switcher Avant / Après -->
+<div class="inline-flex p-1 rounded-lg bg-surface-container-low">
+<button class="px-3 py-1 rounded text-label-md text-label-md bg-surface-card text-text-primary shadow-xs font-semibold" id="toggle-before" onclick="setComparison('before')">
+                Avant correction
+              </button>
+<button class="px-3 py-1 rounded text-label-md text-label-md text-text-muted hover:text-text-primary font-medium" id="toggle-after" onclick="setComparison('after')">
+                Après correction optique
+              </button>
+</div>
+</div>
+<!-- Surface d'affichage du composant comparé -->
+<div class="relative bg-surface-canvas rounded-lg p-6 lg:p-10 flex items-center justify-center min-h-[300px] overflow-hidden">
+<!-- Composant ÉTAT 1 : AVANT (espacements bancals, mauvais centrage) -->
+<div class="w-full max-w-sm bg-surface-card rounded-xl p-6 shadow-sm flex flex-col gap-1 transition-all" id="comp-view-before">
+<div class="flex justify-between items-center mb-6">
+<span class="px-2 py-0.5 rounded bg-surface-container font-mono-sm text-mono-sm text-text-muted">Édition print</span>
+<span class="font-mono-sm text-mono-sm text-text-muted">45,00 €</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-text-primary leading-tight">Typographie Suisse</h4>
+<p class="font-body-sm text-body-sm text-text-muted mt-4">
+                Une anthologie critique des grilles modulaires et des casses asymétriques des années 1960.
+              </p>
+<button class="mt-8 w-full py-2 bg-text-primary text-surface-card rounded font-label-md text-label-md">
+                Ajouter au panier
+              </button>
+<div class="mt-2 text-center">
+<span class="font-mono-sm text-[10px] text-error font-medium">! Espaces incohérents : 24px en haut, 16px au texte, 32px au bouton</span>
+</div>
+</div>
+<!-- Composant ÉTAT 2 : APRÈS (espacements harmonisés, rythme 8px strict) -->
+<div class="hidden w-full max-w-sm bg-surface-card rounded-xl p-6 shadow-sm flex flex-col gap-space-md transition-all ring-2 ring-domain-composition" id="comp-view-after">
+<div class="flex justify-between items-center">
+<span class="px-2.5 py-0.5 rounded text-mono-sm font-mono-sm bg-domain-composition text-text-primary font-medium">Édition print</span>
+<span class="font-mono-metric text-mono-metric font-bold text-text-primary">45,00 €</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<h4 class="font-headline-md text-headline-md text-text-primary leading-tight">Typographie Suisse</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  Une anthologie critique des grilles modulaires et des casses asymétriques des années 1960.
+                </p>
+</div>
+<button class="w-full py-2.5 bg-primary-container text-on-primary rounded-lg font-label-md text-label-md shadow-sm hover:bg-primary transition-all">
+                Ajouter au panier
+              </button>
+<div class="text-center">
+<span class="font-mono-sm text-mono-sm text-primary-container font-medium">✓ Rythme équilibré : échelle 4-16-24px respectée</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between font-mono-sm text-mono-sm text-text-muted">
+<span>Interactions au curseur instantanées</span>
+<span class="text-primary-container font-medium">Indice de lisibilité : +34%</span>
+</div>
+</div>
+<!-- Colonne Explication Pédagogique (5 cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<span class="font-mono-sm text-mono-sm text-primary-container font-semibold">LE PRINCIPE EXPLICITÉ</span>
+<h3 class="font-headline-md text-headline-md text-text-primary">
+              La proximité sémantique dicte le vide.
+            </h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Dans la version de gauche, le titre et sa description s'éloignent sans raison, créant une rupture visuelle. En appliquant la loi de proximité de Gestalt, l'œil lit la carte comme un ensemble fluide et unifié.
+          </p>
+<div class="space-y-3 pt-2">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container text-[20px] shrink-0 mt-0.5">check_circle</span>
+<p class="font-body-sm text-body-sm text-text-primary">
+<strong>Analyse au millimètre :</strong> Chaque exercice affiche la distance exacte en pixels qui sépare ta réponse de la référence maître.
+              </p>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container text-[20px] shrink-0 mt-0.5">check_circle</span>
+<p class="font-body-sm text-body-sm text-text-primary">
+<strong>Mémoire musculaire du regard :</strong> En répétant les corrections, ton intuition remplace l'hésitation dans Figma.
+              </p>
+</div>
+</div>
+<div class="pt-space-xs">
+<a class="inline-flex items-center gap-2 font-label-md text-label-md text-primary-container hover:text-primary transition-colors" data-path="jouer" href="#">
+<span>Tester cette mécanique en jeu</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION OFFRE APPROFONDISSEMENT : LE PARCOURS PAYANT TRANSPARENT -->
+<section class="w-full max-w-7xl mx-auto px-6 lg:px-margin py-space-xl" id="parcours-offre">
+<div class="bg-surface-card rounded-xl shadow-sm p-space-lg lg:p-space-xl">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
+<!-- Discours offre (7 cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="inline-flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded text-mono-sm font-mono-sm bg-domain-color text-text-primary font-bold">PROGRAMME COMPLET</span>
+<span class="font-mono-sm text-mono-sm text-text-muted">14 JOURS D'IMMERSION</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-text-primary">
+            L'œil UI — 14 jours pour mieux composer tes interfaces.
+          </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+            Un programme quotidien structuré pour dépasser le statut de « designer qui tâtonne » et développer une confiance absolue dans chaque décision de mise en page.
+          </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm pt-space-xs">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary-container text-[18px] shrink-0 mt-0.5">done</span>
+<span class="font-body-sm text-body-sm text-text-primary">14 micro-défis progressifs commentés</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary-container text-[18px] shrink-0 mt-0.5">done</span>
+<span class="font-body-sm text-body-sm text-text-primary">Fiches de synthèse téléchargeables</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary-container text-[18px] shrink-0 mt-0.5">done</span>
+<span class="font-body-sm text-body-sm text-text-primary">Accès à vie sans abonnement</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary-container text-[18px] shrink-0 mt-0.5">done</span>
+<span class="font-body-sm text-body-sm text-text-primary">Certificat d'acuité optique</span>
+</div>
+</div>
+<!-- Assurance pédagogique -->
+<div class="p-space-md rounded-lg bg-surface-canvas text-text-muted font-body-sm text-body-sm">
+            « Pas de jargon inutile, pas de promesses de devenir senior en deux nuits. Un entraînement d'artisan, précis, mesurable et gratifiant. »
+          </div>
+</div>
+<!-- Bloc Tarif Honnête (5 cols) -->
+<div class="lg:col-span-5">
+<div class="bg-surface-canvas rounded-xl p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-mono-sm text-mono-sm text-text-muted">PAIEMENT UNIQUE</span>
+<span class="px-space-xs py-0.5 rounded text-mono-sm font-mono-sm bg-surface-card text-text-primary font-medium">PAS DE RECONDUCTION TACITE</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl text-text-primary">19 €</span>
+<span class="font-body-sm text-body-sm text-text-muted">TTC, une seule fois.</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Tarif clair, sans fausse réduction barrée de 190 € à 19 €. Un prix juste pour valoriser un travail d'ingénierie pédagogique indépendant.
+            </p>
+<a class="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary transition-all active:scale-[0.98]" data-path="parcours" href="#">
+<span>Rejoindre le parcours complet</span>
+<span class="material-symbols-outlined text-[18px]">lock_open</span>
+</a>
+<div class="flex items-center justify-center gap-4 text-text-muted font-mono-sm text-mono-sm">
+<span>Garantie 14 jours</span>
+<span>•</span>
+<span>Facture avec TVA</span>
+<span>•</span>
+<span>CB &amp; Apple Pay</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- BLOC POUR LES PROFS & ÉCOLES -->
+<section class="w-full max-w-7xl mx-auto px-6 lg:px-margin py-space-lg">
+<div class="bg-surface-container-high rounded-xl p-space-lg lg:p-space-xl grid grid-cols-1 md:grid-cols-12 gap-space-lg items-center">
+<div class="md:col-span-8 flex flex-col gap-space-sm">
+<div class="inline-flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded text-mono-sm font-mono-sm bg-text-primary text-surface-card font-bold">ENSEIGNEMENT</span>
+<span class="font-mono-sm text-mono-sm text-text-muted">ÉCOLES DE DESIGN, BTS, MASTERS &amp; UNIVERSITÉS</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-text-primary">
+          Tu donnes des cours de design ? Utilise Œil Studio en atelier.
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+          Échauffe tes promotions en 5 minutes avant chaque cours de composition ou typographie. Nous fournissons des licences groupées adaptées et des exports de progression pour animer tes TD.
+        </p>
+<div class="flex flex-wrap items-center gap-space-md pt-space-xs text-text-muted font-body-sm text-body-sm">
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-text-primary text-[18px]">school</span> Utilisé par 40+ intervenants</span>
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-text-primary text-[18px]">group</span> Mode classe &amp; défis collectifs</span>
+</div>
+</div>
+<div class="md:col-span-4 flex flex-col items-start md:items-end justify-center">
+<a class="inline-flex items-center justify-center px-space-lg py-3 rounded-lg bg-surface-card text-text-primary font-label-md text-label-md shadow-sm hover:bg-surface-canvas transition-all" data-path="pour-les-profs" href="#">
+          Découvrir l'espace enseignant
+        </a>
+</div>
+</div>
+</section>
+<!-- FAQ CONCISE & BIENVEILLANTE -->
+<section class="w-full max-w-4xl mx-auto px-6 lg:px-margin py-space-xl">
+<div class="text-center mb-space-lg">
+<span class="font-mono-sm text-mono-sm text-text-muted uppercase">QUESTIONS FRÉQUENTES</span>
+<h2 class="font-headline-md text-headline-md text-text-primary mt-1">Tout ce que tu dois savoir</h2>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- FAQ 1 -->
+<div class="bg-surface-card rounded-lg p-space-md shadow-sm">
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Faut-il être designer senior pour s'entraîner ?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+          Pas du tout. Les exercices sont pensés pour calibrer l'intuition : que tu sois étudiant curieux, développeur front voulant soigner ses finitions, ou directeur artistique chevronné venant maintenir son acuité, chaque épreuve apporte une correction claire et sans jugement.
+        </p>
+</div>
+<!-- FAQ 2 -->
+<div class="bg-surface-card rounded-lg p-space-md shadow-sm">
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Pourquoi les exercices sont-ils limités à 5 minutes ?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+          La fatigue visuelle est réelle. Après dix minutes d'observation soutenue, le cerveau s'habitue aux déséquilibres et commence à tolérer les défauts. Les sessions très courtes garantissent une fraîcheur de regard maximale.
+        </p>
+</div>
+<!-- FAQ 3 -->
+<div class="bg-surface-card rounded-lg p-space-md shadow-sm">
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Les jeux gratuits le resteront-ils ?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+          Oui. Le défi du jour quotidien et l'accès d'entraînement aux modules de base (Color Recall, Spacing Repair, Kern Clinic) demeurent libres et sans barrière d'inscription. Seuls les parcours approfondis et structurés sur plusieurs semaines font l'objet d'un paiement unique.
+        </p>
+</div>
+</div>
+<!-- Bannière de bas de page d'incitation finale -->
+<div class="mt-space-xl p-space-lg rounded-xl bg-surface-card shadow-sm text-center flex flex-col items-center gap-space-sm">
+<span class="font-mono-sm text-mono-sm text-text-muted uppercase">PRÊT À CALIBRER TON REGARD ?</span>
+<h3 class="font-headline-md text-headline-md text-text-primary">Le premier exercice t'attend en accès immédiat.</h3>
+<a class="inline-flex items-center justify-center gap-2 px-space-lg py-3 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary transition-all active:scale-[0.98]" data-path="jouer" href="#">
+<span>Lancer un premier jeu</span>
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</a>
+</div>
+</section>
+</div>
+<!-- SCRIPTS D'INTERACTIVITÉ ATELIER -->
+<script>
+  // Micro-test instantané du Hero (Centrage optique)
+  function testEye(choice) {
+    const feedback = document.getElementById('quiz-feedback');
+    const icon = document.getElementById('feedback-icon');
+    const verdict = document.getElementById('feedback-verdict');
+    const expl = document.getElementById('feedback-expl');
+    const btnA = document.getElementById('quiz-btn-a');
+    const btnB = document.getElementById('quiz-btn-b');
+
+    feedback.classList.remove('hidden');
+
+    if (choice === 'B') {
+      verdict.textContent = "Bien vu ! Ton regard a repéré l'équilibre.";
+      icon.textContent = "task_alt";
+      icon.className = "material-symbols-outlined text-domain-color text-[20px]";
+      expl.textContent = "L'option B applique une correction optique : l'icône de validation à droite alourdit visuellement le bouton. Il fallait légèrement repousser le texte à gauche pour préserver le centre de gravité ressenti.";
+      btnB.classList.add('ring-2', 'ring-primary-container');
+      btnA.classList.remove('ring-2', 'ring-primary-container');
+    } else {
+      verdict.textContent = "Piège classique ! L'option A est le centrage purement mathématique.";
+      icon.textContent = "info";
+      icon.className = "material-symbols-outlined text-primary-container text-[20px]";
+      expl.textContent = "Bien que les marges gauches et droites soient mathématiquement égales dans le code de l'option A, la présence de l'icône donne l'illusion que le texte flotte trop vers la droite. L'œil exige une compensation.";
+      btnA.classList.add('ring-2', 'ring-primary-container');
+      btnB.classList.remove('ring-2', 'ring-primary-container');
+    }
+  }
+
+  // Comparateur Avant / Après
+  function setComparison(state) {
+    const beforeView = document.getElementById('comp-view-before');
+    const afterView = document.getElementById('comp-view-after');
+    const btnBefore = document.getElementById('toggle-before');
+    const btnAfter = document.getElementById('toggle-after');
+
+    if (state === 'before') {
+      beforeView.classList.remove('hidden');
+      afterView.classList.add('hidden');
+      btnBefore.className = "px-3 py-1 rounded text-label-md text-label-md bg-surface-card text-text-primary shadow-xs font-semibold";
+      btnAfter.className = "px-3 py-1 rounded text-label-md text-label-md text-text-muted hover:text-text-primary font-medium";
+    } else {
+      beforeView.classList.add('hidden');
+      afterView.classList.remove('hidden');
+      btnAfter.className = "px-3 py-1 rounded text-label-md text-label-md bg-surface-card text-text-primary shadow-xs font-semibold";
+      btnBefore.className = "px-3 py-1 rounded text-label-md text-label-md text-text-muted hover:text-text-primary font-medium";
+    }
+  }
+</script></main><footer class="w-full bg-surface-canvas border-t border-border-subtle mt-space-xl"><div class="max-w-7xl mx-auto px-6 lg:px-margin py-space-xl"><div class="grid grid-cols-1 md:grid-cols-12 gap-space-lg mb-space-xl"><div class="md:col-span-5 flex flex-col gap-space-sm"><div class="flex items-center gap-space-sm"><span class="font-headline-md text-headline-md text-text-primary">Œil Studio</span><span class="font-mono-sm text-mono-sm text-text-muted">v1.2 atelier</span></div><p class="font-body-sm text-body-sm text-text-muted max-w-sm">Plateforme d'entraînement du regard typographique, chromatique et géométrique. Ni scores vaniteux, ni promesses creuses : uniquement l'exercice patient du geste et du discernement.</p><div class="mt-space-sm flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-domain-color"></span><span class="font-mono-sm text-mono-sm text-text-muted">Étalonnage optique en accès libre</span></div></div><div class="md:col-span-2 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps text-text-muted uppercase tracking-wider">Disciplines</span><ul class="flex flex-col gap-space-xs font-body-sm text-body-sm"><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Typométrie &amp; Crénage</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Nuances &amp; Saturation</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Courbes de Bézier</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Alignement &amp; Rythme</li></ul></div><div class="md:col-span-2 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps text-text-muted uppercase tracking-wider">Pédagogie</span><ul class="flex flex-col gap-space-xs font-body-sm text-body-sm"><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Pour les enseignants</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Ateliers scolaires</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Guide d'évaluation</li><li class="text-on-surface-variant hover:text-text-primary cursor-pointer transition-colors">Manifeste de l'œil</li></ul></div><div class="md:col-span-3 flex flex-col gap-space-sm"><span class="font-label-caps text-label-caps text-text-muted uppercase tracking-wider">Engagement</span><p class="font-body-sm text-body-sm text-text-muted">Conçu selon les critères RGAA et WCAG 2.1 AA pour l'entraînement visuel inclusif avec profils pour daltonisme et navigation clavier intégrale.</p></div></div><div class="pt-space-md border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-space-sm font-mono-sm text-mono-sm text-text-muted"><p>© 2025 Œil Studio. Exercices visuels pensés avec rigueur et bienveillance.</p><div class="flex items-center gap-space-md"><span class="hover:text-text-primary cursor-pointer transition-colors">Accessibilité certifiée</span><span class="hover:text-text-primary cursor-pointer transition-colors">Mentions légales</span><span class="hover:text-text-primary cursor-pointer transition-colors">Confidentialité sobre</span></div></div></div></footer></body></html>

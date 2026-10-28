@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bibliothèque des jeux — Œil Studio</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..500,0..1,0&amp;display=swap" rel="stylesheet"/>
+<script>document.documentElement.classList.add("js")</script>
+<script src="assets/seed.js"></script>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="assets/tailwind-config.js"></script>
+<link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body class="bg-ground text-ink">
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] btn" href="#contenu">Aller au contenu</a>
+<header class="fixed top-0 inset-x-0 z-50 bg-ground">
+<div class="h-16 max-w-[1440px] mx-auto px-4 sm:px-8 grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-6">
+<a aria-label="Œil Studio, accueil" class="flex items-center gap-2.5 text-[18px] font-medium tracking-[-0.03em] w-max" href="index.html"><svg aria-hidden="true" class="h-7 w-7 shrink-0" viewBox="0 0 32 32"><rect fill="#141413" height="32" rx="6" width="32"/><path d="M5 16c3-5 6.8-7.5 11-7.5S24 11 27 16c-3 5-6.8 7.5-11 7.5S8 21 5 16Z" fill="#F7F6F2"/><circle cx="16" cy="16" fill="#F0447A" r="4.6"/><circle cx="17.6" cy="14.4" fill="#141413" r="1.3"/></svg><span>Œil Studio</span></a>
+<nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-8 text-[15px]"><a class="nav-link" aria-current="page" href="jeux.html">Jeux</a><a class="nav-link" href="defi.html">Défi du jour</a><a class="nav-link" href="live.html">En direct</a><a class="nav-link" href="parcours.html">Parcours</a><a class="nav-link" href="profs.html">Écoles</a><a class="nav-link" href="tarifs.html">Tarifs</a></nav>
+<div class="flex items-center justify-end gap-2">
+<a aria-label="Mon compte" class="nav-link inline-flex items-center gap-1.5 text-[15px] px-2 sm:px-3 h-9 rounded hover:bg-surface-container" data-account-link="" href="connexion.html"><span aria-hidden="true" class="material-symbols-outlined text-[22px]">account_circle</span><span class="hidden sm:inline" data-account-name="">Connexion</span></a>
+<a class="btn btn-sm" href="jeux.html">Jouer</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu" class="lg:hidden w-9 h-9 rounded-lg hover:bg-surface-container flex items-center justify-center" data-menu-toggle="" type="button"><span class="material-symbols-outlined text-[22px]">menu</span></button>
+</div>
+</div>
+<nav aria-label="Navigation mobile" class="hidden lg:hidden flex-col px-4 sm:px-8 pt-2 pb-6 bg-ground" id="mobile-menu"><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" aria-current="page" href="jeux.html">Jeux</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="defi.html">Défi du jour</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="live.html">En direct</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="parcours.html">Parcours</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="profs.html">Écoles</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="tarifs.html">Tarifs</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em] text-text-muted" data-account-link="" href="connexion.html">Connexion</a></nav>
+</header>
+<main class="pt-16" id="contenu">
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-6 lg:pt-10">
+<div class="dot-board px-5 sm:px-10 pt-16 pb-10 lg:pb-14">
+<p class="board-strip"><span class="board-dot"></span>44 jeux · 6 disciplines · gratuits, sans compte</p>
+<h1 class="text-[clamp(4.25rem,9.6vw,9.5rem)] font-medium leading-[0.88] tracking-[-0.06em] reveal">Bibliothèque</h1>
+<p class="mt-6 lg:mt-10 max-w-[38rem] text-[20px] sm:text-[24px] leading-[1.35] tracking-[-0.015em] reveal" style="--d:80ms">Des jeux de 2 à 5 minutes en typographie, couleur, composition, UI, UX et motion. Joue-les un par un, ou mélange-les : une manche, un jeu.</p>
+<div class="mt-8 flex flex-wrap gap-3 reveal" style="--d:140ms"><a class="btn" href="#melange">Composer un mélange</a><a class="btn-line" href="defi.html">Défi du jour</a></div>
+</div>
+</section>
+<section aria-label="Jeux disponibles" class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-12 lg:pt-16">
+<div class="lib-bar">
+<div aria-label="Filtrer par discipline" class="lib-chips" role="group"><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="typo" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#F7B4CC"></span>Typographie</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="color" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#D8EF71"></span>Couleur</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="layout" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#B9D9FF"></span>Composition</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="ui" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#FFC08F"></span>UI</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="ux" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#FFE08A"></span>UX et accessibilité</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="motion" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#9FE3D0"></span>Motion et vectoriel</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="all" type="button">Tous les jeux</button></div>
+<div class="lib-level"><span class="flex flex-wrap items-center gap-2"><span class="seg-pick" role="radiogroup"><label><input checked="" name="level" type="radio" value="all"/><span>Tous</span></label><label><input name="level" type="radio" value="debutant"/><span>Débutant</span></label><label><input name="level" type="radio" value="intermediaire"/><span>Intermédiaire</span></label><label><input name="level" type="radio" value="avance"/><span>Avancé</span></label></span></span><span aria-live="polite" class="text-body-sm text-text-muted tabular whitespace-nowrap" id="filter-count">44 jeux</span></div>
+</div>
+<div id="games-list" role="list"><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="typo" data-level="all" href="kern-clinic.html" role="listitem" style="--row:#F7B4CC">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#F7B4CC"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Kern Clinic</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Typographie · 4 min · Tous niveaux</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Glisse les lettres d'un mot pour équilibrer leurs blancs.</span>
+<span class="hidden md:block text-body-sm">Typographie</span>
+<span class="hidden md:block text-body-sm tabular">4 min · Tous niveaux</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="typo" data-level="debutant" href="optical-center.html" role="listitem" style="--row:#F7B4CC">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#F7B4CC"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Optical Center</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Typographie · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Place un signe au centre perçu de son cadre, pas au centre calculé.</span>
+<span class="hidden md:block text-body-sm">Typographie</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="typo" data-level="intermediaire" href="leading-lab.html" role="listitem" style="--row:#F7B4CC">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#F7B4CC"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Leading Lab <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Typographie · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Règle l'interlignage d'un texte selon son usage.</span>
+<span class="hidden md:block text-body-sm">Typographie</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="typo" data-level="intermediaire" href="weight-match.html" role="listitem" style="--row:#F7B4CC">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#F7B4CC"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Weight Match <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Typographie · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Retrouve la graisse d'un mot de référence, à une autre taille.</span>
+<span class="hidden md:block text-body-sm">Typographie</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="typo" data-level="avance" href="bezier-letters.html" role="listitem" style="--row:#F7B4CC">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#F7B4CC"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Bézier Letters <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Typographie · 4 min · Avancé</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Répare une lettre en ajustant les poignées de ses courbes.</span>
+<span class="hidden md:block text-body-sm">Typographie</span>
+<span class="hidden md:block text-body-sm tabular">4 min · Avancé</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="typo" data-level="intermediaire" href="type-detective.html" role="listitem" style="--row:#F7B4CC">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#F7B4CC"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Type Detective <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Typographie · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Repère les lettres d'une autre police, graisse ou fausse italique.</span>
+<span class="hidden md:block text-body-sm">Typographie</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="typo" data-level="intermediaire" href="rag-rescue.html" role="listitem" style="--row:#F7B4CC">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#F7B4CC"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Rag Rescue <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Typographie · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Règle la largeur d'une colonne pour adoucir son bord droit.</span>
+<span class="hidden md:block text-body-sm">Typographie</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="typo" data-level="debutant" href="widow-hunter.html" role="listitem" style="--row:#F7B4CC">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#F7B4CC"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Widow Hunter <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Typographie · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Débusque veuves, orphelines et coupures malheureuses.</span>
+<span class="hidden md:block text-body-sm">Typographie</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="typo" data-level="debutant" href="type-scale.html" role="listitem" style="--row:#F7B4CC">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#F7B4CC"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Type Scale <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Typographie · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Attribue les tailles d'une échelle aux bons niveaux de texte.</span>
+<span class="hidden md:block text-body-sm">Typographie</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="typo" data-level="all" href="glyph-memory.html" role="listitem" style="--row:#F7B4CC">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#F7B4CC"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Glyph Memory <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Typographie · 2 min · Tous niveaux</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Observe une lettre, puis retrouve-la parmi d'autres polices.</span>
+<span class="hidden md:block text-body-sm">Typographie</span>
+<span class="hidden md:block text-body-sm tabular">2 min · Tous niveaux</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="color" data-level="debutant" href="color-recall.html" role="listitem" style="--row:#D8EF71">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#D8EF71"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Color Recall</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Couleur · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Mémorise une nuance trois secondes, puis recompose-la.</span>
+<span class="hidden md:block text-body-sm">Couleur</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="color" data-level="intermediaire" href="palette-recall.html" role="listitem" style="--row:#D8EF71">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#D8EF71"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Palette Recall <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Couleur · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Mémorise une palette de quatre couleurs, puis retrouve-les.</span>
+<span class="hidden md:block text-body-sm">Couleur</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="color" data-level="debutant" href="hue-line.html" role="listitem" style="--row:#D8EF71">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#D8EF71"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Hue Line</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Couleur · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Remets dans l'ordre les teintes d'un dégradé mélangé.</span>
+<span class="hidden md:block text-body-sm">Couleur</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="color" data-level="intermediaire" href="saturation-ladder.html" role="listitem" style="--row:#D8EF71">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#D8EF71"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Saturation Ladder <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Couleur · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Classe des couleurs de la plus terne à la plus vive.</span>
+<span class="hidden md:block text-body-sm">Couleur</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="color" data-level="intermediaire" href="lightness-ladder.html" role="listitem" style="--row:#D8EF71">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#D8EF71"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Lightness Ladder <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Couleur · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Classe des couleurs de la plus sombre à la plus claire.</span>
+<span class="hidden md:block text-body-sm">Couleur</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="color" data-level="debutant" href="gradient-repair.html" role="listitem" style="--row:#D8EF71">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#D8EF71"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Gradient Repair <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Couleur · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Replace les étapes manquantes d'un dégradé, sans tomber dans les leurres.</span>
+<span class="hidden md:block text-body-sm">Couleur</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="color" data-level="intermediaire" href="contrast-rescue.html" role="listitem" style="--row:#D8EF71">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#D8EF71"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Contrast Rescue <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Couleur · 4 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Trouve à l'œil la limite de contraste exigée par les WCAG.</span>
+<span class="hidden md:block text-body-sm">Couleur</span>
+<span class="hidden md:block text-body-sm tabular">4 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="color" data-level="all" href="color-impostor.html" role="listitem" style="--row:#D8EF71">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#D8EF71"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Color Impostor</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Couleur · 2 min · Tous niveaux</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Trouve la case légèrement différente, de plus en plus vite.</span>
+<span class="hidden md:block text-body-sm">Couleur</span>
+<span class="hidden md:block text-body-sm tabular">2 min · Tous niveaux</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="color" data-level="debutant" href="semantic-colors.html" role="listitem" style="--row:#D8EF71">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#D8EF71"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Semantic Colors <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Couleur · 2 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Attribue les couleurs aux états erreur, succès, alerte, information.</span>
+<span class="hidden md:block text-body-sm">Couleur</span>
+<span class="hidden md:block text-body-sm tabular">2 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="layout" data-level="intermediaire" href="spacing-repair.html" role="listitem" style="--row:#B9D9FF">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#B9D9FF"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Spacing Repair</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Composition · 4 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Étire les écarts cassés d'une interface sur l'échelle 4-8-16-24-32.</span>
+<span class="hidden md:block text-body-sm">Composition</span>
+<span class="hidden md:block text-body-sm tabular">4 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="layout" data-level="debutant" href="grid-snap.html" role="listitem" style="--row:#B9D9FF">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#B9D9FF"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Grid Snap <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Composition · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Cale des blocs sur les colonnes d'une grille de 12.</span>
+<span class="hidden md:block text-body-sm">Composition</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="layout" data-level="all" href="pixel-guess.html" role="listitem" style="--row:#B9D9FF">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#B9D9FF"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Pixel Guess <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Composition · 3 min · Tous niveaux</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Estime la taille d'un élément en pixels, sans règle.</span>
+<span class="hidden md:block text-body-sm">Composition</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Tous niveaux</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="layout" data-level="debutant" href="alignment-hunter.html" role="listitem" style="--row:#B9D9FF">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#B9D9FF"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Alignment Hunter</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Composition · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Repère les éléments décalés de quelques pixels.</span>
+<span class="hidden md:block text-body-sm">Composition</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="layout" data-level="intermediaire" href="whitespace-budget.html" role="listitem" style="--row:#B9D9FF">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#B9D9FF"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Whitespace Budget <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Composition · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Répartis un budget fixe d'espace pour créer une hiérarchie.</span>
+<span class="hidden md:block text-body-sm">Composition</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="layout" data-level="debutant" href="crop-it.html" role="listitem" style="--row:#B9D9FF">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#B9D9FF"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Crop It <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Composition · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Recadre une image selon la règle des tiers ou l'horizon.</span>
+<span class="hidden md:block text-body-sm">Composition</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="layout" data-level="intermediaire" href="balance-lab.html" role="listitem" style="--row:#B9D9FF">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#B9D9FF"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Balance Lab <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Composition · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Déplace une masse pour équilibrer la composition.</span>
+<span class="hidden md:block text-body-sm">Composition</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="layout" data-level="intermediaire" href="responsive-rescue.html" role="listitem" style="--row:#B9D9FF">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#B9D9FF"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Responsive Rescue <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Composition · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Choisis la meilleure adaptation mobile d'une page de bureau.</span>
+<span class="hidden md:block text-body-sm">Composition</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="layout" data-level="all" href="five-second-layout.html" role="listitem" style="--row:#B9D9FF">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#B9D9FF"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Five-Second Layout <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Composition · 2 min · Tous niveaux</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Observe une mise en page cinq secondes, puis retrouve-la.</span>
+<span class="hidden md:block text-body-sm">Composition</span>
+<span class="hidden md:block text-body-sm tabular">2 min · Tous niveaux</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="ui" data-level="intermediaire" href="token-detective.html" role="listitem" style="--row:#FFC08F">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#FFC08F"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Token Detective <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">UI · 4 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Repère les valeurs qui sortent du design system.</span>
+<span class="hidden md:block text-body-sm">UI</span>
+<span class="hidden md:block text-body-sm tabular">4 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="ui" data-level="debutant" href="ui-detective.html" role="listitem" style="--row:#FFC08F">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#FFC08F"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">UI Detective</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">UI · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Trouve les incohérences d'une interface.</span>
+<span class="hidden md:block text-body-sm">UI</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="ui" data-level="debutant" href="state-machine.html" role="listitem" style="--row:#FFC08F">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#FFC08F"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">State Machine <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">UI · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Nomme les états d'un composant : survol, focus, erreur…</span>
+<span class="hidden md:block text-body-sm">UI</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="ui" data-level="debutant" href="button-priority.html" role="listitem" style="--row:#FFC08F">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#FFC08F"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Button Priority <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">UI · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Donne à chaque action son niveau : principal, secondaire, destructif.</span>
+<span class="hidden md:block text-body-sm">UI</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="ui" data-level="debutant" href="form-rescue.html" role="listitem" style="--row:#FFC08F">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#FFC08F"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Form Rescue <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">UI · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Choisis les libellés, aides et erreurs les plus clairs.</span>
+<span class="hidden md:block text-body-sm">UI</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="ui" data-level="intermediaire" href="icon-family.html" role="listitem" style="--row:#FFC08F">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#FFC08F"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Icon Family <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">UI · 2 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Repère les icônes qui sortent de leur famille.</span>
+<span class="hidden md:block text-body-sm">UI</span>
+<span class="hidden md:block text-body-sm tabular">2 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="ui" data-level="intermediaire" href="dark-mode-repair.html" role="listitem" style="--row:#FFC08F">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#FFC08F"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Dark Mode Repair <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">UI · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Choisis la version sombre réussie d'un composant.</span>
+<span class="hidden md:block text-body-sm">UI</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="ux" data-level="debutant" href="focus-order.html" role="listitem" style="--row:#FFE08A">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#FFE08A"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Focus Order <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">UX et accessibilité · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Reconstruis l'ordre logique de la touche Tab.</span>
+<span class="hidden md:block text-body-sm">UX et accessibilité</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="ux" data-level="debutant" href="microcopy-duel.html" role="listitem" style="--row:#FFE08A">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#FFE08A"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Microcopy Duel</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">UX et accessibilité · 3 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Choisis le message qui aide vraiment à comprendre et à agir.</span>
+<span class="hidden md:block text-body-sm">UX et accessibilité</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="ux" data-level="intermediaire" href="keyboard-quest.html" role="listitem" style="--row:#FFE08A">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#FFE08A"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Keyboard Quest <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">UX et accessibilité · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Repère ce qui bloque une navigation au clavier.</span>
+<span class="hidden md:block text-body-sm">UX et accessibilité</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="motion" data-level="avance" href="easing-lab.html" role="listitem" style="--row:#9FE3D0">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#9FE3D0"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Easing Lab</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Motion et vectoriel · 4 min · Avancé</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Tords une courbe de Bézier pour reproduire un mouvement.</span>
+<span class="hidden md:block text-body-sm">Motion et vectoriel</span>
+<span class="hidden md:block text-body-sm tabular">4 min · Avancé</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="motion" data-level="debutant" href="motion-order.html" role="listitem" style="--row:#9FE3D0">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#9FE3D0"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Motion Order <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Motion et vectoriel · 2 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Range les éléments d'un écran dans leur ordre d'apparition.</span>
+<span class="hidden md:block text-body-sm">Motion et vectoriel</span>
+<span class="hidden md:block text-body-sm tabular">2 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="motion" data-level="intermediaire" href="curve-continuity.html" role="listitem" style="--row:#9FE3D0">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#9FE3D0"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Curve Continuity <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Motion et vectoriel · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Aligne les poignées d'un tracé pour supprimer ses cassures.</span>
+<span class="hidden md:block text-body-sm">Motion et vectoriel</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="motion" data-level="intermediaire" href="node-budget.html" role="listitem" style="--row:#9FE3D0">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#9FE3D0"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Node Budget <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Motion et vectoriel · 3 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Reproduis une forme avec un nombre limité de points.</span>
+<span class="hidden md:block text-body-sm">Motion et vectoriel</span>
+<span class="hidden md:block text-body-sm tabular">3 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="motion" data-level="debutant" href="boolean-builder.html" role="listitem" style="--row:#9FE3D0">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#9FE3D0"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Boolean Builder <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Motion et vectoriel · 2 min · Débutant</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Trouve l'opération booléenne qui donne la silhouette cible.</span>
+<span class="hidden md:block text-body-sm">Motion et vectoriel</span>
+<span class="hidden md:block text-body-sm tabular">2 min · Débutant</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="motion" data-level="intermediaire" href="negative-space.html" role="listitem" style="--row:#9FE3D0">
+<span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:#9FE3D0"></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">Negative Space <span class="pro-badge">Pro</span></span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">Motion et vectoriel · 2 min · Intermédiaire</span></span>
+<span class="hidden md:block text-body-md text-on-surface-variant">Reconnais une lettre à ses seules contre-formes.</span>
+<span class="hidden md:block text-body-sm">Motion et vectoriel</span>
+<span class="hidden md:block text-body-sm tabular">2 min · Intermédiaire</span>
+<span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
+</a></div>
+<div class="hidden py-14" id="no-results"><p class="text-headline-sm">Aucun jeu ne correspond à ces filtres.</p><button class="btn-quiet mt-2 text-[15px] font-medium" id="reset-filters" type="button">Réinitialiser les filtres</button></div>
+</section>
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-20 lg:pt-28 scroll-mt-20" id="melange">
+<div class="panel-line bg-white p-5 sm:p-10 grid lg:grid-cols-12 gap-8">
+<div class="lg:col-span-4">
+<h2 class="text-big">Mélange</h2>
+<p class="mt-4 text-body-md text-on-surface-variant max-w-[26rem]">Choisis tes jeux : chaque manche en tire un différent. Idéal pour s'échauffer, ou pour défier un ami avec le lien envoyé à la fin.</p>
+</div>
+<form class="lg:col-span-8 flex flex-col gap-5" id="mix-form">
+<fieldset><legend class="text-body-sm text-text-muted mb-2">Jeux inclus <button class="underline ml-2" id="mix-all" type="button">tout cocher</button><button class="underline ml-2" id="mix-none" type="button">tout décocher</button></legend>
+<div class="flex flex-wrap gap-2"><label class="mix-chip"><input checked="" type="checkbox" value="kern-clinic"/><span><i style="background:#F7B4CC"></i>Kern Clinic</span></label><label class="mix-chip"><input checked="" type="checkbox" value="optical-center"/><span><i style="background:#F7B4CC"></i>Optical Center</span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="leading-lab"/><span><i style="background:#F7B4CC"></i>Leading Lab<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="weight-match"/><span><i style="background:#F7B4CC"></i>Weight Match<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="bezier-letters"/><span><i style="background:#F7B4CC"></i>Bézier Letters<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="type-detective"/><span><i style="background:#F7B4CC"></i>Type Detective<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="rag-rescue"/><span><i style="background:#F7B4CC"></i>Rag Rescue<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="widow-hunter"/><span><i style="background:#F7B4CC"></i>Widow Hunter<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="type-scale"/><span><i style="background:#F7B4CC"></i>Type Scale<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="glyph-memory"/><span><i style="background:#F7B4CC"></i>Glyph Memory<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="color-recall"/><span><i style="background:#D8EF71"></i>Color Recall</span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="palette-recall"/><span><i style="background:#D8EF71"></i>Palette Recall<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="hue-line"/><span><i style="background:#D8EF71"></i>Hue Line</span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="saturation-ladder"/><span><i style="background:#D8EF71"></i>Saturation Ladder<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="lightness-ladder"/><span><i style="background:#D8EF71"></i>Lightness Ladder<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="gradient-repair"/><span><i style="background:#D8EF71"></i>Gradient Repair<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="contrast-rescue"/><span><i style="background:#D8EF71"></i>Contrast Rescue<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="color-impostor"/><span><i style="background:#D8EF71"></i>Color Impostor</span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="semantic-colors"/><span><i style="background:#D8EF71"></i>Semantic Colors<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="spacing-repair"/><span><i style="background:#B9D9FF"></i>Spacing Repair</span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="grid-snap"/><span><i style="background:#B9D9FF"></i>Grid Snap<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="pixel-guess"/><span><i style="background:#B9D9FF"></i>Pixel Guess<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="alignment-hunter"/><span><i style="background:#B9D9FF"></i>Alignment Hunter</span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="whitespace-budget"/><span><i style="background:#B9D9FF"></i>Whitespace Budget<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="crop-it"/><span><i style="background:#B9D9FF"></i>Crop It<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="balance-lab"/><span><i style="background:#B9D9FF"></i>Balance Lab<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="responsive-rescue"/><span><i style="background:#B9D9FF"></i>Responsive Rescue<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="five-second-layout"/><span><i style="background:#B9D9FF"></i>Five-Second Layout<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="token-detective"/><span><i style="background:#FFC08F"></i>Token Detective<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="ui-detective"/><span><i style="background:#FFC08F"></i>UI Detective</span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="state-machine"/><span><i style="background:#FFC08F"></i>State Machine<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="button-priority"/><span><i style="background:#FFC08F"></i>Button Priority<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="form-rescue"/><span><i style="background:#FFC08F"></i>Form Rescue<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="icon-family"/><span><i style="background:#FFC08F"></i>Icon Family<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="dark-mode-repair"/><span><i style="background:#FFC08F"></i>Dark Mode Repair<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="focus-order"/><span><i style="background:#FFE08A"></i>Focus Order<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="microcopy-duel"/><span><i style="background:#FFE08A"></i>Microcopy Duel</span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="keyboard-quest"/><span><i style="background:#FFE08A"></i>Keyboard Quest<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="easing-lab"/><span><i style="background:#9FE3D0"></i>Easing Lab</span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="motion-order"/><span><i style="background:#9FE3D0"></i>Motion Order<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="curve-continuity"/><span><i style="background:#9FE3D0"></i>Curve Continuity<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="node-budget"/><span><i style="background:#9FE3D0"></i>Node Budget<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="boolean-builder"/><span><i style="background:#9FE3D0"></i>Boolean Builder<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" data-pro="" type="checkbox" value="negative-space"/><span><i style="background:#9FE3D0"></i>Negative Space<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label></div><p class="mt-3 text-body-sm text-text-muted" hidden="" id="mix-pro-note">Les jeux avec un cadenas font partie d'<a class="underline" href="tarifs.html#pro">Œil Pro</a>. Les autres sont gratuits.</p></fieldset>
+<div class="flex flex-wrap items-center gap-4">
+<span class="flex flex-wrap items-center gap-2"><span class="seg-pick-label">Manches</span><span class="seg-pick" role="radiogroup"><label><input name="rounds" type="radio" value="5"/><span>5</span></label><label><input checked="" name="rounds" type="radio" value="8"/><span>8</span></label><label><input name="rounds" type="radio" value="10"/><span>10</span></label><label><input name="rounds" type="radio" value="15"/><span>15</span></label></span></span>
+<button class="btn" type="submit">Lancer le mélange<span aria-hidden="true" class="material-symbols-outlined text-[18px]">play_arrow</span></button>
+<span class="text-body-sm text-text-muted" id="mix-msg"></span>
+</div>
+</form>
+</div>
+</section>
+<div class="pb-24 lg:pb-32"></div>
+</main>
+<footer class="bg-ink text-ground pt-16 lg:pt-24 overflow-hidden">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-8">
+<div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
+<p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+</div>
+<p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+</div>
+</footer>
+<script src="assets/catalog.js"></script>
+<script src="assets/account.js"></script>
+<script>window.OEIL_DOMAINS_KEYS = Object.keys(window.OEIL_DOMAINS);</script>
+<script>
+  (function () {
+    const wanted = new URLSearchParams(location.search).get("d");
+    const state = { domain: wanted && (wanted === "all" || window.OEIL_DOMAINS_KEYS.includes(wanted)) ? wanted : "typo", level: "all" };
+    const rows = [...document.querySelectorAll("#games-list .game-row")];
+    const chips = [...document.querySelectorAll(".chip")];
+    const levels = [...document.querySelectorAll('input[name="level"]')];
+    const count = document.getElementById("filter-count");
+    const empty = document.getElementById("no-results");
+    function apply() {
+      let n = 0;
+      rows.forEach((r) => {
+        const ok = (state.domain === "all" || r.dataset.domain === state.domain) && (state.level === "all" || r.dataset.level === "all" || r.dataset.level === state.level);
+        r.classList.toggle("hidden", !ok); if (ok) n++;
+      });
+      chips.forEach((c) => { const on = c.dataset.domain === state.domain; c.setAttribute("aria-pressed", String(on)); c.classList.toggle("bg-ink", on); c.classList.toggle("text-white", on); });
+      count.textContent = n + (n > 1 ? " jeux" : " jeu");
+      empty.classList.toggle("hidden", n > 0);
+    }
+    chips.forEach((c) => c.addEventListener("click", () => { state.domain = c.dataset.domain; apply(); }));
+    levels.forEach((r) => r.addEventListener("change", () => { state.level = r.value; apply(); }));
+    document.getElementById("reset-filters").addEventListener("click", () => { state.level = "all"; levels[0].checked = true; apply(); });
+    apply();
+    // Composer un mélange : les jeux Pro sont verrouillés sans l'offre Pro
+    const pro = window.OeilAccount && window.OeilAccount.isPro();
+    document.querySelectorAll("#mix-form input[data-pro]").forEach((b) => {
+      if (pro) return;
+      b.checked = false; b.disabled = true; b.parentElement.title = "Jeu Pro";
+      b.parentElement.addEventListener("click", () => { document.getElementById("mix-msg").innerHTML = `Le cadenas indique un jeu Pro. <a class="underline" href="tarifs.html#pro">Passe à Pro</a> pour l'ajouter à tes mélanges.`; });
+    });
+    if (!pro) document.getElementById("mix-pro-note").hidden = false;
+    const boxes = [...document.querySelectorAll("#mix-form input[type=checkbox]:not(:disabled)")];
+    document.getElementById("mix-all").onclick = () => boxes.forEach((b) => (b.checked = true));
+    document.getElementById("mix-none").onclick = () => boxes.forEach((b) => (b.checked = false));
+    document.getElementById("mix-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const ids = boxes.filter((b) => b.checked).map((b) => b.value);
+      if (ids.length < 2) { document.getElementById("mix-msg").textContent = "Choisis au moins deux jeux."; return; }
+      location.href = `defi.html?jeux=${ids.join(",")}&manches=${document.querySelector('input[name="rounds"]:checked').value}`;
+    });
+  })();
+</script>
+<script src="assets/site.js"></script>
+</body></html>

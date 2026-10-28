@@ -1,0 +1,6 @@
+# Sauvegardes locales et fichiers système
+.backup-*/
+stitch_interface_web_responsive/
+.DS_Store
+.claude/
+tools/__pycache__/

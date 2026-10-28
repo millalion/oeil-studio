@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tarifs — Œil Studio</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..500,0..1,0&amp;display=swap" rel="stylesheet"/>
+<script>document.documentElement.classList.add("js")</script>
+<script src="assets/seed.js"></script>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="assets/tailwind-config.js"></script>
+<link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body class="bg-ground text-ink">
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] btn" href="#contenu">Aller au contenu</a>
+<header class="fixed top-0 inset-x-0 z-50 bg-ground">
+<div class="h-16 max-w-[1440px] mx-auto px-4 sm:px-8 grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-6">
+<a aria-label="Œil Studio, accueil" class="flex items-center gap-2.5 text-[18px] font-medium tracking-[-0.03em] w-max" href="index.html"><svg aria-hidden="true" class="h-7 w-7 shrink-0" viewBox="0 0 32 32"><rect fill="#141413" height="32" rx="6" width="32"/><path d="M5 16c3-5 6.8-7.5 11-7.5S24 11 27 16c-3 5-6.8 7.5-11 7.5S8 21 5 16Z" fill="#F7F6F2"/><circle cx="16" cy="16" fill="#F0447A" r="4.6"/><circle cx="17.6" cy="14.4" fill="#141413" r="1.3"/></svg><span>Œil Studio</span></a>
+<nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-8 text-[15px]"><a class="nav-link" href="jeux.html">Jeux</a><a class="nav-link" href="defi.html">Défi du jour</a><a class="nav-link" href="live.html">En direct</a><a class="nav-link" href="parcours.html">Parcours</a><a class="nav-link" href="profs.html">Écoles</a><a class="nav-link" aria-current="page" href="tarifs.html">Tarifs</a></nav>
+<div class="flex items-center justify-end gap-2">
+<a aria-label="Mon compte" class="nav-link inline-flex items-center gap-1.5 text-[15px] px-2 sm:px-3 h-9 rounded hover:bg-surface-container" data-account-link="" href="connexion.html"><span aria-hidden="true" class="material-symbols-outlined text-[22px]">account_circle</span><span class="hidden sm:inline" data-account-name="">Connexion</span></a>
+<a class="btn btn-sm" href="jeux.html">Jouer</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu" class="lg:hidden w-9 h-9 rounded-lg hover:bg-surface-container flex items-center justify-center" data-menu-toggle="" type="button"><span class="material-symbols-outlined text-[22px]">menu</span></button>
+</div>
+</div>
+<nav aria-label="Navigation mobile" class="hidden lg:hidden flex-col px-4 sm:px-8 pt-2 pb-6 bg-ground" id="mobile-menu"><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="jeux.html">Jeux</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="defi.html">Défi du jour</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="live.html">En direct</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="parcours.html">Parcours</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="profs.html">Écoles</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" aria-current="page" href="tarifs.html">Tarifs</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em] text-text-muted" data-account-link="" href="connexion.html">Connexion</a></nav>
+</header>
+<main class="pt-16" id="contenu">
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-6 lg:pt-10">
+<div class="dot-board px-5 sm:px-10 pt-16 pb-10">
+<p class="board-strip"><span class="board-dot"></span>Tarifs · gratuit pour jouer, Pro pour progresser</p>
+<div class="flex flex-wrap items-end justify-between gap-6">
+<h1 class="text-big max-w-[13ch]">Joue gratuitement. Progresse avec Pro.</h1>
+<span class="flex flex-wrap items-center gap-2"><span class="seg-pick" role="radiogroup"><label><input checked="" name="billing" type="radio" value="mensuel"/><span>Mensuel</span></label><label><input name="billing" type="radio" value="annuel"/><span>Annuel · 2 mois offerts</span></label></span></span>
+</div>
+<div class="price-grid mt-10 scroll-mt-24" id="pro">
+<div class="offer"><p class="offer-name">Gratuit</p><p class="offer-price">0 €</p><p class="offer-note">pour toujours, sans carte bancaire</p><ul><li>10 jeux sur 44</li><li>Le défi du jour, jeux Pro compris</li><li>Défis entre amis et parties en direct</li></ul><a class="btn-line w-full mt-auto" href="jeux.html">Jouer maintenant</a></div>
+<div class="offer offer-main" style="--field:#F7B4CC"><p class="offer-name">Œil Pro <span class="pro-badge">Pro</span></p><p class="offer-price"><span data-price-m="">3 €</span><span data-price-y="" hidden="">24 €</span><small data-per-m="">/mois</small><small data-per-y="" hidden="">/an</small></p><p class="offer-note">résiliable à tout moment</p><ul><li>Les 44 jeux, sans limite</li><li>Le parcours intensif inclus</li><li>Progression sur tous tes appareils</li></ul><a class="btn w-full mt-auto" data-plan-link="" href="abonnement.html?plan=pro-mensuel">Passer à Pro</a></div>
+<div class="offer" style="--field:#D8EF71"><p class="offer-name">Parcours intensif</p><p class="offer-price">19 €<small>une fois</small></p><p class="offer-note">14 jours, accès à vie</p><ul><li>Un principe et un jeu par jour</li><li>Fiches de synthèse</li><li>Certificat de fin de parcours</li></ul><a class="btn-line w-full mt-auto" href="abonnement.html?plan=parcours">Acheter le parcours</a><a class="btn-quiet text-[14px] w-max" href="parcours.html">Voir le programme</a></div>
+</div>
+</div>
+</section>
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-16 lg:pt-24 scroll-mt-20" id="ecoles">
+<h2 class="text-headline-lg-mobile md:text-headline-xl">Pour les classes et les écoles</h2>
+<div class="price-grid price-grid-2 mt-8">
+<div class="offer offer-main" style="--field:#B9D9FF"><p class="offer-name">Classe</p><p class="offer-price">9 €<small>/mois</small></p><p class="offer-note">par enseignant, jusqu'à 40 étudiants · 14 jours d'essai gratuit</p><ul><li>Comptes Pro pour toute la classe</li><li>Parties en direct sur tous les téléphones</li><li>Classement automatique et suivi sur l'année</li></ul><a class="btn w-full mt-auto" href="abonnement.html?plan=classe-mensuel">Commencer l'essai gratuit</a></div>
+<div class="offer"><p class="offer-name">École</p><p class="offer-price">dès 690 €<small>/an</small></p><p class="offer-note">plusieurs classes ou campus, sur devis</p><ul><li>Licences pour toute l'équipe pédagogique</li><li>Connexion via l'ENT ou le SSO</li><li>Exports pour les évaluations, bon de commande</li></ul><a class="btn-line w-full mt-auto" href="contact.html?offre=ecole">Estimer et demander un devis</a></div>
+</div>
+</section>
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+<div class="lg:col-span-5"><h2 class="text-headline-lg-mobile md:text-headline-xl">Gratuit ou Pro ?</h2><p class="mt-4 text-body-md text-on-surface-variant max-w-[28rem]">Le gratuit suffit pour s'entraîner chaque jour. Pro ouvre les jeux avancés et garde ta progression partout.</p></div>
+<div class="lg:col-span-7 overflow-x-auto"><table class="rank-table compare-table"><thead><tr><th></th><th>Gratuit</th><th>Œil Pro</th></tr></thead><tbody><tr><th>Jeux disponibles</th><td>10 jeux</td><td><b>44 jeux</b></td></tr><tr><th>Défi du jour</th><td>oui</td><td><b>oui</b></td></tr><tr><th>Défier ses amis, parties en direct</th><td>oui</td><td><b>oui</b></td></tr><tr><th>Historique et progression</th><td>sur cet appareil</td><td><b>sur tous tes appareils</b></td></tr><tr><th>Parcours intensif de 14 jours</th><td>–</td><td><b>inclus</b></td></tr><tr><th>Nouveaux jeux</th><td>certains</td><td><b>tous</b></td></tr></tbody></table></div>
+</section>
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pb-24 lg:pb-32 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+<h2 class="lg:col-span-5 text-headline-lg-mobile md:text-headline-xl">Paiement et résiliation</h2>
+<div class="lg:col-span-7">
+<details class="faq border-t border-border-subtle"><summary class="flex items-center justify-between gap-6 py-5 text-[19px] font-medium">Comment se passe le paiement ?<span aria-hidden="true" class="faq-icon material-symbols-outlined">add</span></summary><p class="pb-5 text-on-surface-variant">Par carte bancaire ou Apple Pay, sur la page de paiement sécurisée de Stripe. Œil Studio ne voit jamais ton numéro de carte.</p></details>
+<details class="faq border-t border-border-subtle"><summary class="flex items-center justify-between gap-6 py-5 text-[19px] font-medium">Puis-je résilier quand je veux ?<span aria-hidden="true" class="faq-icon material-symbols-outlined">add</span></summary><p class="pb-5 text-on-surface-variant">Oui, depuis Mon compte. Tu gardes Pro jusqu'à la fin de la période payée.</p></details>
+<details class="faq border-t border-border-subtle border-b"><summary class="flex items-center justify-between gap-6 py-5 text-[19px] font-medium">Et si ça ne me convient pas ?<span aria-hidden="true" class="faq-icon material-symbols-outlined">add</span></summary><p class="pb-5 text-on-surface-variant">Le parcours est remboursé sous 14 jours sur simple demande. L'offre Classe commence par 14 jours d'essai gratuit.</p></details>
+</div>
+</section>
+</main>
+<footer class="bg-ink text-ground pt-16 lg:pt-24 overflow-hidden">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-8">
+<div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
+<p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+</div>
+<p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+</div>
+</footer>
+<script>
+  (function () {
+    const radios = [...document.querySelectorAll('input[name="billing"]')];
+    const set = () => {
+      const y = radios.find((r) => r.checked).value === "annuel";
+      document.querySelectorAll("[data-price-m],[data-per-m]").forEach((n) => (n.hidden = y));
+      document.querySelectorAll("[data-price-y],[data-per-y]").forEach((n) => (n.hidden = !y));
+      document.querySelectorAll("[data-plan-link]").forEach((a) => (a.href = `abonnement.html?plan=pro-${y ? "annuel" : "mensuel"}`));
+    };
+    radios.forEach((r) => r.addEventListener("change", set));
+    set();
+  })();
+</script>
+<script src="assets/site.js"></script>
+</body></html>

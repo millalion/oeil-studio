@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>L'œil UI, le parcours — Œil Studio</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..500,0..1,0&amp;display=swap" rel="stylesheet"/>
+<script>document.documentElement.classList.add("js")</script>
+<script src="assets/seed.js"></script>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="assets/tailwind-config.js"></script>
+<link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body class="bg-ground text-ink">
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] btn" href="#contenu">Aller au contenu</a>
+<header class="fixed top-0 inset-x-0 z-50 bg-ground">
+<div class="h-16 max-w-[1440px] mx-auto px-4 sm:px-8 grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-6">
+<a aria-label="Œil Studio, accueil" class="flex items-center gap-2.5 text-[18px] font-medium tracking-[-0.03em] w-max" href="index.html"><svg aria-hidden="true" class="h-7 w-7 shrink-0" viewBox="0 0 32 32"><rect fill="#141413" height="32" rx="6" width="32"/><path d="M5 16c3-5 6.8-7.5 11-7.5S24 11 27 16c-3 5-6.8 7.5-11 7.5S8 21 5 16Z" fill="#F7F6F2"/><circle cx="16" cy="16" fill="#F0447A" r="4.6"/><circle cx="17.6" cy="14.4" fill="#141413" r="1.3"/></svg><span>Œil Studio</span></a>
+<nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-8 text-[15px]"><a class="nav-link" href="jeux.html">Jeux</a><a class="nav-link" href="defi.html">Défi du jour</a><a class="nav-link" href="live.html">En direct</a><a class="nav-link" aria-current="page" href="parcours.html">Parcours</a><a class="nav-link" href="profs.html">Écoles</a><a class="nav-link" href="tarifs.html">Tarifs</a></nav>
+<div class="flex items-center justify-end gap-2">
+<a aria-label="Mon compte" class="nav-link inline-flex items-center gap-1.5 text-[15px] px-2 sm:px-3 h-9 rounded hover:bg-surface-container" data-account-link="" href="connexion.html"><span aria-hidden="true" class="material-symbols-outlined text-[22px]">account_circle</span><span class="hidden sm:inline" data-account-name="">Connexion</span></a>
+<a class="btn btn-sm" href="jeux.html">Jouer</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu" class="lg:hidden w-9 h-9 rounded-lg hover:bg-surface-container flex items-center justify-center" data-menu-toggle="" type="button"><span class="material-symbols-outlined text-[22px]">menu</span></button>
+</div>
+</div>
+<nav aria-label="Navigation mobile" class="hidden lg:hidden flex-col px-4 sm:px-8 pt-2 pb-6 bg-ground" id="mobile-menu"><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="jeux.html">Jeux</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="defi.html">Défi du jour</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="live.html">En direct</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" aria-current="page" href="parcours.html">Parcours</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="profs.html">Écoles</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="tarifs.html">Tarifs</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em] text-text-muted" data-account-link="" href="connexion.html">Connexion</a></nav>
+</header>
+<main class="pt-16" id="contenu">
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-6 lg:pt-10">
+<div class="dot-board px-5 sm:px-10 pt-16 pb-10 lg:pb-14 grid lg:grid-cols-12 gap-8 items-end">
+<p class="board-strip"><span class="board-dot" style="background:#D8EF71"></span>L'œil UI · programme guidé</p>
+<div class="lg:col-span-8">
+<h1 class="text-big reveal">14 jours pour composer juste.</h1>
+<p class="reveal mt-6 max-w-[38rem] text-body-lg" style="--d:80ms">Chaque jour, un principe, un jeu pour le sentir et une fiche pour le retenir. Dix minutes par jour, et à la fin, des décisions de mise en page que tu sais justifier.</p>
+</div>
+<div class="lg:col-span-4 panel-line bg-white p-6 reveal" style="--d:140ms">
+<p class="text-[88px] font-medium tracking-[-0.06em] leading-[0.9] tabular">19 €</p>
+<p class="mt-3 text-body-sm">TTC, payé une fois. Accès à vie, sans abonnement. Inclus dans Œil Pro.</p>
+<a class="btn w-full mt-6" href="abonnement.html?plan=parcours">Acheter le parcours</a>
+<p class="mt-3 text-body-sm text-text-muted">Remboursé sous 14 jours si ça ne te convient pas.</p>
+</div>
+</div>
+</section>
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 py-20 lg:py-28">
+<h2 class="text-big mb-10 lg:mb-14 reveal">Le programme.</h2>
+<ol class="day-list reveal" style="--d:80ms"><li class="day-row" style="--field:#F7B4CC"><span class="day-num">Jour 1</span><span class="day-title">Le crénage optique</span><span class="day-text">On juge des surfaces de blanc, pas des distances.</span><a class="day-game" href="kern-clinic.html"><i></i>Kern Clinic</a></li><li class="day-row" style="--field:#F7B4CC"><span class="day-num">Jour 2</span><span class="day-title">Le centre optique</span><span class="day-text">La masse d'une forme déplace son centre perçu.</span><a class="day-game" href="optical-center.html"><i></i>Optical Center</a></li><li class="day-row" style="--field:#B9D9FF"><span class="day-num">Jour 3</span><span class="day-title">La proximité</span><span class="day-text">Ce qui va ensemble est plus proche que ce qui est séparé.</span><a class="day-game" href="spacing-repair.html"><i></i>Spacing Repair</a></li><li class="day-row" style="--field:#D8EF71"><span class="day-num">Jour 4</span><span class="day-title">La mémoire des couleurs</span><span class="day-text">On se souvient des couleurs plus vives qu'elles ne sont.</span><a class="day-game" href="color-recall.html"><i></i>Color Recall</a></li><li class="day-row" style="--field:#D8EF71"><span class="day-num">Jour 5</span><span class="day-title">La clarté perçue</span><span class="day-text">Un jaune paraît toujours plus clair qu'un bleu.</span><a class="day-game" href="lightness-ladder.html"><i></i>Lightness Ladder</a></li><li class="day-row" style="--field:#D8EF71"><span class="day-num">Jour 6</span><span class="day-title">Le contraste lisible</span><span class="day-text">4,5:1 pour le texte courant, 3:1 pour le grand texte.</span><a class="day-game" href="contrast-rescue.html"><i></i>Contrast Rescue</a></li><li class="day-row" style="--field:#F7B4CC"><span class="day-num">Jour 7</span><span class="day-title">L'interlignage</span><span class="day-text">Plus le corps grandit, plus l'interlignage se resserre.</span><a class="day-game" href="leading-lab.html"><i></i>Leading Lab</a></li><li class="day-row" style="--field:#F7B4CC"><span class="day-num">Jour 8</span><span class="day-title">La graisse et la taille</span><span class="day-text">À graisse égale, un grand mot paraît plus noir.</span><a class="day-game" href="weight-match.html"><i></i>Weight Match</a></li><li class="day-row" style="--field:#B9D9FF"><span class="day-num">Jour 9</span><span class="day-title">Les alignements</span><span class="day-text">Deux pixels suffisent à casser une colonne.</span><a class="day-game" href="alignment-hunter.html"><i></i>Alignment Hunter</a></li><li class="day-row" style="--field:#B9D9FF"><span class="day-num">Jour 10</span><span class="day-title">L'équilibre des masses</span><span class="day-text">Un petit poids loin du centre compense un gros poids proche.</span><a class="day-game" href="balance-lab.html"><i></i>Balance Lab</a></li><li class="day-row" style="--field:#B9D9FF"><span class="day-num">Jour 11</span><span class="day-title">Les étalons de taille</span><span class="day-text">On estime mieux par comparaison qu'en valeur absolue.</span><a class="day-game" href="pixel-guess.html"><i></i>Pixel Guess</a></li><li class="day-row" style="--field:#FFC08F"><span class="day-num">Jour 12</span><span class="day-title">Le design system</span><span class="day-text">Une valeur hors système en appelle d'autres.</span><a class="day-game" href="token-detective.html"><i></i>Token Detective</a></li><li class="day-row" style="--field:#D8EF71"><span class="day-num">Jour 13</span><span class="day-title">Les écarts de teinte</span><span class="day-text">On compare mieux deux voisines que deux extrêmes.</span><a class="day-game" href="hue-line.html"><i></i>Hue Line</a></li><li class="day-row" style="--field:#9FE3D0"><span class="day-num">Jour 14</span><span class="day-title">Le mouvement naturel</span><span class="day-text">Rien ne démarre ni ne s'arrête sans accélérer.</span><a class="day-game" href="easing-lab.html"><i></i>Easing Lab</a></li></ol>
+<p class="mt-6 text-body-sm text-text-muted">Tous ces jeux sont déjà jouables gratuitement. Le parcours ajoute l'ordre, les fiches de synthèse, les corrections commentées et le certificat de fin.</p>
+</section>
+</main>
+<footer class="bg-ink text-ground pt-16 lg:pt-24 overflow-hidden">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-8">
+<div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
+<p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+</div>
+<p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+</div>
+</footer>
+<script src="assets/site.js"></script>
+</body></html>

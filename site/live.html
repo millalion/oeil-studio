@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Partie en direct — Œil Studio</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..500,0..1,0&amp;display=swap" rel="stylesheet"/>
+<script>document.documentElement.classList.add("js")</script>
+<script src="assets/seed.js"></script>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="assets/tailwind-config.js"></script>
+<link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body class="bg-ground text-ink">
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] btn" href="#contenu">Aller au contenu</a>
+<header class="fixed top-0 inset-x-0 z-50 bg-ground">
+<div class="h-16 max-w-[1440px] mx-auto px-4 sm:px-8 grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-6">
+<a aria-label="Œil Studio, accueil" class="flex items-center gap-2.5 text-[18px] font-medium tracking-[-0.03em] w-max" href="index.html"><svg aria-hidden="true" class="h-7 w-7 shrink-0" viewBox="0 0 32 32"><rect fill="#141413" height="32" rx="6" width="32"/><path d="M5 16c3-5 6.8-7.5 11-7.5S24 11 27 16c-3 5-6.8 7.5-11 7.5S8 21 5 16Z" fill="#F7F6F2"/><circle cx="16" cy="16" fill="#F0447A" r="4.6"/><circle cx="17.6" cy="14.4" fill="#141413" r="1.3"/></svg><span>Œil Studio</span></a>
+<nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-8 text-[15px]"><a class="nav-link" href="jeux.html">Jeux</a><a class="nav-link" href="defi.html">Défi du jour</a><a class="nav-link" aria-current="page" href="live.html">En direct</a><a class="nav-link" href="parcours.html">Parcours</a><a class="nav-link" href="profs.html">Écoles</a><a class="nav-link" href="tarifs.html">Tarifs</a></nav>
+<div class="flex items-center justify-end gap-2">
+<a aria-label="Mon compte" class="nav-link inline-flex items-center gap-1.5 text-[15px] px-2 sm:px-3 h-9 rounded hover:bg-surface-container" data-account-link="" href="connexion.html"><span aria-hidden="true" class="material-symbols-outlined text-[22px]">account_circle</span><span class="hidden sm:inline" data-account-name="">Connexion</span></a>
+<a class="btn btn-sm" href="jeux.html">Jouer</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu" class="lg:hidden w-9 h-9 rounded-lg hover:bg-surface-container flex items-center justify-center" data-menu-toggle="" type="button"><span class="material-symbols-outlined text-[22px]">menu</span></button>
+</div>
+</div>
+<nav aria-label="Navigation mobile" class="hidden lg:hidden flex-col px-4 sm:px-8 pt-2 pb-6 bg-ground" id="mobile-menu"><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="jeux.html">Jeux</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="defi.html">Défi du jour</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" aria-current="page" href="live.html">En direct</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="parcours.html">Parcours</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="profs.html">Écoles</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="tarifs.html">Tarifs</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em] text-text-muted" data-account-link="" href="connexion.html">Connexion</a></nav>
+</header>
+<main class="pt-16" id="contenu">
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-6 lg:pt-10 pb-20">
+
+<div class="ticket" id="step-setup">
+<div class="ticket-main">
+<p class="board-strip"><span class="board-dot" style="background:#FFE08A"></span>Partie en direct · à projeter devant la classe ou tes amis</p>
+<h1 class="text-big max-w-[13ch]">Lance une partie en direct.</h1>
+<p class="mt-4 max-w-[38rem] text-body-lg">Choisis les jeux, crée la salle, projette cet écran. Chacun rejoint avec le code ou le QR code et joue le même tirage.</p>
+<form class="mt-8 flex flex-col gap-6" id="live-form">
+<label class="grid gap-1 text-body-sm text-text-muted max-w-[28rem]">Nom de la partie<input class="field" id="live-title" placeholder="Ex. : Échauffement typo du mardi" required="" type="text"/></label>
+<fieldset><legend class="text-body-sm text-text-muted mb-2">Jeux de la partie</legend><div class="flex flex-wrap gap-2"><label class="mix-chip"><input checked="" type="checkbox" value="kern-clinic"/><span><i style="background:#F7B4CC"></i>Kern Clinic</span></label><label class="mix-chip"><input type="checkbox" value="optical-center"/><span><i style="background:#F7B4CC"></i>Optical Center</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="leading-lab"/><span><i style="background:#F7B4CC"></i>Leading Lab<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="weight-match"/><span><i style="background:#F7B4CC"></i>Weight Match<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="bezier-letters"/><span><i style="background:#F7B4CC"></i>Bézier Letters<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="type-detective"/><span><i style="background:#F7B4CC"></i>Type Detective<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="rag-rescue"/><span><i style="background:#F7B4CC"></i>Rag Rescue<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="widow-hunter"/><span><i style="background:#F7B4CC"></i>Widow Hunter<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="type-scale"/><span><i style="background:#F7B4CC"></i>Type Scale<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="glyph-memory"/><span><i style="background:#F7B4CC"></i>Glyph Memory<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input type="checkbox" value="color-recall"/><span><i style="background:#D8EF71"></i>Color Recall</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="palette-recall"/><span><i style="background:#D8EF71"></i>Palette Recall<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="hue-line"/><span><i style="background:#D8EF71"></i>Hue Line</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="saturation-ladder"/><span><i style="background:#D8EF71"></i>Saturation Ladder<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="lightness-ladder"/><span><i style="background:#D8EF71"></i>Lightness Ladder<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="gradient-repair"/><span><i style="background:#D8EF71"></i>Gradient Repair<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="contrast-rescue"/><span><i style="background:#D8EF71"></i>Contrast Rescue<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="color-impostor"/><span><i style="background:#D8EF71"></i>Color Impostor</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="semantic-colors"/><span><i style="background:#D8EF71"></i>Semantic Colors<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="spacing-repair"/><span><i style="background:#B9D9FF"></i>Spacing Repair</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="grid-snap"/><span><i style="background:#B9D9FF"></i>Grid Snap<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="pixel-guess"/><span><i style="background:#B9D9FF"></i>Pixel Guess<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input type="checkbox" value="alignment-hunter"/><span><i style="background:#B9D9FF"></i>Alignment Hunter</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="whitespace-budget"/><span><i style="background:#B9D9FF"></i>Whitespace Budget<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="crop-it"/><span><i style="background:#B9D9FF"></i>Crop It<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="balance-lab"/><span><i style="background:#B9D9FF"></i>Balance Lab<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="responsive-rescue"/><span><i style="background:#B9D9FF"></i>Responsive Rescue<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="five-second-layout"/><span><i style="background:#B9D9FF"></i>Five-Second Layout<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="token-detective"/><span><i style="background:#FFC08F"></i>Token Detective<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="ui-detective"/><span><i style="background:#FFC08F"></i>UI Detective</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="state-machine"/><span><i style="background:#FFC08F"></i>State Machine<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="button-priority"/><span><i style="background:#FFC08F"></i>Button Priority<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="form-rescue"/><span><i style="background:#FFC08F"></i>Form Rescue<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="icon-family"/><span><i style="background:#FFC08F"></i>Icon Family<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="dark-mode-repair"/><span><i style="background:#FFC08F"></i>Dark Mode Repair<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="focus-order"/><span><i style="background:#FFE08A"></i>Focus Order<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="microcopy-duel"/><span><i style="background:#FFE08A"></i>Microcopy Duel</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="keyboard-quest"/><span><i style="background:#FFE08A"></i>Keyboard Quest<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input type="checkbox" value="easing-lab"/><span><i style="background:#9FE3D0"></i>Easing Lab</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="motion-order"/><span><i style="background:#9FE3D0"></i>Motion Order<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="curve-continuity"/><span><i style="background:#9FE3D0"></i>Curve Continuity<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="node-budget"/><span><i style="background:#9FE3D0"></i>Node Budget<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="boolean-builder"/><span><i style="background:#9FE3D0"></i>Boolean Builder<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="negative-space"/><span><i style="background:#9FE3D0"></i>Negative Space<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label></div></fieldset>
+<div class="flex flex-wrap items-center gap-4"><span class="flex flex-wrap items-center gap-2"><span class="seg-pick-label">Manches</span><span class="seg-pick" role="radiogroup"><label><input name="live-rounds" type="radio" value="5"/><span>5</span></label><label><input checked="" name="live-rounds" type="radio" value="6"/><span>6</span></label><label><input name="live-rounds" type="radio" value="8"/><span>8</span></label><label><input name="live-rounds" type="radio" value="10"/><span>10</span></label></span></span><span class="text-body-sm text-text-muted" id="live-msg"></span></div>
+</form>
+</div>
+<aside class="ticket-side" style="background:#FFE08A">
+<p class="side-title">Comment ça se passe</p>
+<ul class="step-list"><li><span aria-hidden="true" class="material-symbols-outlined">add_box</span><span><b>Crée la salle.</b> Un code et un QR code s'affichent à l'écran.</span></li><li><span aria-hidden="true" class="material-symbols-outlined">qr_code_scanner</span><span><b>Les joueurs rejoignent</b> en scannant ou sur rejoindre.html, avec leur prénom.</span></li><li><span aria-hidden="true" class="material-symbols-outlined">play_arrow</span><span><b>Tu lances.</b> Tout le monde joue les mêmes manches, en même temps.</span></li><li><span aria-hidden="true" class="material-symbols-outlined">leaderboard</span><span><b>Le classement</b> bouge à chaque manche, jusqu'au podium.</span></li></ul>
+<button class="btn w-full mt-auto" form="live-form" type="submit">Créer la salle<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></button>
+</aside>
+</div>
+
+<div class="ticket" hidden="" id="step-lobby">
+<div class="ticket-main">
+<p class="board-strip"><span class="board-dot" style="background:#FFE08A"></span>Salle d'attente · <span id="lobby-title"></span></p>
+<p class="text-body-lg">Va sur <b id="lobby-url"></b> et entre le code</p>
+<p aria-live="polite" class="live-code" id="lobby-code"></p>
+<div class="flex flex-wrap items-center gap-6 mt-6"><div class="live-qr" id="lobby-qr"></div><div class="flex flex-col gap-2"><p class="text-body-md">ou scanne ce QR code avec ton téléphone.</p><p class="text-body-sm text-text-muted" id="lobby-meta"></p><a class="btn-line btn-sm w-max mt-2" id="lobby-self" target="_blank">Ouvrir la page joueur dans un onglet</a></div></div>
+</div>
+<aside class="ticket-side" style="background:#FFE08A">
+<div class="flex items-center justify-between"><p class="font-medium">Joueurs</p><p class="tabular font-medium" id="lobby-count">0 joueur</p></div>
+<ul class="live-players" id="lobby-players"><li class="live-empty">En attente des premiers joueurs…</li></ul>
+<button class="btn w-full mt-auto" disabled="" id="lobby-start" type="button">Lancer la partie<span aria-hidden="true" class="material-symbols-outlined text-[18px]">play_arrow</span></button>
+<button class="btn-quiet text-[14px] w-max" id="lobby-cancel" type="button">Annuler la salle</button>
+</aside>
+</div>
+
+<div class="ticket" hidden="" id="step-live">
+<div class="ticket-main">
+<p class="board-strip"><span class="board-dot" style="background:#FFE08A"></span>En cours · <span id="live-title-h"></span></p>
+<h1 class="text-headline-lg-mobile md:text-headline-xl">Classement en direct</h1>
+<ol class="live-board" id="live-board"></ol>
+</div>
+<aside class="ticket-side" style="background:#FFE08A">
+<p class="text-body-sm">Retardataires : code</p>
+<p class="live-code live-code-sm" id="live-code-small"></p>
+<div class="live-qr live-qr-sm" id="live-qr-small"></div>
+<button class="btn w-full mt-auto" id="live-end" type="button">Terminer et afficher le podium</button>
+</aside>
+</div>
+
+<div class="dot-board px-5 sm:px-10 pt-16 pb-12" hidden="" id="step-podium">
+<p class="board-strip"><span class="board-dot" style="background:#FFE08A"></span>Fin de partie</p>
+<h1 class="text-big text-center">Le podium</h1>
+<div class="podium" id="podium"></div>
+<ol class="live-board mt-10 max-w-[48rem] mx-auto" id="podium-all"></ol>
+<div class="flex justify-center gap-3 mt-8"><a class="btn" href="live.html">Nouvelle partie</a><a class="btn-line" href="profs.html">Espace écoles</a></div>
+</div>
+<p class="live-note"><span class="material-symbols-outlined" aria-hidden="true">info</span>Démo sans serveur : la partie fonctionne entre les onglets d'un même navigateur. Pour jouer depuis plusieurs téléphones, il faudra brancher le serveur dans <code>assets/live.js</code>.</p>
+</section>
+</main>
+<footer class="bg-ink text-ground pt-16 lg:pt-24 overflow-hidden">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-8">
+<div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
+<p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+</div>
+<p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+</div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="assets/catalog.js"></script>
+<script src="assets/account.js"></script>
+<script src="assets/live.js"></script>
+<script>
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const games = window.OEIL_GAMES;
+    let room = null;
+    if (!(window.OeilAccount && OeilAccount.isPro())) document.querySelectorAll("#live-form input[data-pro]").forEach((b) => { b.checked = false; b.disabled = true; });
+    const show = (step) => ["setup", "lobby", "live", "podium"].forEach((k) => ($("step-" + k).hidden = k !== step));
+    function joinUrl() { return location.href.split("#")[0].split("?")[0].replace(/[^/]*$/, "") + "rejoindre.html"; }
+    $("live-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const ids = [...document.querySelectorAll("#live-form input[type=checkbox]:checked")].map((b) => b.value);
+      if (!ids.length) { $("live-msg").textContent = "Choisis au moins un jeu."; return; }
+      const rounds = +document.querySelector('input[name="live-rounds"]:checked').value;
+      room = OeilLive.createRoom({ title: $("live-title").value.trim() || "Partie en direct", ids, rounds });
+      $("lobby-code").textContent = room.code;
+      $("lobby-url").textContent = joinUrl().replace(/^https?:\/\//, "");
+      $("lobby-title").textContent = room.title;
+      $("lobby-meta").textContent = `${rounds} manches · ${ids.length} jeu${ids.length > 1 ? "x" : ""}`;
+      const link = `${joinUrl()}?code=${room.code}`;
+      $("lobby-self").href = link;
+      $("lobby-qr").innerHTML = "";
+      if (window.QRCode) new QRCode($("lobby-qr"), { text: link, width: 200, height: 200, colorDark: "#141413", colorLight: "#ffffff" });
+      else $("lobby-qr").textContent = link;
+      show("lobby");
+      OeilLive.subscribe(room.code, render);
+      render(room);
+    });
+    function render(r) {
+      room = r;
+      const ranking = OeilLive.ranking(r);
+      const n = ranking.length;
+      $("lobby-count").textContent = `${n} joueur${n > 1 ? "s" : ""}`;
+      $("lobby-players").innerHTML = n ? ranking.map((p) => `<li><span class="live-avatar">${esc(p.name[0] || "?").toUpperCase()}</span>${esc(p.name)}</li>`).join("") : '<li class="live-empty">En attente des premiers joueurs…</li>';
+      $("lobby-start").disabled = !n;
+      if (r.status === "playing") {
+        show("live");
+        $("live-code-small").textContent = r.code;
+        if (!$("live-qr-small").childElementCount && window.QRCode) new QRCode($("live-qr-small"), { text: `${joinUrl()}?code=${r.code}`, width: 120, height: 120, colorDark: "#141413", colorLight: "#ffffff" });
+        $("live-title-h").textContent = r.title;
+        $("live-board").innerHTML = ranking.map((p, i) => `<li class="live-row"><span class="live-rank">${i + 1}</span><span class="live-name">${esc(p.name)}${p.done ? ' <small>terminé</small>' : ""}</span><span class="live-dots">${Array.from({ length: r.rounds }, (_, k) => `<i class="${p.scores[k] != null ? "is-done" : ""}" title="${p.scores[k] != null ? p.scores[k] + " %" : ""}">${p.scores[k] != null ? p.scores[k] : ""}</i>`).join("")}</span><b class="live-total">${p.total} pts</b></li>`).join("");
+      }
+      if (r.status === "finished") podium(ranking);
+    }
+    function podium(ranking) {
+      show("podium");
+      const top = ranking.slice(0, 3), order = [1, 0, 2];
+      $("podium").innerHTML = order.filter((i) => top[i]).map((i) => `<div class="podium-step podium-${i + 1}"><span class="live-avatar">${esc(top[i].name[0] || "?").toUpperCase()}</span><b>${esc(top[i].name)}</b><span>${top[i].total} pts</span><i>${i + 1}</i></div>`).join("");
+      $("podium-all").innerHTML = ranking.map((p, i) => `<li class="live-row"><span class="live-rank">${i + 1}</span><span class="live-name">${esc(p.name)}</span><span class="text-body-sm text-text-muted">${p.played} manche${p.played > 1 ? "s" : ""} · moyenne ${Math.round(p.avg)} %</span><b class="live-total">${p.total} pts</b></li>`).join("");
+    }
+    $("lobby-start").addEventListener("click", () => room && render(OeilLive.start(room.code)));
+    $("lobby-cancel").addEventListener("click", () => { show("setup"); room = null; });
+    $("live-end").addEventListener("click", () => room && render(OeilLive.finish(room.code)));
+  })();
+</script>
+<script src="assets/site.js"></script>
+</body></html>

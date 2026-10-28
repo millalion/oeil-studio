@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rejoindre une partie — Œil Studio</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..500,0..1,0&amp;display=swap" rel="stylesheet"/>
+<script>document.documentElement.classList.add("js")</script>
+<script src="assets/seed.js"></script>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="assets/tailwind-config.js"></script>
+<link href="assets/style.css" rel="stylesheet"/>
+</head>
+<body class="bg-ground text-ink">
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] btn" href="#contenu">Aller au contenu</a>
+<header class="fixed top-0 inset-x-0 z-50 bg-ground">
+<div class="h-16 max-w-[1440px] mx-auto px-4 sm:px-8 grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-6">
+<a aria-label="Œil Studio, accueil" class="flex items-center gap-2.5 text-[18px] font-medium tracking-[-0.03em] w-max" href="index.html"><svg aria-hidden="true" class="h-7 w-7 shrink-0" viewBox="0 0 32 32"><rect fill="#141413" height="32" rx="6" width="32"/><path d="M5 16c3-5 6.8-7.5 11-7.5S24 11 27 16c-3 5-6.8 7.5-11 7.5S8 21 5 16Z" fill="#F7F6F2"/><circle cx="16" cy="16" fill="#F0447A" r="4.6"/><circle cx="17.6" cy="14.4" fill="#141413" r="1.3"/></svg><span>Œil Studio</span></a>
+<nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-8 text-[15px]"><a class="nav-link" href="jeux.html">Jeux</a><a class="nav-link" href="defi.html">Défi du jour</a><a class="nav-link" href="live.html">En direct</a><a class="nav-link" href="parcours.html">Parcours</a><a class="nav-link" href="profs.html">Écoles</a><a class="nav-link" href="tarifs.html">Tarifs</a></nav>
+<div class="flex items-center justify-end gap-2">
+<a aria-label="Mon compte" class="nav-link inline-flex items-center gap-1.5 text-[15px] px-2 sm:px-3 h-9 rounded hover:bg-surface-container" data-account-link="" href="connexion.html"><span aria-hidden="true" class="material-symbols-outlined text-[22px]">account_circle</span><span class="hidden sm:inline" data-account-name="">Connexion</span></a>
+<a class="btn btn-sm" href="jeux.html">Jouer</a>
+<button aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu" class="lg:hidden w-9 h-9 rounded-lg hover:bg-surface-container flex items-center justify-center" data-menu-toggle="" type="button"><span class="material-symbols-outlined text-[22px]">menu</span></button>
+</div>
+</div>
+<nav aria-label="Navigation mobile" class="hidden lg:hidden flex-col px-4 sm:px-8 pt-2 pb-6 bg-ground" id="mobile-menu"><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="jeux.html">Jeux</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="defi.html">Défi du jour</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="live.html">En direct</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="parcours.html">Parcours</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="profs.html">Écoles</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="tarifs.html">Tarifs</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em] text-text-muted" data-account-link="" href="connexion.html">Connexion</a></nav>
+</header>
+<main class="pt-16" id="contenu">
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-6 lg:pt-10 pb-20">
+<div class="dot-board">
+<p class="board-strip"><span class="board-dot" style="background:#FFE08A"></span>Rejoindre une partie en direct</p>
+<div class="px-5 sm:px-10 pt-16 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+<div class="lg:col-span-6">
+<h1 class="text-big">Entre le code.</h1>
+<p class="mt-4 text-body-lg max-w-[30rem]">Le code de la partie s'affiche sur l'écran de l'hôte, sous le QR code.</p>
+</div>
+<div class="lg:col-span-6">
+<form class="join-card" id="join-form">
+<label class="grid gap-2 text-body-sm text-text-muted">Code de la partie<input autocapitalize="characters" autocomplete="off" class="join-code" id="join-code" maxlength="5" placeholder="K7Q4M" required="" type="text"/></label>
+<label class="grid gap-2 text-body-sm text-text-muted">Ton prénom<input autocomplete="given-name" class="h-12 rounded border border-ink bg-white px-3 text-[18px] text-ink" id="join-name" maxlength="24" required="" type="text"/></label>
+<button class="btn w-full" type="submit">Rejoindre<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></button>
+<p aria-live="polite" class="text-body-sm text-error" id="join-error"></p>
+</form>
+<div class="join-card" hidden="" id="join-wait">
+<p class="text-body-sm text-text-muted">Tu es dans la salle</p>
+<p class="text-headline-md" id="wait-title"></p>
+<p class="mt-2 flex items-center gap-2 text-body-md"><span class="sm-spin sm-spin-dark"></span>En attente du lancement par l'hôte…</p>
+<ul class="live-players mt-4" id="wait-players"></ul>
+</div>
+</div>
+</div>
+<div class="px-5 sm:px-10 pb-8"><p class="live-note"><span class="material-symbols-outlined" aria-hidden="true">info</span>Démo sans serveur : la partie fonctionne entre les onglets d'un même navigateur. Pour jouer depuis plusieurs téléphones, il faudra brancher le serveur dans <code>assets/live.js</code>.</p></div>
+</div>
+</section>
+</main>
+<footer class="bg-ink text-ground pt-16 lg:pt-24 overflow-hidden">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-8">
+<div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
+<p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+</div>
+<p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+</div>
+</footer>
+<script src="assets/live.js"></script>
+<script>
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const q = new URLSearchParams(location.search);
+    if (q.get("code")) $("join-code").value = q.get("code").toUpperCase();
+    try { $("join-name").value = JSON.parse(localStorage.getItem("oeil:name")) || ""; } catch (e) {}
+    $("join-code").addEventListener("input", (e) => (e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "")));
+    $("join-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const code = $("join-code").value.trim(), name = $("join-name").value.trim();
+      const room = await OeilLive.fetchRoom(code);
+      if (!room) { $("join-error").textContent = "Code introuvable. Vérifie le code affiché par l'hôte."; return; }
+      if (room.status === "finished") { $("join-error").textContent = "Cette partie est terminée."; return; }
+      try { localStorage.setItem("oeil:name", JSON.stringify(name)); } catch (e2) {}
+      const go = (r) => {
+        if (r.status === "playing") { location.href = OeilLive.playLink(r, name); return; }
+        $("wait-title").textContent = r.title;
+        $("wait-players").innerHTML = Object.values(r.players).map((p) => `<li><span class="live-avatar">${esc(p.name[0] || "?").toUpperCase()}</span>${esc(p.name)}</li>`).join("");
+      };
+      go(OeilLive.join(code, name));
+      $("join-form").hidden = true; $("join-wait").hidden = false;
+      OeilLive.subscribe(code, go);
+    });
+  })();
+</script>
+<script src="assets/site.js"></script>
+</body></html>
