@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<html data-auth="1" lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Mon compte — Œil Studio</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
@@ -25,34 +25,50 @@
 <nav aria-label="Navigation mobile" class="hidden lg:hidden flex-col px-4 sm:px-8 pt-2 pb-6 bg-ground" id="mobile-menu"><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="jeux.html">Jeux</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="defi.html">Défi du jour</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="live.html">En direct</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="parcours.html">Parcours</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="profs.html">Écoles</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em]" href="tarifs.html">Tarifs</a><a class="py-3 text-[24px] font-medium tracking-[-0.02em] text-text-muted" data-account-link="" href="connexion.html">Connexion</a></nav>
 </header>
 <main class="pt-16" id="contenu">
-<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-6 lg:pt-10 pb-20">
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-6 lg:pt-10">
 <div class="dot-board">
-<p class="board-strip"><span class="board-dot"></span>Mon compte</p>
-<div class="px-5 sm:px-10 pt-16 pb-10">
-<div class="flex flex-wrap items-end justify-between gap-4">
-<div><p class="text-body-md text-text-muted" id="acc-role">Sans compte</p><h1 class="text-big" id="acc-name">Ta progression</h1></div>
-<div class="flex flex-wrap gap-2"><a class="btn" href="defi.html">Défi du jour</a><a class="btn-line" href="connexion.html" id="acc-login">Se connecter</a><button class="btn-line" hidden="" id="acc-logout" type="button">Se déconnecter</button></div>
+<p class="board-strip"><span class="board-dot"></span>Mon compte · progression</p>
+<div class="px-5 sm:px-10 pt-16 pb-8">
+<div class="flex flex-wrap items-end justify-between gap-6">
+<div class="flex items-center gap-5 min-w-0"><span id="acc-avatar"></span><div class="min-w-0"><p class="text-body-md text-text-muted" id="acc-role">Sur cet appareil</p><h1 class="text-[clamp(44px,6.4vw,96px)] font-medium leading-[0.92] tracking-[-0.05em] break-words" id="acc-name">Ta progression</h1></div></div>
+<div class="btn-row"><a class="btn" href="defi.html">Défi du jour</a><button class="btn-line" hidden="" id="acc-edit" type="button">Modifier mon profil</button><a class="btn-line" href="connexion.html#inscription" id="acc-signup">Créer un compte</a><a class="btn-line" href="connexion.html" id="acc-login">Se connecter</a></div>
 </div>
-<div class="acc-guest" hidden="" id="acc-guest"><span class="material-symbols-outlined" aria-hidden="true">info</span><span>Sans compte, tes scores restent dans ce navigateur : ils disparaissent si tu changes d'appareil ou effaces tes données. <a class="underline" href="connexion.html#inscription">Crée un compte</a> pour les garder.</span></div>
-<div class="acc-stats mt-8">
-<div class="ticket-stat"><span>Offre</span><b id="acc-plan">Gratuit</b><a class="text-[13px] underline mt-1" href="tarifs.html">Voir les offres</a></div>
-<div class="ticket-stat"><span>Sessions jouées</span><b id="st-sessions">0</b></div>
-<div class="ticket-stat"><span>Moyenne générale</span><b id="st-avg">–</b></div>
-<div class="ticket-stat"><span>Série du défi du jour</span><b id="st-streak">0 jour</b></div>
-<div class="ticket-stat"><span>Jeux essayés</span><b id="st-games">0 sur 44</b></div>
-</div>
+<div class="acc-guest" hidden="" id="acc-guest"><span class="material-symbols-outlined" aria-hidden="true">cloud_upload</span><span>Ta progression est enregistrée sur cet appareil. <a class="underline" href="connexion.html#inscription">Crée un compte gratuit</a> pour la retrouver partout et apparaître dans le classement du jour.</span></div>
+<form class="join-card mt-8 max-w-[40rem]" hidden="" id="profile-form">
+<p class="text-headline-md">Mon profil</p>
+<label class="grid gap-1 text-body-sm text-text-muted">Prénom ou pseudo<input class="field" id="pf-name" maxlength="40" required="" type="text"/></label>
+<fieldset><legend class="text-body-sm text-text-muted mb-2">Tu es</legend><span class="flex flex-wrap items-center gap-2"><span class="seg-pick" role="radiogroup"><label><input checked="" name="pf-role" type="radio" value="etudiant"/><span>Étudiant·e</span></label><label><input name="pf-role" type="radio" value="enseignant"/><span>Enseignant·e</span></label><label><input name="pf-role" type="radio" value="pro"/><span>Designer en poste</span></label></span></span></fieldset>
+<fieldset class="av-picker"><legend class="text-body-sm text-text-muted mb-2">Ton avatar</legend>
+<div class="flex items-center gap-4"><span data-av-preview="pav"></span><div class="grid gap-2"><div aria-label="Couleur" class="av-row" role="radiogroup"><label><input name="pav-color" type="radio" value="#F7B4CC"/><span aria-label="Couleur 1" class="av-swatch" style="--av:#F7B4CC"></span></label><label><input name="pav-color" type="radio" value="#D8EF71"/><span aria-label="Couleur 2" class="av-swatch" style="--av:#D8EF71"></span></label><label><input checked="" name="pav-color" type="radio" value="#B9D9FF"/><span aria-label="Couleur 3" class="av-swatch" style="--av:#B9D9FF"></span></label><label><input name="pav-color" type="radio" value="#FFC08F"/><span aria-label="Couleur 4" class="av-swatch" style="--av:#FFC08F"></span></label><label><input name="pav-color" type="radio" value="#FFE08A"/><span aria-label="Couleur 5" class="av-swatch" style="--av:#FFE08A"></span></label><label><input name="pav-color" type="radio" value="#9FE3D0"/><span aria-label="Couleur 6" class="av-swatch" style="--av:#9FE3D0"></span></label><label><input name="pav-color" type="radio" value="#C9B8FF"/><span aria-label="Couleur 7" class="av-swatch" style="--av:#C9B8FF"></span></label><label><input name="pav-color" type="radio" value="#F0447A"/><span aria-label="Couleur 8" class="av-swatch" style="--av:#F0447A"></span></label></div><div aria-label="Symbole" class="av-row" role="radiogroup"><label><input checked="" name="pav-icon" type="radio" value=""/><span class="av-icon">Aa</span></label><label><input name="pav-icon" type="radio" value="visibility"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">visibility</span></span></label><label><input name="pav-icon" type="radio" value="palette"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">palette</span></span></label><label><input name="pav-icon" type="radio" value="grid_view"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">grid_view</span></span></label><label><input name="pav-icon" type="radio" value="format_size"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">format_size</span></span></label><label><input name="pav-icon" type="radio" value="gesture"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">gesture</span></span></label><label><input name="pav-icon" type="radio" value="bolt"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">bolt</span></span></label><label><input name="pav-icon" type="radio" value="local_florist"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">local_florist</span></span></label><label><input name="pav-icon" type="radio" value="rocket_launch"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">rocket_launch</span></span></label></div></div></div></fieldset>
+<div class="btn-row"><button class="btn" type="submit">Enregistrer</button><button class="btn-line" id="pf-cancel" type="button">Annuler</button></div>
+<p aria-live="polite" class="form-msg" id="pf-msg"></p>
+</form>
 </div>
 </div>
 </section>
-<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pb-16 grid lg:grid-cols-12 gap-8 items-start">
-<div class="lg:col-span-7">
-<h2 class="text-headline-lg-mobile md:text-headline-lg">Records par discipline</h2>
-<div class="mt-6 grid gap-6" id="acc-domains"></div>
-</div>
-<div class="lg:col-span-5">
-<h2 class="text-headline-lg-mobile md:text-headline-lg">Dernières sessions</h2>
-<ol class="mt-6 acc-history" id="acc-history"><li class="text-text-muted">Aucune session pour l'instant.</li></ol>
-<button class="btn-quiet text-[14px] mt-6" id="acc-clear" type="button">Effacer mes données de ce navigateur</button>
+
+<section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-4 pb-24">
+<div class="dash-grid">
+<div class="dash-card c-3 dash-kpi"><span>Sessions jouées</span><b id="k-sessions">0</b><small id="k-sessions-sub">aucune pour l'instant</small></div>
+<div class="dash-card c-3 dash-kpi"><span>Moyenne sur 30 jours</span><b id="k-avg">–</b><small id="k-avg-sub">toutes sessions : –</small></div>
+<div class="dash-card c-3 dash-kpi"><span>Série du défi du jour</span><b id="k-streak">0 jour</b><small id="k-streak-sub">record : 0 jour</small></div>
+<div class="dash-card c-3 dash-kpi"><span>Jeux essayés</span><b id="k-games">0 sur 44</b><small id="k-badges">0 badge débloqué</small></div>
+
+<div class="dash-card c-7"><h2>Ta courbe</h2><p class="text-body-sm text-text-muted mt-1">Moyenne de tes 30 dernières sessions.</p><div id="spark"></div></div>
+<div class="dash-card c-5"><h2>Tes disciplines</h2><p class="text-body-sm text-text-muted mt-1">Moyenne de tes records, et jeux essayés.</p><div class="dom-bars" id="dom-bars"></div></div>
+
+<div class="dash-card c-12 scroll-mt-24" id="badges"><div class="flex flex-wrap items-baseline justify-between gap-2"><h2>Badges et couronnes</h2><p class="text-body-sm text-text-muted" id="badge-count"></p></div><div class="badges" id="badge-list"></div></div>
+
+<div class="dash-card c-7"><h2>Records par discipline</h2><div class="dash-tabs" id="rec-tabs" role="group" aria-label="Discipline"></div><ol class="records" id="rec-list"></ol></div>
+<div class="dash-card c-5"><h2>Dernières sessions</h2><ol class="mt-3 acc-history" id="acc-history"><li class="text-text-muted">Aucune session pour l'instant. <a class="underline" href="jeux.html">Choisis un jeu</a>.</li></ol></div>
+
+<div class="dash-card c-5" id="plan-card"><h2>Mon offre</h2><p class="mt-2 text-[34px] font-medium tracking-[-0.04em]" id="acc-plan">Gratuit</p><p class="text-body-sm text-text-muted" id="acc-plan-sub">10 jeux gratuits, le défi du jour et les parties en direct.</p><div class="btn-row mt-4"><a class="btn" href="tarifs.html" id="plan-cta">Voir les offres</a><button class="btn-line" hidden="" id="plan-portal" type="button">Gérer mon abonnement</button></div><p class="form-msg mt-2" id="plan-msg"></p></div>
+<div class="dash-card c-7" id="class-card" hidden=""><h2 id="class-h">Ma classe</h2>
+<div id="class-student"><p class="text-body-sm text-text-muted mt-1">Ton enseignant·e t'a donné un code de classe ? Entre-le pour obtenir l'accès Pro de la classe.</p><form class="sum-share-row mt-3" id="class-join"><input aria-label="Code de classe" autocapitalize="characters" class="field flex-1 min-w-0 uppercase" id="class-code" maxlength="8" placeholder="Code de classe" required="" type="text"/><button class="btn" type="submit">Rejoindre</button></form><ul class="mt-3 grid gap-2" id="class-mine"></ul></div>
+<div hidden="" id="class-teacher"><p class="text-body-sm text-text-muted mt-1">Crée une classe, donne son code à tes étudiants : ils obtiennent l'accès Pro (40 par classe) et leurs résultats s'affichent ici.</p><form class="sum-share-row mt-3" id="class-new"><input aria-label="Nom de la classe" class="field flex-1 min-w-0" id="class-name" maxlength="60" placeholder="Ex. : DN MADE 2, groupe B" required="" type="text"/><button class="btn" type="submit">Créer</button></form><div class="mt-4 grid gap-4" id="class-list"></div></div>
+<p class="form-msg mt-2" id="class-msg"></p></div>
+
+<div class="dash-card c-12" id="danger-card"><h2>Mes données</h2><p class="text-body-sm text-text-muted mt-1">Tes scores sont enregistrés sur cet appareil<span id="sync-note">, et sur ton compte quand tu es connecté·e</span>.</p><div class="btn-row mt-4"><button class="btn-line" hidden="" id="acc-logout" type="button">Se déconnecter</button><button class="btn-line" id="acc-clear" type="button">Effacer les données de cet appareil</button><button class="btn-line" hidden="" id="acc-delete" type="button">Supprimer mon compte</button></div><p class="form-msg mt-2" id="danger-msg"></p></div>
 </div>
 </section>
 </main>
@@ -61,41 +77,149 @@
 <div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
 <p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
 <div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
-<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a><a class="foot-link w-max" href="cgv.html">Conditions générales</a></div>
 </div>
 <p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
-<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2026 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="cgv.html">CGV</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
 </div>
 </footer>
-<script src="assets/catalog.js"></script>
+<script src="assets/config.js"></script>
 <script src="assets/account.js"></script>
+<script src="assets/catalog.js"></script>
+<script src="assets/progress.js"></script>
 <script>
   (function () {
+  function avatarPicker(prefix, nameInput, initial) {
+    const box = document.querySelector(`[data-av-preview="${prefix}"]`);
+    const val = () => ({ color: (document.querySelector(`input[name="${prefix}-color"]:checked`) || {}).value, icon: (document.querySelector(`input[name="${prefix}-icon"]:checked`) || {}).value || "" });
+    const paint = () => { if (box) box.innerHTML = OeilAvatar({ name: (nameInput && nameInput.value) || "?", avatar: val() }, "avatar-lg"); };
+    if (initial) {
+      document.querySelectorAll(`input[name="${prefix}-color"]`).forEach((r) => (r.checked = r.value.toLowerCase() === String(initial.color || "").toLowerCase()));
+      document.querySelectorAll(`input[name="${prefix}-icon"]`).forEach((r) => (r.checked = r.value === (initial.icon || "")));
+      if (!document.querySelector(`input[name="${prefix}-color"]:checked`)) document.querySelector(`input[name="${prefix}-color"]`).checked = true;
+    }
+    document.querySelectorAll(`input[name^="${prefix}-"]`).forEach((r) => r.addEventListener("change", paint));
+    nameInput && nameInput.addEventListener("input", paint);
+    paint();
+    return val;
+  }
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const say = (el, text, kind) => { el.textContent = text; el.className = "form-msg" + (kind ? " is-" + kind : ""); };
+
     const $ = (id) => document.getElementById(id);
-    const get = (k) => { try { return JSON.parse(localStorage.getItem("oeil:" + k)); } catch (e) { return null; } };
-    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-    const u = OeilAccount.get();
-    const ROLES = { etudiant: "Étudiant·e", enseignant: "Enseignant·e", pro: "Designer en poste" };
-    if (u) { $("acc-name").textContent = u.name; $("acc-role").textContent = `${ROLES[u.role] || ""} · ${u.email}`; $("acc-login").hidden = true; $("acc-logout").hidden = false; }
-    else {{ $("acc-role").textContent = "Tu n'es pas connecté·e"; $("acc-name").textContent = "Ta progression sur cet appareil"; document.getElementById("acc-guest").hidden = false; }}
-    const plan = OeilAccount.plan(), PLANS = {{ free: "Gratuit", pro: "Œil Pro", parcours: "Parcours intensif", classe: "Classe", ecole: "École" }};
-    $("acc-plan").textContent = PLANS[plan] || plan;
-    $("acc-logout").addEventListener("click", () => { OeilAccount.logout(); location.reload(); });
-    $("acc-clear").addEventListener("click", () => { if (confirm("Effacer records, historique et série de ce navigateur ?")) { OeilAccount.clearAll(); location.reload(); } });
-    const hist = get("history") || [];
-    const daily = get("daily") || { streak: 0 };
     const games = window.OEIL_GAMES, doms = window.OEIL_DOMAINS;
-    const bests = Object.fromEntries(games.map((g) => [g.id, get("best:" + g.id)]));
-    const tried = games.filter((g) => bests[g.id] != null).length;
-    $("st-sessions").textContent = hist.length;
-    $("st-avg").textContent = hist.length ? Math.round(hist.reduce((a, h) => a + h.avg, 0) / hist.length) + " %" : "–";
-    $("st-streak").textContent = `${daily.streak || 0} jour${(daily.streak || 0) > 1 ? "s" : ""}`;
-    $("st-games").textContent = `${tried} sur ${games.length}`;
-    $("acc-domains").innerHTML = Object.entries(doms).map(([k, d]) => {
-      const list = games.filter((g) => g.domain === k);
-      return `<div class="acc-domain" style="--field:${d.field}"><p class="disc-head"><span class="board-dot"></span>${d.label}</p><ul>${list.map((g) => { const b = bests[g.id]; return `<li><a href="${g.id}.html">${g.name}</a><span class="acc-bar"><i style="width:${b != null ? Math.round(b) : 0}%"></i></span><b>${b != null ? Math.round(b) + " %" : "–"}</b></li>`; }).join("")}</ul></div>`;
-    }).join("");
-    if (hist.length) $("acc-history").innerHTML = hist.slice(0, 15).map((h) => `<li><span>${esc(h.title)}${h.daily ? " · défi du jour" : ""}</span><small>${new Date(h.date).toLocaleDateString("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</small><b>${h.avg} %</b></li>`).join("");
+    const ROLES = { etudiant: "Étudiant·e", enseignant: "Enseignant·e", pro: "Designer en poste" };
+    const PLANS = { free: ["Gratuit", "10 jeux gratuits, le défi du jour et les parties en direct."], pro: ["Œil Pro", "Les 44 jeux, le parcours et ta progression sur tous tes appareils."], parcours: ["Parcours intensif", "Le parcours de 14 jours et tous les jeux, à vie."], classe: ["Offre Classe", "Œil Pro pour toi et 40 étudiants par classe."], ecole: ["Offre École", "Œil Pro pour toute l'équipe et les étudiants."], "classe-eleve": ["Pro via ta classe", "L'accès Pro t'est offert par ta classe."] };
+    const plural = (n, w) => `${n} ${w}${n > 1 ? "s" : ""}`;
+
+    function header() {
+      const u = OeilAccount.get(), id = OeilAccount.identity();
+      $("acc-avatar").innerHTML = OeilAvatar(u || { name: id.name || "?", avatar: id.name ? id.avatar : { color: id.avatar.color, icon: "person" } }, "avatar-lg");
+      $("acc-name").textContent = u ? u.name : "Ta progression";
+      $("acc-role").textContent = u ? `${ROLES[u.role] || ""} · ${u.email}` : "Sur cet appareil";
+      ["acc-login", "acc-signup"].forEach((k) => ($(k).hidden = !!u));
+      ["acc-edit", "acc-logout", "acc-delete"].forEach((k) => ($(k).hidden = !u));
+      $("acc-guest").hidden = !!u;
+      $("sync-note").hidden = !OeilAccount.enabled;
+      const plan = OeilAccount.plan(), P = PLANS[plan] || [plan, ""];
+      $("acc-plan").textContent = P[0]; $("acc-plan-sub").textContent = P[1];
+      $("plan-cta").hidden = plan !== "free"; $("plan-portal").hidden = !(u && u.billing);
+      $("class-card").hidden = !u;
+      if (u) { const teacher = u.role === "enseignant" || plan === "classe" || plan === "ecole"; $("class-teacher").hidden = !teacher; $("class-student").hidden = teacher; $("class-h").textContent = teacher ? "Mes classes" : "Ma classe"; }
+    }
+
+    function dashboard() {
+      const S = OeilProgress.stats();
+      $("k-sessions").textContent = S.sessions;
+      $("k-sessions-sub").textContent = S.sessions ? `dernière : ${new Date(S.hist[0].date).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}` : "aucune pour l'instant";
+      $("k-avg").textContent = S.avg30 != null ? Math.round(S.avg30) + " %" : "–";
+      $("k-avg-sub").textContent = `toutes sessions : ${S.avg != null ? Math.round(S.avg) + " %" : "–"}`;
+      $("k-streak").textContent = plural(S.streak, "jour");
+      $("k-streak-sub").textContent = `record : ${plural(S.maxStreak, "jour")}`;
+      $("k-games").textContent = `${S.tried} sur ${S.total}`;
+      // Courbe
+      const pts = S.hist.slice(0, 30).reverse().map((h) => h.avg);
+      if (pts.length > 1) {
+        const W = 600, Hh = 120, x = (i) => (i / (pts.length - 1)) * (W - 16) + 8, y = (v) => Hh - 10 - (v / 100) * (Hh - 20);
+        const d = pts.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
+        $("spark").innerHTML = `<svg class="spark" viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" role="img" aria-label="Évolution de tes scores"><line x1="0" x2="${W}" y1="${y(50)}" y2="${y(50)}" stroke="#E0DFD8" stroke-dasharray="4 4"/><line x1="0" x2="${W}" y1="${y(90)}" y2="${y(90)}" stroke="#E0DFD8" stroke-dasharray="4 4"/><path d="${d} L${x(pts.length - 1)} ${Hh} L${x(0)} ${Hh} Z" fill="#B9D9FF" opacity=".5"/><path d="${d}" fill="none" stroke="#141413" stroke-width="2" vector-effect="non-scaling-stroke"/>${pts.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="3" fill="#fff" stroke="#141413" vector-effect="non-scaling-stroke"/>`).join("")}</svg><p class="flex justify-between text-[12px] text-text-muted"><span>il y a ${pts.length} sessions</span><span>lignes : 50 % et 90 %</span><span>aujourd'hui</span></p>`;
+      } else $("spark").innerHTML = `<p class="mt-6 text-body-md text-text-muted">Joue deux sessions pour voir ta courbe.</p>`;
+      // Disciplines
+      $("dom-bars").innerHTML = S.domainStats.map((d) => `<div class="dom-bar" style="--field:${d.field}"><span><i class="board-dot"></i>${d.label.split(" ")[0]}</span><span class="track" title="${d.tried} jeux essayés sur ${d.total}"><i style="width:${d.avg != null ? Math.round(d.avg) : 0}%"></i></span><b>${d.avg != null ? Math.round(d.avg) + " %" : "–"}</b></div><p class="text-[12px] text-text-muted -mt-2 pl-[18px]">${d.tried} jeu${d.tried > 1 ? "x" : ""} essayé${d.tried > 1 ? "s" : ""} sur ${d.total}</p>`).join("");
+      // Badges
+      const B = OeilProgress.badges(), got = B.filter((b) => b.ok).length;
+      OeilProgress.check();
+      $("badge-count").textContent = `${got} sur ${B.length} débloqués`;
+      $("k-badges").textContent = plural(got, "badge") + " débloqué" + (got > 1 ? "s" : "");
+      $("badge-list").innerHTML = B.map((b) => `<div class="badge${b.ok ? "" : " is-locked"}" style="${b.ok && b.field ? `--field:${b.field}` : b.ok ? "--field:#FFE08A" : ""}"><i><span aria-hidden="true" class="material-symbols-outlined">${b.icon}</span></i><b>${b.name}</b><small>${b.text}</small>${b.ok ? "" : `<span class="badge-prog" aria-label="Progression ${Math.round(b.p * 100)} %"><em style="width:${Math.round(b.p * 100)}%"></em></span>`}</div>`).join("");
+      // Records
+      const keys = Object.keys(doms);
+      let cur = keys.find((k) => S.domainStats.find((d) => d.key === k && d.scored)) || keys[0];
+      const recs = () => {
+        $("rec-tabs").innerHTML = keys.map((k) => `<button aria-pressed="${k === cur}" data-k="${k}" type="button">${doms[k].label.split(" ")[0]}</button>`).join("");
+        $("rec-tabs").querySelectorAll("button").forEach((b) => (b.onclick = () => { cur = b.dataset.k; recs(); }));
+        const list = games.filter((g) => g.domain === cur).sort((a, b) => (S.best[b.id] ?? -1) - (S.best[a.id] ?? -1));
+        $("rec-list").innerHTML = list.map((g) => { const v = S.best[g.id]; return `<li><span aria-hidden="true" class="material-symbols-outlined">${v >= 90 ? "workspace_premium" : v != null ? "check_circle" : ""}</span><a class="truncate hover:underline" href="${g.id}.html">${g.name}${g.pro ? ' <span class="pro-badge">Pro</span>' : ""}</a><span class="track"><i style="width:${v != null ? Math.round(v) : 0}%"></i></span><b>${v != null ? Math.round(v) + " %" : "–"}</b></li>`; }).join("");
+      };
+      recs();
+      if (S.hist.length) $("acc-history").innerHTML = S.hist.slice(0, 12).map((h) => `<li><span class="truncate">${esc(h.title)}${h.daily ? " · défi du jour" : ""}</span><small>${new Date(h.date).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}</small><b>${h.avg} %</b></li>`).join("");
+    }
+
+    // Classes
+    async function classes() {
+      const u = OeilAccount.get();
+      if (!u || !OeilAccount.enabled) return;
+      const list = await OeilAccount.myClasses().catch(() => []);
+      const teacher = !$("class-teacher").hidden;
+      if (!teacher) { $("class-mine").innerHTML = list.map((c) => `<li class="flex items-center justify-between gap-3 p-3 border border-ink rounded-lg"><span><b>${esc(c.name)}</b><small class="block text-text-muted">avec ${esc(c.teacher_name || "ton enseignant·e")}</small></span><button class="btn-quiet text-[13px]" data-leave="${c.id}" type="button">Quitter</button></li>`).join(""); document.querySelectorAll("[data-leave]").forEach((b) => (b.onclick = async () => { await OeilAccount.leaveClass(b.dataset.leave); header(); classes(); })); return; }
+      const own = list.filter((c) => c.is_teacher);
+      $("class-list").innerHTML = own.length ? "" : `<p class="text-body-sm text-text-muted">Aucune classe pour l'instant.</p>`;
+      for (const c of own) {
+        const roster = await OeilAccount.classRoster(c.id).catch(() => []);
+        const box = document.createElement("div");
+        box.className = "p-4 border border-ink rounded-lg";
+        box.innerHTML = `<div class="flex flex-wrap items-center justify-between gap-2"><p><b>${esc(c.name)}</b> · code <b class="tabular tracking-[.08em]">${esc(c.code)}</b></p><span class="text-body-sm text-text-muted">${roster.length} sur 40 étudiants</span></div><div class="overflow-x-auto mt-3"><table class="rank-table"><thead><tr><th>Étudiant</th><th>Sessions</th><th>Moyenne</th><th>Dernière</th></tr></thead><tbody>${roster.length ? roster.map((r) => `<tr><td><span class="inline-flex items-center gap-2">${OeilAvatar({ name: r.name, avatar: { color: r.avatar_color, icon: r.avatar_icon } }, "avatar-sm")}${esc(r.name)}</span></td><td>${r.sessions}</td><td><b>${r.avg != null ? r.avg + " %" : "–"}</b></td><td>${r.last ? new Date(r.last).toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) : "–"}</td></tr>`).join("") : `<tr><td class="text-text-muted" colspan="4">Donne le code ${esc(c.code)} à tes étudiants : ils l'entrent dans Mon compte.</td></tr>`}</tbody></table></div>`;
+        $("class-list").append(box);
+      }
+    }
+    $("class-join").addEventListener("submit", async (e) => { e.preventDefault(); try { await OeilAccount.joinClass($("class-code").value); say($("class-msg"), "Tu as rejoint la classe.", "ok"); $("class-code").value = ""; header(); classes(); } catch (err) { say($("class-msg"), OeilAccount.human(err), "error"); } });
+    $("class-new").addEventListener("submit", async (e) => { e.preventDefault(); try { await OeilAccount.createClass($("class-name").value.trim()); $("class-name").value = ""; say($("class-msg"), "Classe créée.", "ok"); classes(); } catch (err) { say($("class-msg"), OeilAccount.human(err), "error"); } });
+
+    // Profil
+    let pav = null;
+    $("acc-edit").addEventListener("click", () => {
+      const u = OeilAccount.get(); if (!u) return;
+      $("pf-name").value = u.name;
+      document.querySelectorAll('input[name="pf-role"]').forEach((r) => (r.checked = r.value === u.role));
+      pav = avatarPicker("pav", $("pf-name"), u.avatar);
+      $("profile-form").hidden = false; $("pf-name").focus();
+    });
+    $("pf-cancel").addEventListener("click", () => ($("profile-form").hidden = true));
+    $("profile-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try { await OeilAccount.updateProfile({ name: $("pf-name").value.trim(), role: (document.querySelector('input[name="pf-role"]:checked') || {}).value, avatar: pav() }); $("profile-form").hidden = true; header(); }
+      catch (err) { say($("pf-msg"), OeilAccount.human(err), "error"); }
+    });
+    $("plan-portal").addEventListener("click", async () => { try { await OeilAccount.portal(); } catch (err) { say($("plan-msg"), OeilAccount.human(err), "error"); } });
+    $("acc-logout").addEventListener("click", async () => { await OeilAccount.signOut(); location.reload(); });
+    $("acc-clear").addEventListener("click", () => { if (confirm("Effacer les records, l'historique et la série enregistrés sur cet appareil ?")) { OeilAccount.clearAll(); location.reload(); } });
+    $("acc-delete").addEventListener("click", async () => {
+      if (!confirm("Supprimer définitivement ton compte et tes scores ? Un abonnement en cours est aussi résilié.")) return;
+      try {
+        const t = await OeilAccount.token();
+        const r = await fetch("/api/delete-account", { method: "POST", headers: { Authorization: "Bearer " + t } });
+        if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || "");
+        await OeilAccount.signOut(); OeilAccount.clearAll(); location.href = "index.html";
+      } catch (err) { say($("danger-msg"), err.message || "La suppression n'a pas abouti. Écris-nous depuis la page contact.", "error"); }
+    });
+
+    header(); dashboard();
+    OeilAccount.ready.then(async (u) => {
+      header();
+      if (!u) return;
+      OeilProgress.merge(await OeilAccount.scores().catch(() => []));
+      dashboard(); classes();
+    });
   })();
 </script>
 <script src="assets/site.js"></script>

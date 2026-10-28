@@ -30,8 +30,9 @@
 <p class="board-strip"><span class="board-dot" style="background:#B9D9FF"></span>Contact, essai et devis</p>
 <div class="px-5 sm:px-10 pt-16 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
 <div class="lg:col-span-5">
-<h1 class="text-big max-w-[10ch]">Parlons de ton projet.</h1>
-<p class="mt-5 text-body-lg max-w-[30rem]">Un essai pour ta classe, un devis pour ton école ou une simple question : on te répond sous deux jours ouvrés.</p>
+<h1 class="text-big">Parlons de<br/>ton projet.</h1>
+<p class="mt-5 text-body-lg max-w-[30rem]">Un essai pour ta classe, un devis pour ton école ou une simple question : réponse sous deux jours ouvrés.</p>
+<p class="mt-4 text-body-md">Ou écris directement à <a class="underline" data-mail="" href="contact.html">notre adresse</a>.</p>
 <div class="estimate panel-line mt-8 p-5" id="estimate" hidden="">
 <p class="text-body-sm text-text-muted">Estimation indicative</p>
 <p class="offer-price mt-1" id="est-price">690 €</p>
@@ -41,15 +42,16 @@
 <form class="lg:col-span-7 join-card" id="contact-form">
 <fieldset><legend class="text-body-sm text-text-muted mb-2">Ta demande concerne</legend><span class="flex flex-wrap items-center gap-2"><span class="seg-pick" role="radiogroup"><label><input name="offre" type="radio" value="etudiant"/><span>Étudiant</span></label><label><input name="offre" type="radio" value="parcours"/><span>Parcours</span></label><label><input checked="" name="offre" type="radio" value="classe"/><span>Classe</span></label><label><input name="offre" type="radio" value="ecole"/><span>École</span></label><label><input name="offre" type="radio" value="autre"/><span>Autre</span></label></span></span></fieldset>
 <div class="grid sm:grid-cols-2 gap-4">
-<label class="grid gap-1 text-body-sm text-text-muted">Nom<input autocomplete="name" class="field" id="c-name" required="" type="text"/></label>
-<label class="grid gap-1 text-body-sm text-text-muted">Adresse e-mail<input autocomplete="email" class="field" id="c-email" required="" type="email"/></label>
+<label class="grid gap-1 text-body-sm text-text-muted">Nom<input autocomplete="name" class="field" id="c-name" maxlength="80" required="" type="text"/></label>
+<label class="grid gap-1 text-body-sm text-text-muted">Adresse e-mail<input autocomplete="email" class="field" id="c-email" maxlength="120" required="" type="email"/></label>
 </div>
-<label class="grid gap-1 text-body-sm text-text-muted" data-for="classe ecole">Établissement<input autocomplete="organization" class="field" id="c-org" type="text"/></label>
+<label class="grid gap-1 text-body-sm text-text-muted" data-for="classe ecole">Établissement<input autocomplete="organization" class="field" id="c-org" maxlength="120" type="text"/></label>
 <label class="grid gap-2 text-body-sm text-text-muted" data-for="classe ecole">Nombre d'étudiants : <b class="text-ink tabular" id="c-n-out">120</b><input aria-describedby="c-n-help" class="w-full accent-ink" id="c-n" max="2000" min="1" step="1" type="range" value="120"/></label>
 <label class="grid gap-1 text-body-sm text-text-muted" data-for="classe ecole">Ou tape le nombre exact<input class="field w-40" id="c-n-num" inputmode="numeric" max="20000" min="1" type="number" value="120"/><span id="c-n-help" class="text-[12px]">De 1 à 20 000 étudiants.</span></label>
-<label class="grid gap-1 text-body-sm text-text-muted">Message<textarea class="field min-h-[120px] py-2" id="c-msg" placeholder="Tes besoins, tes dates, tes questions…"></textarea></label>
-<button class="btn w-full" type="submit">Envoyer la demande</button>
-<p class="text-body-sm text-text-muted">Le bouton ouvre ton logiciel de messagerie avec le message prérempli, à envoyer à bonjour@oeil.studio.</p>
+<label class="grid gap-1 text-body-sm text-text-muted">Message<textarea class="field min-h-[120px] py-2" id="c-msg" maxlength="4000" placeholder="Tes besoins, tes dates, tes questions…"></textarea></label>
+<button class="btn w-full" id="c-submit" type="submit">Envoyer la demande</button>
+<p aria-live="polite" class="form-msg" id="c-out"></p>
+<p class="text-[12px] text-text-muted">Tes coordonnées servent uniquement à te répondre. <a class="underline" href="confidentialite.html">Confidentialité</a></p>
 </form>
 </div>
 </div>
@@ -60,27 +62,31 @@
 <div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
 <p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
 <div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
-<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a><a class="foot-link w-max" href="cgv.html">Conditions générales</a></div>
 </div>
 <p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
-<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2026 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="cgv.html">CGV</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
 </div>
 </footer>
+<script src="assets/config.js"></script>
+<script src="assets/account.js"></script>
 <script>
   (function () {
     const $ = (id) => document.getElementById(id);
+    const MAIL = (window.OEIL_CONFIG && OEIL_CONFIG.contactEmail) || "";
+    document.querySelectorAll("[data-mail]").forEach((a) => { a.href = "mailto:" + MAIL; a.textContent = MAIL; });
     const radios = [...document.querySelectorAll('input[name="offre"]')];
     const q = new URLSearchParams(location.search).get("offre");
     if (q) radios.forEach((r) => (r.checked = r.value === q));
     const offer = () => (radios.find((r) => r.checked) || {}).value;
-    // Grille indicative : école = 290 € + 4,50 € par étudiant et par an, au moins 690 € ; classe = 9 € par mois et par enseignant (≈ 40 étudiants).
+    // Grille indicative : école = 290 € + 4,50 € par étudiant et par an, au moins 690 € ; classe = 9 € par mois et par enseignant (40 étudiants).
     function update(exact) {
       const o = offer(), n = typeof exact === "number" ? exact : +$("c-n-num").value || +$("c-n").value;
       $("c-n-out").textContent = n;
       document.querySelectorAll("[data-for]").forEach((el) => (el.hidden = !el.dataset.for.split(" ").includes(o)));
       const est = $("estimate");
-      if (o === "ecole") { const p = Math.max(690, Math.round((290 + 4.5 * n) / 10) * 10); est.hidden = false; $("est-price").textContent = `${p.toLocaleString("fr-FR")} €/an`; $("est-detail").textContent = `Pour ${n} étudiants, soit ${(p / n).toFixed(2).replace(".", ",")} € par étudiant et par an. Le devis final dépend du nombre de campus et des options (SSO, exports).`; }
-      else if (o === "classe") { const t = Math.max(1, Math.ceil(n / 40)); est.hidden = false; $("est-price").textContent = `${9 * t} €/mois`; $("est-detail").textContent = `${t} enseignant${t > 1 ? "s" : ""} pour ${n} étudiants (jusqu'à 40 par enseignant).`; }
+      if (o === "ecole") { const p = Math.max(690, Math.round((290 + 4.5 * n) / 10) * 10); est.hidden = false; $("est-price").textContent = `${p.toLocaleString("fr-FR")} €/an`; $("est-detail").textContent = `Pour ${n} étudiants, soit ${(p / n).toFixed(2).replace(".", ",")} € par étudiant et par an. Le devis final dépend du nombre de campus et des options.`; }
+      else if (o === "classe") { const t = Math.max(1, Math.ceil(n / 40)); est.hidden = false; $("est-price").textContent = `${9 * t} €/mois`; $("est-detail").textContent = `${t} enseignant${t > 1 ? "s" : ""} pour ${n} étudiants (jusqu'à 40 par classe).`; }
       else if (o === "parcours") { est.hidden = false; $("est-price").textContent = "19 €"; $("est-detail").textContent = "Payé une fois, accès à vie au parcours de 14 jours."; }
       else if (o === "etudiant") { est.hidden = false; $("est-price").textContent = "3 €/mois"; $("est-detail").textContent = "Ou 24 € par an, résiliable à tout moment."; }
       else est.hidden = true;
@@ -89,11 +95,23 @@
     $("c-n").addEventListener("input", () => { $("c-n-num").value = $("c-n").value; update(); });
     $("c-n-num").addEventListener("input", () => { const v = Math.max(1, Math.min(20000, +$("c-n-num").value || 1)); $("c-n").value = Math.min(2000, v); update(v); });
     update();
-    $("contact-form").addEventListener("submit", (e) => {
+    $("contact-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const o = offer(), labels = { etudiant: "Offre étudiant", parcours: "Parcours intensif", classe: "Offre classe", ecole: "Devis école", autre: "Question" };
-      const body = [`Nom : ${$("c-name").value}`, `E-mail : ${$("c-email").value}`, $("c-org").value && !$("c-org").parentElement.hidden ? `Établissement : ${$("c-org").value}` : "", !$("c-n").parentElement.hidden ? `Nombre d'étudiants : ${$("c-n-num").value}` : "", "", $("c-msg").value].filter((x) => x !== "").join("\n");
-      location.href = `mailto:bonjour@oeil.studio?subject=${encodeURIComponent(labels[o] + " — Œil Studio")}&body=${encodeURIComponent(body)}`;
+      const school = !$("c-org").parentElement.hidden;
+      const payload = { offer: o, name: $("c-name").value.trim(), email: $("c-email").value.trim(), org: school ? $("c-org").value.trim() : null, students: school ? +$("c-n-num").value || null : null, message: $("c-msg").value.trim() };
+      const out = $("c-out"), btn = $("c-submit");
+      btn.disabled = true; out.textContent = "Envoi…"; out.className = "form-msg";
+      try {
+        await OeilAccount.contact(payload);
+        out.textContent = "Merci, ta demande est bien arrivée. Réponse sous deux jours ouvrés."; out.className = "form-msg is-ok";
+        $("contact-form").reset(); update();
+      } catch (err) {
+        // Sans service de comptes, la demande part par le logiciel de messagerie
+        const body = [`Nom : ${payload.name}`, `E-mail : ${payload.email}`, payload.org ? `Établissement : ${payload.org}` : "", payload.students ? `Nombre d'étudiants : ${payload.students}` : "", "", payload.message].filter((x) => x !== "").join("\n");
+        location.href = `mailto:${MAIL}?subject=${encodeURIComponent(labels[o] + " — Œil Studio")}&body=${encodeURIComponent(body)}`;
+        out.textContent = "Ta messagerie s'ouvre avec le message prérempli : il ne reste qu'à l'envoyer."; out.className = "form-msg";
+      } finally { btn.disabled = false; }
     });
   })();
 </script>

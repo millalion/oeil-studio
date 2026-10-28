@@ -30,24 +30,32 @@
 <p class="board-strip"><span class="board-dot"></span>Ton espace Œil Studio</p>
 <div class="px-5 sm:px-10 pt-16 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
 <div class="lg:col-span-6">
-<h1 class="text-big max-w-[10ch]">Garde ta progression.</h1>
-<p class="mt-5 text-body-lg max-w-[32rem]">Un compte retrouve tes records, ta série du défi du jour et ton historique sur tous tes appareils. Les jeux restent jouables sans compte.</p>
-<ul class="mt-8 grid gap-3 text-body-md"><li class="flex gap-3"><span class="material-symbols-outlined text-signal">check</span>Records et progression par discipline</li><li class="flex gap-3"><span class="material-symbols-outlined text-signal">check</span>Série du défi du jour</li><li class="flex gap-3"><span class="material-symbols-outlined text-signal">check</span>Pour les enseignants : classes et classements</li></ul>
+<h1 class="text-big">Garde ta<br/>progression.</h1>
+<p class="mt-5 text-body-lg max-w-[32rem]">Un compte gratuit retrouve tes records, ta série du défi du jour, tes badges et ton historique sur tous tes appareils. Les jeux gratuits restent jouables sans compte.</p>
+<ul class="mt-8 grid gap-3 text-body-md"><li class="flex gap-3"><span class="material-symbols-outlined text-signal">check</span>Tableau de progression par discipline</li><li class="flex gap-3"><span class="material-symbols-outlined text-signal">check</span>Badges et couronnes à débloquer</li><li class="flex gap-3"><span class="material-symbols-outlined text-signal">check</span>Classement du défi du jour</li><li class="flex gap-3"><span class="material-symbols-outlined text-signal">check</span>Pour les enseignants : classes et résultats</li></ul>
 </div>
 <div class="lg:col-span-6">
-<div class="join-card">
+<div class="join-card" id="auth-card">
 <div aria-label="Type de formulaire" class="seg-line w-max" role="group"><button aria-pressed="true" data-tab="login" type="button">Se connecter</button><button aria-pressed="false" data-tab="signup" type="button">Créer un compte</button></div>
 <form class="flex flex-col gap-4 mt-2" id="auth-form">
-<label class="grid gap-1 text-body-sm text-text-muted" data-only="signup" hidden="">Prénom<input autocomplete="given-name" class="field" id="auth-name" type="text"/></label>
+<label class="grid gap-1 text-body-sm text-text-muted" data-only="signup" hidden="">Prénom ou pseudo<input autocomplete="given-name" class="field" id="auth-name" maxlength="40" type="text"/></label>
 <label class="grid gap-1 text-body-sm text-text-muted">Adresse e-mail<input autocomplete="email" class="field" id="auth-email" required="" type="email"/></label>
-<label class="grid gap-1 text-body-sm text-text-muted">Mot de passe<input autocomplete="current-password" class="field" id="auth-pass" minlength="12" required="" type="password"/><span class="text-[12px]" data-only="signup" hidden="">12 caractères minimum. Une phrase fonctionne très bien.</span></label>
+<label class="grid gap-1 text-body-sm text-text-muted" data-hide="forgot">Mot de passe<input autocomplete="current-password" class="field" id="auth-pass" minlength="10" required="" type="password"/><span class="text-[12px]" data-only="signup" hidden="">10 caractères minimum. Une phrase fonctionne très bien.</span></label>
 <fieldset data-only="signup" hidden=""><legend class="text-body-sm text-text-muted mb-2">Tu es</legend><span class="flex flex-wrap items-center gap-2"><span class="seg-pick" role="radiogroup"><label><input checked="" name="role" type="radio" value="etudiant"/><span>Étudiant·e</span></label><label><input name="role" type="radio" value="enseignant"/><span>Enseignant·e</span></label><label><input name="role" type="radio" value="pro"/><span>Designer en poste</span></label></span></span></fieldset>
+<div data-only="signup" hidden=""><fieldset class="av-picker"><legend class="text-body-sm text-text-muted mb-2">Ton avatar</legend>
+<div class="flex items-center gap-4"><span data-av-preview="sav"></span><div class="grid gap-2"><div aria-label="Couleur" class="av-row" role="radiogroup"><label><input name="sav-color" type="radio" value="#F7B4CC"/><span aria-label="Couleur 1" class="av-swatch" style="--av:#F7B4CC"></span></label><label><input name="sav-color" type="radio" value="#D8EF71"/><span aria-label="Couleur 2" class="av-swatch" style="--av:#D8EF71"></span></label><label><input checked="" name="sav-color" type="radio" value="#B9D9FF"/><span aria-label="Couleur 3" class="av-swatch" style="--av:#B9D9FF"></span></label><label><input name="sav-color" type="radio" value="#FFC08F"/><span aria-label="Couleur 4" class="av-swatch" style="--av:#FFC08F"></span></label><label><input name="sav-color" type="radio" value="#FFE08A"/><span aria-label="Couleur 5" class="av-swatch" style="--av:#FFE08A"></span></label><label><input name="sav-color" type="radio" value="#9FE3D0"/><span aria-label="Couleur 6" class="av-swatch" style="--av:#9FE3D0"></span></label><label><input name="sav-color" type="radio" value="#C9B8FF"/><span aria-label="Couleur 7" class="av-swatch" style="--av:#C9B8FF"></span></label><label><input name="sav-color" type="radio" value="#F0447A"/><span aria-label="Couleur 8" class="av-swatch" style="--av:#F0447A"></span></label></div><div aria-label="Symbole" class="av-row" role="radiogroup"><label><input checked="" name="sav-icon" type="radio" value=""/><span class="av-icon">Aa</span></label><label><input name="sav-icon" type="radio" value="visibility"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">visibility</span></span></label><label><input name="sav-icon" type="radio" value="palette"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">palette</span></span></label><label><input name="sav-icon" type="radio" value="grid_view"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">grid_view</span></span></label><label><input name="sav-icon" type="radio" value="format_size"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">format_size</span></span></label><label><input name="sav-icon" type="radio" value="gesture"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">gesture</span></span></label><label><input name="sav-icon" type="radio" value="bolt"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">bolt</span></span></label><label><input name="sav-icon" type="radio" value="local_florist"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">local_florist</span></span></label><label><input name="sav-icon" type="radio" value="rocket_launch"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">rocket_launch</span></span></label></div></div></div></fieldset></div>
+<label class="flex gap-2 items-start text-body-sm" data-only="signup" hidden=""><input class="mt-1 accent-ink" id="auth-terms" type="checkbox"/><span>J'accepte les <a class="underline" href="cgv.html" target="_blank">conditions générales</a> et la <a class="underline" href="confidentialite.html" target="_blank">politique de confidentialité</a>.</span></label>
 <button class="btn w-full" id="auth-submit" type="submit">Se connecter</button>
-<button class="btn-quiet text-[14px] w-max" data-only="login" id="auth-forgot" type="button">Mot de passe oublié ?</button>
-<p aria-live="polite" class="text-body-sm" id="auth-msg"></p>
+<div class="flex flex-wrap justify-between gap-2"><button class="btn-quiet text-[14px] w-max" data-only="login" id="auth-forgot" type="button">Mot de passe oublié ?</button><button class="btn-quiet text-[14px] w-max" data-only="forgot" hidden="" id="auth-back" type="button">Retour à la connexion</button></div>
+<p aria-live="polite" class="form-msg" id="auth-msg"></p>
 </form>
 </div>
-<p class="live-note mt-4"><span class="material-symbols-outlined" aria-hidden="true">info</span>Version de démonstration : le compte est enregistré dans ce navigateur et le mot de passe n'est pas conservé. L'authentification se branche dans <code>assets/account.js</code>.</p>
+<form class="join-card" hidden="" id="reset-form">
+<p class="text-headline-md">Nouveau mot de passe</p>
+<label class="grid gap-1 text-body-sm text-text-muted">Choisis un nouveau mot de passe<input autocomplete="new-password" class="field" id="reset-pass" minlength="10" required="" type="password"/></label>
+<button class="btn w-full" type="submit">Enregistrer</button>
+<p aria-live="polite" class="form-msg" id="reset-msg"></p>
+</form>
 </div>
 </div>
 </div>
@@ -58,37 +66,79 @@
 <div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
 <p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
 <div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
-<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a><a class="foot-link w-max" href="cgv.html">Conditions générales</a></div>
 </div>
 <p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
-<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2026 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="cgv.html">CGV</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
 </div>
 </footer>
+<script src="assets/config.js"></script>
 <script src="assets/account.js"></script>
 <script>
   (function () {
+  function avatarPicker(prefix, nameInput, initial) {
+    const box = document.querySelector(`[data-av-preview="${prefix}"]`);
+    const val = () => ({ color: (document.querySelector(`input[name="${prefix}-color"]:checked`) || {}).value, icon: (document.querySelector(`input[name="${prefix}-icon"]:checked`) || {}).value || "" });
+    const paint = () => { if (box) box.innerHTML = OeilAvatar({ name: (nameInput && nameInput.value) || "?", avatar: val() }, "avatar-lg"); };
+    if (initial) {
+      document.querySelectorAll(`input[name="${prefix}-color"]`).forEach((r) => (r.checked = r.value.toLowerCase() === String(initial.color || "").toLowerCase()));
+      document.querySelectorAll(`input[name="${prefix}-icon"]`).forEach((r) => (r.checked = r.value === (initial.icon || "")));
+      if (!document.querySelector(`input[name="${prefix}-color"]:checked`)) document.querySelector(`input[name="${prefix}-color"]`).checked = true;
+    }
+    document.querySelectorAll(`input[name^="${prefix}-"]`).forEach((r) => r.addEventListener("change", paint));
+    nameInput && nameInput.addEventListener("input", paint);
+    paint();
+    return val;
+  }
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const say = (el, text, kind) => { el.textContent = text; el.className = "form-msg" + (kind ? " is-" + kind : ""); };
+
     const $ = (id) => document.getElementById(id);
+    const next = new URLSearchParams(location.search).get("suite");
+    const after = () => { location.href = next && /^[a-z0-9-]+\.html/i.test(next) ? next : "compte.html"; };
     let tab = "login";
+    const av = avatarPicker("sav", $("auth-name"));
     const setTab = (t) => {
       tab = t;
       document.querySelectorAll("[data-tab]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tab === t)));
       document.querySelectorAll("[data-only]").forEach((n) => (n.hidden = n.dataset.only !== t));
-      $("auth-submit").textContent = t === "login" ? "Se connecter" : "Créer mon compte";
+      document.querySelectorAll("[data-hide]").forEach((n) => (n.hidden = n.dataset.hide === t));
+      $("auth-submit").textContent = { login: "Se connecter", signup: "Créer mon compte", forgot: "Recevoir le lien" }[t];
       $("auth-pass").autocomplete = t === "login" ? "current-password" : "new-password";
+      $("auth-pass").required = t !== "forgot";
       $("auth-name").required = t === "signup";
-      $("auth-msg").textContent = "";
+      say($("auth-msg"), "");
     };
     document.querySelectorAll("[data-tab]").forEach((b) => b.addEventListener("click", () => setTab(b.dataset.tab)));
+    $("auth-forgot").addEventListener("click", () => setTab("forgot"));
+    $("auth-back").addEventListener("click", () => setTab("login"));
     if (location.hash === "#inscription") setTab("signup");
-    $("auth-forgot").addEventListener("click", () => {
-      const email = $("auth-email").value.trim();
-      $("auth-msg").textContent = email ? `Si un compte existe pour ${email}, un lien de réinitialisation vient d'être envoyé.` : "Indique d'abord ton adresse e-mail.";
-    });
-    $("auth-form").addEventListener("submit", (e) => {
+    // Retour du lien « mot de passe oublié »
+    if (location.hash.includes("type=recovery") || location.hash === "#nouveau") {
+      OeilAccount.client().then((c) => c && c.auth.onAuthStateChange((ev) => { if (ev === "PASSWORD_RECOVERY") { $("auth-card").hidden = true; $("reset-form").hidden = false; } }));
+      OeilAccount.ready.then((u) => { if (u) { $("auth-card").hidden = true; $("reset-form").hidden = false; } });
+    } else OeilAccount.ready.then((u) => { if (u && !next) location.replace("compte.html"); });
+    $("reset-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const role = (document.querySelector('input[name="role"]:checked') || {}).value;
-      OeilAccount.login({ name: $("auth-name").value.trim(), email: $("auth-email").value.trim(), role });
-      location.href = "compte.html";
+      try { await OeilAccount.updatePassword($("reset-pass").value); say($("reset-msg"), "Mot de passe enregistré. Redirection…", "ok"); setTimeout(after, 900); }
+      catch (err) { say($("reset-msg"), OeilAccount.human(err), "error"); }
+    });
+    $("auth-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = $("auth-email").value.trim(), password = $("auth-pass").value;
+      const btn = $("auth-submit"); btn.disabled = true;
+      try {
+        if (tab === "forgot") { await OeilAccount.resetPassword(email); say($("auth-msg"), `Si un compte existe pour ${email}, un lien pour choisir un nouveau mot de passe vient d'être envoyé.`, "ok"); }
+        else if (tab === "login") { await OeilAccount.signIn({ email, password }); after(); }
+        else {
+          if (!$("auth-terms").checked) { say($("auth-msg"), "Accepte les conditions générales pour créer ton compte.", "error"); return; }
+          const role = (document.querySelector('input[name="role"]:checked') || {}).value;
+          const r = await OeilAccount.signUp({ name: $("auth-name").value.trim(), email, password, role, avatar: av() });
+          if (r.confirm) say($("auth-msg"), `Compte créé. Ouvre l'e-mail envoyé à ${email} et clique sur le lien pour l'activer.`, "ok");
+          else after();
+        }
+      } catch (err) { say($("auth-msg"), OeilAccount.human(err), "error"); }
+      finally { btn.disabled = false; }
     });
   })();
 </script>

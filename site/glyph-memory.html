@@ -83,9 +83,11 @@
 <div class="sum-top"><b id="sum-score"></b><span id="sum-grade"></span></div>
 <p class="text-body-sm text-text-muted" id="sum-record"></p>
 <p class="sum-versus" hidden="" id="sum-versus"></p>
+<p class="unlock-toast" hidden="" id="sum-unlock"></p>
 <div class="summary-actions"><button class="btn-line" id="btn-restart" type="button">Rejouer</button><a class="btn" href="color-recall.html">Jeu suivant : Color Recall<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
 </div>
 <div class="sum-right">
+<div class="sum-rank" hidden="" id="sum-rank"></div>
 <ol id="sum-rounds"></ol>
 <div class="sum-share">
 <p class="font-medium">Défier un ami sur les mêmes manches</p>
@@ -107,30 +109,32 @@
 <button class="btn" id="btn-submit" type="button">Valider<kbd>Entrée</kbd></button>
 </div>
 </div>
-<nav aria-label="Autres jeux" class="game-more">
+</div>
+</div>
+<div class="w-full max-w-[1440px] mx-auto px-4 sm:px-8"><nav aria-label="Autres jeux" class="game-more">
 <a class="game-more-card" href="type-scale.html" style="--card:#F7B4CC"><small><span aria-hidden="true" class="material-symbols-outlined text-[16px]">arrow_back</span>Jeu précédent · Typographie</small><b>Type Scale</b><p>Attribue les tailles d'une échelle aux bons niveaux de texte.</p></a>
 <a class="game-more-card is-next" href="color-recall.html" style="--card:#D8EF71"><small>Jeu suivant · Couleur<span aria-hidden="true" class="material-symbols-outlined text-[16px]">arrow_forward</span></small><b>Color Recall</b><p>Mémorise une nuance trois secondes, puis recompose-la.</p></a>
 <div class="game-more-same"><span>Aussi en typographie :</span><a href="kern-clinic.html">Kern Clinic</a><a href="optical-center.html">Optical Center</a><a href="leading-lab.html">Leading Lab</a><a href="weight-match.html">Weight Match</a><a href="bezier-letters.html">Bézier Letters</a><a href="type-detective.html">Type Detective</a><a href="rag-rescue.html">Rag Rescue</a><a href="widow-hunter.html">Widow Hunter</a><a href="type-scale.html">Type Scale</a><a class="more-all" href="jeux.html">Les 44 jeux</a></div>
-</nav>
-</div>
-</div>
+</nav></div>
 </main>
 <footer class="bg-ink text-ground pt-16 lg:pt-24 overflow-hidden">
 <div class="max-w-[1440px] mx-auto px-4 sm:px-8">
 <div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
 <p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
 <div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
-<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a><a class="foot-link w-max" href="cgv.html">Conditions générales</a></div>
 </div>
 <p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
-<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2026 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="cgv.html">CGV</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
 </div>
 </footer>
 <script src="assets/catalog.js"></script>
 <script src="assets/config.js"></script>
 <script src="assets/account.js"></script>
+<script src="assets/progress.js"></script>
 <script src="assets/engine.js"></script>
 <script src="assets/kits.js"></script>
+<script src="assets/live.js"></script>
 <script src="assets/games/glyph-memory.js"></script>
 <script src="assets/site.js"></script>
 </body></html>

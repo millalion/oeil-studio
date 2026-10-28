@@ -4,3 +4,6 @@ stitch_interface_web_responsive/
 .DS_Store
 .claude/
 tools/__pycache__/
+node_modules/
+.vercel/
+.env*

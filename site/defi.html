@@ -30,8 +30,10 @@
 <div class="ticket">
 <div class="ticket-main">
 <p class="board-strip"><span class="board-dot" style="background:#F7B4CC"></span>Défi du jour · renouvelé à minuit · le même pour tout le monde</p>
-<div class="ticket-date"><span class="ticket-day" data-today="day">28</span><span><span class="ticket-wd" data-today="weekday">mercredi</span><span class="ticket-mo" data-today="monthlong">octobre</span></span></div>
-<h1 class="text-big mt-4">Six manches, six disciplines.</h1>
+<div class="ticket-hero">
+<p aria-label="Date du défi" class="cal"><span class="cal-mo" data-today="monthlong">octobre</span><span class="cal-day" data-today="day">28</span><span class="cal-wd" data-today="weekday">mercredi</span></p>
+<h1 class="text-big">Six manches,<br/>six disciplines.</h1>
+</div>
 <p class="mt-4 max-w-[36rem] text-body-lg">Un jeu tiré au sort dans chaque discipline. Joue-le une fois par jour, garde ta série, et compare ton score avec tes amis grâce au lien de fin de partie.</p>
 <ol class="ticket-games" id="ticket-games"></ol>
 </div>
@@ -39,6 +41,7 @@
 <div class="ticket-stat"><span>Ta série</span><b id="ticket-streak">0 jour</b></div>
 <div class="ticket-stat"><span>Ton score aujourd'hui</span><b id="ticket-today">pas encore joué</b></div>
 <div class="ticket-stat"><span>Durée</span><b>environ 15 min</b></div>
+<div class="ticket-stat" hidden="" id="ticket-board-box"><span>Classement du jour</span><ol class="ticket-rank mt-2" id="ticket-board"></ol></div>
 <button class="btn w-full mt-auto" id="ticket-go" type="button">Commencer le défi<span aria-hidden="true" class="material-symbols-outlined text-[18px]">play_arrow</span></button>
 <a class="btn-line w-full" href="jeux.html#melange">Composer mon propre mélange</a>
 </aside>
@@ -103,9 +106,11 @@
 <div class="sum-top"><b id="sum-score"></b><span id="sum-grade"></span></div>
 <p class="text-body-sm text-text-muted" id="sum-record"></p>
 <p class="sum-versus" hidden="" id="sum-versus"></p>
+<p class="unlock-toast" hidden="" id="sum-unlock"></p>
 <div class="summary-actions"><button class="btn-line" id="btn-restart" type="button">Rejouer</button><a class="btn" href="jeux.html#melange">Composer un mélange<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
 </div>
 <div class="sum-right">
+<div class="sum-rank" hidden="" id="sum-rank"></div>
 <ol id="sum-rounds"></ol>
 <div class="sum-share">
 <p class="font-medium">Défier un ami sur les mêmes manches</p>
@@ -127,9 +132,9 @@
 <button class="btn" id="btn-submit" type="button">Valider<kbd>Entrée</kbd></button>
 </div>
 </div>
+</div>
+</div>
 
-</div>
-</div>
 </div>
 </main>
 <footer class="bg-ink text-ground pt-16 lg:pt-24 overflow-hidden">
@@ -137,15 +142,16 @@
 <div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
 <p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
 <div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
-<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a><a class="foot-link w-max" href="cgv.html">Conditions générales</a></div>
 </div>
 <p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
-<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2026 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="cgv.html">CGV</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
 </div>
 </footer>
 <script src="assets/catalog.js"></script>
 <script src="assets/config.js"></script>
 <script src="assets/account.js"></script>
+<script src="assets/progress.js"></script>
 <script src="assets/engine.js"></script>
 <script src="assets/kits.js"></script>
 <script src="assets/live.js"></script>
@@ -210,7 +216,7 @@
       ids = Object.keys(window.OEIL_DOMAINS).map((d) => Oeil.pick(games.filter((g) => g.domain === d)).id);
       rounds = ids.length;
       title = "Défi du " + new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
-      sub = "5 disciplines, le même tirage pour tout le monde";
+      sub = "6 disciplines, le même tirage pour tout le monde";
     }
     document.getElementById("mix-title").textContent = title;
     document.getElementById("mix-sub").textContent = sub;
@@ -227,6 +233,13 @@
     const streak = daily.last === S.today || daily.last === yesterday ? daily.streak : 0;
     document.getElementById("ticket-streak").textContent = `${streak} jour${streak > 1 ? "s" : ""}`;
     if (daily.scores[S.today] != null) document.getElementById("ticket-today").textContent = `${daily.scores[S.today]} %`;
+    // Classement du jour (comptes connectés)
+    if (window.OeilAccount && OeilAccount.enabled) OeilAccount.dailyBoard(S.today).then((rows) => {
+      if (!rows.length) return;
+      const me = OeilAccount.get();
+      document.getElementById("ticket-board-box").hidden = false;
+      document.getElementById("ticket-board").innerHTML = rows.slice(0, 5).map((r, i) => `<li class="${me && r.name === me.name ? "is-me" : ""}"><span>${i + 1}</span>${OeilAvatar({ name: r.name, avatar: { color: r.avatar_color, icon: r.avatar_icon } }, "avatar-sm")}<span class="truncate">${String(r.name).replace(/[<>&]/g, "")}</span><b>${r.best} %</b></li>`).join("");
+    }).catch(() => {});
     document.getElementById("ticket-go").addEventListener("click", () => { intro.hidden = true; app.hidden = false; Oeil.start({ ids, rounds, title }); window.scrollTo(0, 0); });
   })();
 </script>

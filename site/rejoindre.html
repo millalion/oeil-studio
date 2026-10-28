@@ -31,14 +31,16 @@
 <div class="px-5 sm:px-10 pt-16 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
 <div class="lg:col-span-6">
 <h1 class="text-big">Entre le code.</h1>
-<p class="mt-4 text-body-lg max-w-[30rem]">Le code de la partie s'affiche sur l'écran de l'hôte, sous le QR code.</p>
+<p class="mt-4 text-body-lg max-w-[30rem]">Le code de la partie s'affiche sur l'écran de l'hôte, sous le QR code. Choisis ton prénom et ton avatar : ils apparaîtront dans le classement.</p>
 </div>
 <div class="lg:col-span-6">
 <form class="join-card" id="join-form">
 <label class="grid gap-2 text-body-sm text-text-muted">Code de la partie<input autocapitalize="characters" autocomplete="off" class="join-code" id="join-code" maxlength="5" placeholder="K7Q4M" required="" type="text"/></label>
 <label class="grid gap-2 text-body-sm text-text-muted">Ton prénom<input autocomplete="given-name" class="h-12 rounded border border-ink bg-white px-3 text-[18px] text-ink" id="join-name" maxlength="24" required="" type="text"/></label>
-<button class="btn w-full" type="submit">Rejoindre<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></button>
-<p aria-live="polite" class="text-body-sm text-error" id="join-error"></p>
+<div id="join-av"><fieldset class="av-picker"><legend class="text-body-sm text-text-muted mb-2">Ton avatar</legend>
+<div class="flex items-center gap-4"><span data-av-preview="jav"></span><div class="grid gap-2"><div aria-label="Couleur" class="av-row" role="radiogroup"><label><input name="jav-color" type="radio" value="#F7B4CC"/><span aria-label="Couleur 1" class="av-swatch" style="--av:#F7B4CC"></span></label><label><input name="jav-color" type="radio" value="#D8EF71"/><span aria-label="Couleur 2" class="av-swatch" style="--av:#D8EF71"></span></label><label><input checked="" name="jav-color" type="radio" value="#B9D9FF"/><span aria-label="Couleur 3" class="av-swatch" style="--av:#B9D9FF"></span></label><label><input name="jav-color" type="radio" value="#FFC08F"/><span aria-label="Couleur 4" class="av-swatch" style="--av:#FFC08F"></span></label><label><input name="jav-color" type="radio" value="#FFE08A"/><span aria-label="Couleur 5" class="av-swatch" style="--av:#FFE08A"></span></label><label><input name="jav-color" type="radio" value="#9FE3D0"/><span aria-label="Couleur 6" class="av-swatch" style="--av:#9FE3D0"></span></label><label><input name="jav-color" type="radio" value="#C9B8FF"/><span aria-label="Couleur 7" class="av-swatch" style="--av:#C9B8FF"></span></label><label><input name="jav-color" type="radio" value="#F0447A"/><span aria-label="Couleur 8" class="av-swatch" style="--av:#F0447A"></span></label></div><div aria-label="Symbole" class="av-row" role="radiogroup"><label><input checked="" name="jav-icon" type="radio" value=""/><span class="av-icon">Aa</span></label><label><input name="jav-icon" type="radio" value="visibility"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">visibility</span></span></label><label><input name="jav-icon" type="radio" value="palette"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">palette</span></span></label><label><input name="jav-icon" type="radio" value="grid_view"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">grid_view</span></span></label><label><input name="jav-icon" type="radio" value="format_size"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">format_size</span></span></label><label><input name="jav-icon" type="radio" value="gesture"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">gesture</span></span></label><label><input name="jav-icon" type="radio" value="bolt"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">bolt</span></span></label><label><input name="jav-icon" type="radio" value="local_florist"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">local_florist</span></span></label><label><input name="jav-icon" type="radio" value="rocket_launch"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">rocket_launch</span></span></label></div></div></div></fieldset></div>
+<button class="btn w-full" id="join-submit" type="submit">Rejoindre<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></button>
+<p aria-live="polite" class="form-msg" id="join-error"></p>
 </form>
 <div class="join-card" hidden="" id="join-wait">
 <p class="text-body-sm text-text-muted">Tu es dans la salle</p>
@@ -48,7 +50,6 @@
 </div>
 </div>
 </div>
-<div class="px-5 sm:px-10 pb-8"><p class="live-note"><span class="material-symbols-outlined" aria-hidden="true">info</span>Démo sans serveur : la partie fonctionne entre les onglets d'un même navigateur. Pour jouer depuis plusieurs téléphones, il faudra brancher le serveur dans <code>assets/live.js</code>.</p></div>
 </div>
 </section>
 </main>
@@ -57,36 +58,61 @@
 <div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
 <p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
 <div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
-<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a><a class="foot-link w-max" href="cgv.html">Conditions générales</a></div>
 </div>
 <p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
-<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2026 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="cgv.html">CGV</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
 </div>
 </footer>
+<script src="assets/config.js"></script>
+<script src="assets/account.js"></script>
 <script src="assets/live.js"></script>
 <script>
   (function () {
+  function avatarPicker(prefix, nameInput, initial) {
+    const box = document.querySelector(`[data-av-preview="${prefix}"]`);
+    const val = () => ({ color: (document.querySelector(`input[name="${prefix}-color"]:checked`) || {}).value, icon: (document.querySelector(`input[name="${prefix}-icon"]:checked`) || {}).value || "" });
+    const paint = () => { if (box) box.innerHTML = OeilAvatar({ name: (nameInput && nameInput.value) || "?", avatar: val() }, "avatar-lg"); };
+    if (initial) {
+      document.querySelectorAll(`input[name="${prefix}-color"]`).forEach((r) => (r.checked = r.value.toLowerCase() === String(initial.color || "").toLowerCase()));
+      document.querySelectorAll(`input[name="${prefix}-icon"]`).forEach((r) => (r.checked = r.value === (initial.icon || "")));
+      if (!document.querySelector(`input[name="${prefix}-color"]:checked`)) document.querySelector(`input[name="${prefix}-color"]`).checked = true;
+    }
+    document.querySelectorAll(`input[name^="${prefix}-"]`).forEach((r) => r.addEventListener("change", paint));
+    nameInput && nameInput.addEventListener("input", paint);
+    paint();
+    return val;
+  }
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const say = (el, text, kind) => { el.textContent = text; el.className = "form-msg" + (kind ? " is-" + kind : ""); };
+
     const $ = (id) => document.getElementById(id);
-    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     const q = new URLSearchParams(location.search);
     if (q.get("code")) $("join-code").value = q.get("code").toUpperCase();
-    try { $("join-name").value = JSON.parse(localStorage.getItem("oeil:name")) || ""; } catch (e) {}
+    const me = OeilAccount.identity(), acc = OeilAccount.get();
+    $("join-name").value = me.name || "";
+    const av = avatarPicker("jav", $("join-name"), me.avatar);
+    if (acc) $("join-av").hidden = true;
     $("join-code").addEventListener("input", (e) => (e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "")));
     $("join-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const code = $("join-code").value.trim(), name = $("join-name").value.trim();
+      const avatar = acc ? acc.avatar : av();
+      $("join-submit").disabled = true; say($("join-error"), "Connexion à la salle…");
       const room = await OeilLive.fetchRoom(code);
-      if (!room) { $("join-error").textContent = "Code introuvable. Vérifie le code affiché par l'hôte."; return; }
-      if (room.status === "finished") { $("join-error").textContent = "Cette partie est terminée."; return; }
-      try { localStorage.setItem("oeil:name", JSON.stringify(name)); } catch (e2) {}
+      $("join-submit").disabled = false;
+      if (!room) { say($("join-error"), "Code introuvable. Vérifie le code affiché par l'hôte, et que son écran est toujours ouvert.", "error"); return; }
+      if (room.status === "finished") { say($("join-error"), "Cette partie est terminée.", "error"); return; }
+      if (!acc) OeilAccount.setGuest({ name, avatar });
       const go = (r) => {
         if (r.status === "playing") { location.href = OeilLive.playLink(r, name); return; }
         $("wait-title").textContent = r.title;
-        $("wait-players").innerHTML = Object.values(r.players).map((p) => `<li><span class="live-avatar">${esc(p.name[0] || "?").toUpperCase()}</span>${esc(p.name)}</li>`).join("");
+        $("wait-players").innerHTML = Object.values(r.players).map((p) => `<li>${OeilAvatar(p, "avatar-sm")}${esc(p.name)}</li>`).join("");
       };
-      go(OeilLive.join(code, name));
       $("join-form").hidden = true; $("join-wait").hidden = false;
-      OeilLive.subscribe(code, go);
+      go(room);
+      OeilLive.watch(code, go);
+      OeilLive.join(code, name, avatar);
     });
   })();
 </script>

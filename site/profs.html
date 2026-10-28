@@ -29,10 +29,10 @@
 <div class="dot-board px-5 sm:px-10 pt-16 pb-10 lg:pb-14 grid lg:grid-cols-12 gap-8 items-end">
 <p class="board-strip"><span class="board-dot" style="background:#B9D9FF"></span>Écoles de design, BTS, DN MADE, masters, universités</p>
 <div class="lg:col-span-8">
-<h1 class="text-big reveal">Échauffe toute ta classe en cinq minutes.</h1>
-<p class="reveal mt-6 max-w-[38rem] text-body-lg" style="--d:80ms">Une session, un lien, et chaque étudiant joue les mêmes manches sur son poste ou son téléphone. Pas de compte élève : le classement se construit à partir des codes résultats.</p>
+<h1 class="text-big reveal">Échauffe <span class="nw">toute ta classe</span> <span class="nw">en cinq minutes.</span></h1>
+<p class="reveal mt-6 max-w-[38rem] text-body-lg" style="--d:80ms">Une partie en direct ou un lien de session, et chaque étudiant joue les mêmes manches sur son poste ou son téléphone. Le classement s'affiche à la fin de chaque partie.</p>
 </div>
-<div class="lg:col-span-4 flex flex-wrap gap-3 lg:justify-end reveal" style="--d:140ms"><a class="btn" href="live.html">Lancer une partie en direct</a><a class="btn-line" href="#offres">Voir les offres</a></div>
+<div class="lg:col-span-4 btn-row lg:justify-end reveal" style="--d:140ms"><a class="btn" href="live.html">Lancer une partie en direct</a><a class="btn-line" href="#offres">Voir les offres</a></div>
 </div>
 </section>
 
@@ -49,9 +49,9 @@
 <div class="live-promo panel-line p-5 sm:p-10 grid lg:grid-cols-12 gap-8 items-center">
 <div class="lg:col-span-7">
 <p class="feature-kicker"><span class="board-dot" style="background:#fff"></span>En direct, comme un quiz en classe</p>
-<h2 class="text-headline-lg-mobile md:text-headline-xl mt-3">Un code, un QR code, toute la classe joue.</h2>
+<h2 class="text-headline-lg-mobile md:text-headline-xl mt-3"><span class="nw">Un code,</span> <span class="nw">un QR code,</span><br/><span class="nw">toute la classe joue.</span></h2>
 <p class="mt-4 text-body-lg max-w-[36rem]">Tu projettes l'écran de l'hôte. Les étudiants scannent le QR code ou tapent le code sur rejoindre.html, entrent leur prénom, et attendent ton signal. Chaque manche met à jour le classement à l'écran, jusqu'au podium.</p>
-<div class="mt-6 flex flex-wrap gap-3"><a class="btn" href="live.html">Créer une partie</a><a class="btn-line" href="rejoindre.html">Page à donner aux étudiants</a></div>
+<div class="mt-6 btn-row"><a class="btn" href="live.html">Créer une partie</a><a class="btn-line" href="rejoindre.html">Page à donner aux étudiants</a></div>
 </div>
 <ul class="lg:col-span-5 step-list"><li><span aria-hidden="true" class="material-symbols-outlined">tune</span><span>Tu choisis les jeux et le nombre de manches.</span></li><li><span aria-hidden="true" class="material-symbols-outlined">qr_code_2</span><span>Le code et le QR code s'affichent : la salle d'attente se remplit.</span></li><li><span aria-hidden="true" class="material-symbols-outlined">play_arrow</span><span>Tu lances : tout le monde joue le même tirage.</span></li><li><span aria-hidden="true" class="material-symbols-outlined">leaderboard</span><span>Le classement évolue à chaque manche, puis le podium.</span></li></ul>
 </div>
@@ -84,7 +84,7 @@
 <div class="panel-line bg-white p-5 sm:p-10 grid lg:grid-cols-12 gap-8">
 <div class="lg:col-span-4">
 <h2 class="text-headline-lg-mobile md:text-headline-lg">Classement</h2>
-<p class="mt-4 text-body-md text-on-surface-variant">Colle les codes résultats envoyés par tes étudiants, un par ligne. Le classement reste enregistré dans ce navigateur.</p>
+<p class="mt-4 text-body-md text-on-surface-variant">Colle les codes résultats envoyés par tes étudiants, un par ligne. Le classement est gardé sur cet ordinateur et s'exporte en CSV. Avec l'offre Classe, les résultats remontent tout seuls dans Mon compte.</p>
 </div>
 <div class="lg:col-span-8 flex flex-col gap-4">
 <textarea class="min-h-[120px] rounded border border-ink bg-white p-3 text-[14px]" id="codes" placeholder="Colle ici les codes résultats…"></textarea>
@@ -98,14 +98,13 @@
 <div class="course-banner" style="--field:#B9D9FF">
 <div class="course-copy">
 <p class="feature-kicker"><span class="board-dot"></span>Offres pour les classes et les écoles</p>
-<h2 class="feature-title">Gratuit pour essayer, payant pour suivre.</h2>
-<p class="feature-text">Les parties en direct et les sessions par lien sont gratuites. L'offre Classe ajoute les comptes étudiants, le classement automatique et le suivi sur l'année ; l'offre École couvre toute l'équipe.</p>
+<h2 class="feature-title">Gratuit pour essayer,<br/>payant pour suivre.</h2>
+<p class="feature-text">Les parties en direct et les sessions par lien sont gratuites. L'offre Classe donne l'accès Pro à 40 étudiants, avec leurs résultats dans ton compte ; l'offre École couvre toute l'équipe.</p>
 </div>
 <div class="course-price">
 <p class="text-body-sm text-text-muted">Classe</p><p class="course-amount tabular">9 €<small>/mois</small></p>
 <p class="text-body-sm">par enseignant · École dès 690 €/an</p>
-<a class="btn w-full mt-auto" href="tarifs.html#ecoles">Voir les tarifs écoles</a>
-<a class="btn-quiet text-[14px] font-medium w-max" href="contact.html?offre=ecole">Demander un devis</a>
+<div class="course-actions"><a class="btn" href="tarifs.html#ecoles">Voir les tarifs écoles</a><a class="btn-line" href="contact.html?offre=ecole">Demander un devis</a></div>
 </div>
 </div>
 </section>
@@ -115,10 +114,10 @@
 <div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
 <p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
 <div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
-<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a><a class="foot-link w-max" href="cgv.html">Conditions générales</a></div>
 </div>
 <p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
-<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2026 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="cgv.html">CGV</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
 </div>
 </footer>
 <script>

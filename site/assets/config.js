@@ -1,12 +1,23 @@
-// Réglages du site à remplir avant la mise en ligne.
+// Réglages publics du site. Rien de secret ici : les clés secrètes (Stripe, clé « service_role » de Supabase)
+// se règlent dans Vercel → Settings → Environment Variables, jamais dans ce fichier.
 window.OEIL_CONFIG = {
-  contactEmail: "bonjour@oeil.studio", // adresse provisoire : remplace-la par la tienne
-  // Liens de paiement Stripe (Payment Links). Crée-les dans le tableau de bord Stripe,
-  // règle l'URL de confirmation sur https://TON-DOMAINE/abonnement.html?succes=1&plan=<clé>, puis colle-les ici.
-  stripe: {
-    "pro-mensuel": "",
-    "pro-annuel": "",
-    parcours: "",
-    "classe-mensuel": "",
+  contactEmail: "bonjour@oeil.studio", // adresse affichée sur le site : remplace-la par la tienne
+
+  // Supabase (comptes, scores, classements, parties en direct sur plusieurs appareils).
+  // Supabase → Project Settings → API : copie « Project URL » et la clé « anon public ».
+  supabase: {
+    url: "",
+    anonKey: "",
+  },
+
+  // Informations légales affichées dans les mentions légales, les CGV et la page confidentialité.
+  legal: {
+    editeur: "", // ton prénom et ton nom
+    statut: "Entrepreneur individuel (micro-entreprise)",
+    adresse: "", // adresse postale complète
+    siret: "", // laisse vide tant que l'immatriculation est en cours
+    email: "", // adresse de contact légale (sinon contactEmail est utilisée)
+    mediateur: "", // nom du médiateur de la consommation choisi
+    mediateurUrl: "", // site du médiateur
   },
 };

@@ -81,12 +81,23 @@
   window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(fit, 80); });
 })();
 
-// En-tête : affiche le prénom quand un compte est connecté.
+// En-tête : avatar et prénom quand un compte est connecté.
 (function () {
-  let u = null;
-  try { u = JSON.parse(localStorage.getItem("oeil:account")); } catch (e) {}
-  if (!u) return;
-  document.querySelectorAll("[data-account-link]").forEach((a) => { a.href = "compte.html"; const n = a.querySelector("[data-account-name]"); if (n) n.textContent = u.name; else a.textContent = u.name; });
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  function paint() {
+    let u = null;
+    try { u = JSON.parse(localStorage.getItem("oeil:account")); } catch (e) {}
+    document.querySelectorAll("[data-account-link]").forEach((a) => {
+      if (a.dataset.orig == null) a.dataset.orig = a.innerHTML;
+      if (!u) { a.innerHTML = a.dataset.orig; a.href = "connexion.html"; a.classList.remove("account-chip"); return; }
+      a.href = "compte.html";
+      const av = u.avatar || {}, inner = av.icon ? `<span class="material-symbols-outlined" aria-hidden="true">${esc(av.icon)}</span>` : esc((u.name || "?").trim()[0].toUpperCase());
+      if (a.dataset.orig.includes("data-account-name")) { a.classList.add("account-chip"); a.innerHTML = `<span class="avatar" style="--av:${esc(av.color || "#B9D9FF")}">${inner}</span><span class="hidden sm:inline">${esc(u.name)}</span>`; }
+      else a.textContent = u.name;
+    });
+  }
+  paint();
+  document.addEventListener("oeil:account", paint);
 })();
 
 // FAQ : ouverture et fermeture animées.

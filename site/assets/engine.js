@@ -236,13 +236,17 @@
       if (isRecord) store.set(key, avg);
       // Historique (page « Mon compte ») et série du défi du jour
       const hist = store.get("history") || [];
-      hist.unshift({ id: mix ? "mix" : ids[0], title: mix ? (title || "Mélange") : info(ids[0]).name, avg: Math.round(avg), date: new Date().toISOString(), daily: !!S.daily });
-      store.set("history", hist.slice(0, 60));
+      const entry = { id: mix ? "mix" : ids[0], title: mix ? (title || "Mélange") : info(ids[0]).name, avg: Math.round(avg), date: new Date().toISOString(), daily: !!S.daily, plays: scores.map((sc, i) => ({ id: plan[i], s: Math.round(sc) })) };
+      hist.unshift(entry);
+      store.set("history", hist.slice(0, 500));
+      if (mix) scores.forEach((sc, i) => { const k = "best:" + plan[i], b = store.get(k); if (b == null || sc > b) store.set(k, sc); });
+      if (window.OeilAccount) window.OeilAccount.saveScore({ id: entry.id, title: entry.title, avg: entry.avg, rounds: scores.map(Math.round), mode: S.daily ? "daily" : challenge?.live ? "live" : mix ? "mix" : "solo", day: S.daily ? S.today : null });
       if (S.daily) {
         const d = store.get("daily") || { streak: 0, last: null, scores: {} };
         const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
         if (d.last !== S.today) d.streak = d.last === yesterday ? d.streak + 1 : 1;
         d.last = S.today;
+        d.max = Math.max(d.max || 0, d.streak);
         d.scores[S.today] = Math.max(d.scores[S.today] || 0, Math.round(avg));
         store.set("daily", d);
       }
@@ -257,10 +261,29 @@
         const diff = Math.round(avg) - Math.round(challenge.score);
         vs.hidden = false;
         vs.innerHTML = `<b>${diff > 0 ? "Tu gagnes" : diff < 0 ? "Défi perdu" : "Égalité"}</b> : toi ${Math.round(avg)} %, ${esc(challenge.name)} ${Math.round(challenge.score)} %.`;
+        if (diff > 0) store.set("wins", (store.get("wins") || 0) + 1);
       } else vs.hidden = true;
 
+      // Badges débloqués par cette session
+      const unlock = $("#sum-unlock");
+      if (unlock && window.OeilProgress) {
+        const fresh = window.OeilProgress.check();
+        unlock.hidden = !fresh.length;
+        if (fresh.length) unlock.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">${fresh[0].icon}</span><span><b>Badge débloqué : ${esc(fresh.map((b) => b.name).join(", "))}.</b> <a class="underline" href="compte.html#badges">Voir mes badges</a></span>`;
+      }
+      // Partie en direct : classement mis à jour au fil des joueurs
+      const rankBox = $("#sum-rank");
+      if (rankBox && window.OeilLive && challenge?.live) {
+        rankBox.hidden = false;
+        rankBox.innerHTML = `<p class="font-medium">Classement de la partie</p><ol><li><span></span><span></span><span>En attente des autres joueurs…</span></li></ol>`;
+        window.OeilLive.watch(challenge.live, (room) => {
+          const rk = window.OeilLive.ranking(room), me = rk.findIndex((p) => p.name === challenge.player);
+          if (room.status === "finished" && me > -1 && me < 3 && !store.get("podium:" + room.code)) { store.set("podium:" + room.code, 1); store.set("podiums", (store.get("podiums") || 0) + 1); }
+          rankBox.innerHTML = `<p class="font-medium">${room.status === "finished" ? "Classement final" : "Classement en cours"}${me > -1 ? ` · tu es ${me + 1}${me ? "e" : "er"} sur ${rk.length}` : ""}</p><ol>${rk.slice(0, 5).map((p, i) => `<li><b>${i + 1}</b>${window.OeilAvatar ? window.OeilAvatar(p, "avatar-sm") : ""}<span class="truncate">${esc(p.name)}${p.name === challenge.player ? " (toi)" : ""}</span><b>${p.total} pts</b></li>`).join("")}</ol>`;
+        });
+      }
       const nameInput = $("#sum-name");
-      nameInput.value = store.get("name") || "";
+      nameInput.value = (window.OeilAccount && window.OeilAccount.identity().name) || store.get("name") || "";
       const makeLink = () => {
         const name = nameInput.value.trim() || "Quelqu'un";
         store.set("name", nameInput.value.trim());

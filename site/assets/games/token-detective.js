@@ -36,11 +36,11 @@
   Oeil.play({
     id: "token-detective", name: "Token Detective",
     howto: [
-      { icon: "menu_book", text: "Le design system est rappelé à droite : espacements, arrondis, tailles de texte et couleurs autorisés." },
+      { icon: "menu_book", text: "Le design system est rappelé à côté de la fiche : espacements, arrondis, tailles de texte et couleurs autorisés." },
       { icon: "touch_app", text: "Au centre, la fiche du composant : compare chaque valeur à la liste de droite. Si elle n'y figure pas (14 px alors que le système propose 8 ou 16), clique dessus." },
       { icon: "check", text: "Valide quand tu as fini. Les fausses alertes coûtent des points." },
     ],
-    brief: (s) => `${s.c.name} : clique les ${s.bad.length} valeurs de la fiche qui n'existent pas dans le design system (à droite).`,
+    brief: (s) => `${s.c.name} : clique les ${s.bad.length} valeurs de la fiche hors du design system.`,
     setup(round) {
       const c = order[round % order.length];
       const p = Object.fromEntries(c.props.map(([k, , , v]) => [k, v]));

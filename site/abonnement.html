@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<html data-auth="1" lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Abonnement — Œil Studio</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
@@ -28,31 +28,36 @@
 <section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-6 lg:pt-10 pb-20">
 <div class="ticket">
 <div class="ticket-main">
-<p class="board-strip"><span class="board-dot"></span>Abonnement · paiement sécurisé par Stripe</p>
+<p class="board-strip"><span class="board-dot"></span>Commande · paiement sécurisé par Stripe</p>
 <div id="co-checkout">
 <p class="text-body-sm text-text-muted">Ta commande</p>
 <h1 class="text-headline-lg-mobile md:text-headline-xl" id="co-name">Œil Pro</h1>
 <p class="course-amount tabular mt-2" id="co-price">3 €</p>
 <p class="text-body-md" id="co-detail"></p>
 <ul class="course-list mt-6" id="co-list"></ul>
+<p class="mt-6 text-body-sm text-text-muted">Prix TTC. TVA non applicable, article 293 B du CGI. <a class="underline" href="cgv.html">Conditions générales</a></p>
 </div>
 <div hidden="" id="co-success">
 <p class="text-body-sm text-text-muted">Paiement confirmé</p>
-<h1 class="text-big">Bienvenue dans <span id="co-ok-name">Œil Pro</span>.</h1>
-<p class="mt-4 text-body-lg max-w-[34rem]">Ton offre est active. Stripe t'a envoyé le reçu par e-mail.</p>
-<div class="mt-8 flex flex-wrap gap-3"><a class="btn" href="jeux.html">Jouer maintenant</a><a class="btn-line" href="compte.html">Mon compte</a></div>
+<h1 class="text-big">Bienvenue dans<br/><span id="co-ok-name">Œil Pro</span>.</h1>
+<p class="mt-4 text-body-lg max-w-[34rem]" id="co-ok-text">Activation de ton offre…</p>
+<div class="mt-8 btn-row"><a class="btn" href="jeux.html">Jouer maintenant</a><a class="btn-line" href="compte.html">Mon compte</a></div>
 </div>
 </div>
 <aside class="ticket-side" id="co-side">
-<p class="font-medium">Ton compte</p>
-<form class="flex flex-col gap-3" id="co-form">
-<label class="grid gap-1 text-body-sm">Prénom<input autocomplete="given-name" class="field" id="co-first" required="" type="text"/></label>
-<label class="grid gap-1 text-body-sm">Adresse e-mail<input autocomplete="email" class="field" id="co-email" required="" type="email"/></label>
-<p class="text-[12px]">Le reçu et l'accès sont envoyés à cette adresse.</p>
-<button class="btn w-full mt-2" type="submit">Payer avec Stripe<span aria-hidden="true" class="material-symbols-outlined text-[18px]">lock</span></button>
-<p aria-live="polite" class="text-body-sm" id="co-msg"></p>
-</form>
-<p class="text-[12px] mt-auto">Carte bancaire ou Apple Pay. Résiliable à tout moment depuis Mon compte.</p>
+<div hidden="" id="co-guest">
+<p class="side-title">Connecte-toi d'abord</p>
+<p class="text-body-sm mt-2">Ton offre est rattachée à ton compte : tu la retrouves sur tous tes appareils et tu peux la résilier quand tu veux.</p>
+<div class="course-actions mt-4"><a class="btn" id="co-signup" href="connexion.html#inscription">Créer un compte</a><a class="btn-line" id="co-login" href="connexion.html">J'ai déjà un compte</a></div>
+</div>
+<div class="flex flex-col gap-3" hidden="" id="co-user">
+<p class="side-title">Ton compte</p>
+<div class="flex items-center gap-3 p-3 bg-white border border-ink rounded-lg"><span id="co-av"></span><span class="min-w-0"><b class="block truncate" id="co-uname"></b><small class="block truncate text-text-muted" id="co-email"></small></span></div>
+<label class="flex gap-2 items-start text-[13px]"><input class="mt-0.5 accent-ink" id="co-terms" type="checkbox"/><span>J'accepte les <a class="underline" href="cgv.html" target="_blank">conditions générales</a> et je demande l'accès immédiat au contenu, ce qui met fin au délai de rétractation (le remboursement sous 14 jours reste possible sur demande).</span></label>
+<button class="btn w-full" id="co-pay" type="button">Payer avec Stripe<span aria-hidden="true" class="material-symbols-outlined text-[18px]">lock</span></button>
+<p aria-live="polite" class="form-msg" id="co-msg"></p>
+</div>
+<p class="text-[12px] mt-auto">Carte bancaire, Apple Pay ou Google Pay. Résiliable à tout moment depuis Mon compte.</p>
 <a class="btn-quiet text-[14px] w-max" href="tarifs.html">Changer d'offre</a>
 </aside>
 </div>
@@ -63,10 +68,10 @@
 <div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
 <p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
 <div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
-<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a><a class="foot-link w-max" href="cgv.html">Conditions générales</a></div>
 </div>
 <p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>
-<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2025 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
+<div class="flex flex-col sm:flex-row justify-between gap-2 py-6 text-body-sm text-ground/60"><p>© 2026 Œil Studio · <a class="foot-link" href="mentions-legales.html">Mentions légales</a> · <a class="foot-link" href="cgv.html">CGV</a> · <a class="foot-link" href="confidentialite.html">Confidentialité</a></p><p>Accessible au clavier · Conçu selon le RGAA et les WCAG 2.1 AA</p></div>
 </div>
 </footer>
 <script src="assets/config.js"></script>
@@ -78,27 +83,39 @@
     const PLANS = {
       "pro-mensuel": { name: "Œil Pro", price: "3 €", detail: "par mois, résiliable à tout moment", plan: "pro", list: PRO },
       "pro-annuel": { name: "Œil Pro", price: "24 €", detail: "par an, soit 2 mois offerts", plan: "pro", list: PRO },
-      parcours: { name: "Parcours intensif", price: "19 €", detail: "payé une fois, accès à vie", plan: "parcours", list: ["14 jours, un principe et un jeu par jour", "Fiches de synthèse", "Certificat de fin de parcours"] },
-      "classe-mensuel": { name: "Offre Classe", price: "9 €", detail: "par mois et par enseignant, après 14 jours d'essai gratuit", plan: "classe", list: ["Comptes Pro pour 40 étudiants", "Parties en direct sur tous les téléphones", "Classement automatique et suivi"] },
+      parcours: { name: "Parcours intensif", price: "19 €", detail: "payé une fois, accès à vie", plan: "parcours", list: ["14 jours, un principe et un jeu par jour", "Fiches de synthèse", "Certificat de fin de parcours", "Tous les jeux Pro"] },
+      "classe-mensuel": { name: "Offre Classe", price: "9 €", detail: "par mois et par enseignant, après 14 jours d'essai gratuit", plan: "classe", list: ["Accès Pro pour 40 étudiants par classe", "Parties en direct sur tous les téléphones", "Résultats des étudiants dans ton compte"] },
     };
     const q = new URLSearchParams(location.search), key = q.get("plan"), P = PLANS[key];
     if (!P) { location.replace("tarifs.html"); return; }
     $("co-name").textContent = P.name; $("co-price").textContent = P.price; $("co-detail").textContent = P.detail;
     $("co-list").innerHTML = P.list.map((x) => `<li>${x}</li>`).join("");
-    const u = OeilAccount.get();
-    if (u) { $("co-first").value = u.name || ""; $("co-email").value = u.email || ""; }
+    const back = encodeURIComponent(`abonnement.html?plan=${key}`);
+    $("co-signup").href = `connexion.html?suite=${back}#inscription`; $("co-login").href = `connexion.html?suite=${back}`;
+    const paint = (u) => {
+      $("co-guest").hidden = !!u; $("co-user").hidden = !u;
+      if (u) { $("co-av").innerHTML = OeilAvatar(u); $("co-uname").textContent = u.name; $("co-email").textContent = u.email; }
+    };
+    paint(OeilAccount.get());
     if (q.get("succes") === "1") {
-      // Retour de Stripe. Sans serveur, l'offre est notée dans ce navigateur ; avec un backend, c'est le webhook Stripe qui l'active.
-      OeilAccount.setPlan(P.plan);
+      // Retour de Stripe : le webhook active l'offre sur le compte, on attend qu'elle apparaisse.
       $("co-checkout").hidden = true; $("co-side").hidden = true; $("co-success").hidden = false; $("co-ok-name").textContent = P.name;
+      let tries = 0;
+      const poll = async () => {
+        const u = await OeilAccount.refresh().catch(() => null);
+        if (u && OeilAccount.isPro()) { $("co-ok-text").textContent = "Ton offre est active. Stripe t'a envoyé le reçu par e-mail."; return; }
+        if (++tries < 15) setTimeout(poll, 2000);
+        else $("co-ok-text").textContent = "Paiement reçu. L'activation prend parfois une minute : recharge la page si les jeux Pro restent verrouillés.";
+      };
+      poll();
       return;
     }
-    $("co-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      OeilAccount.login({ name: $("co-first").value.trim(), email: $("co-email").value.trim(), role: key.startsWith("classe") ? "enseignant" : (u && u.role) || "etudiant" });
-      const link = (window.OEIL_CONFIG && window.OEIL_CONFIG.stripe[key]) || "";
-      if (!link) { $("co-msg").textContent = "Paiement pas encore relié : ajoute le lien Stripe de cette offre dans assets/config.js."; return; }
-      location.href = `${link}${link.includes("?") ? "&" : "?"}prefilled_email=${encodeURIComponent($("co-email").value.trim())}`;
+    OeilAccount.ready.then(paint);
+    $("co-pay").addEventListener("click", async () => {
+      if (!$("co-terms").checked) { $("co-msg").textContent = "Coche la case pour accepter les conditions générales."; $("co-msg").className = "form-msg is-error"; return; }
+      $("co-pay").disabled = true; $("co-msg").textContent = "Ouverture de la page de paiement…"; $("co-msg").className = "form-msg";
+      try { await OeilAccount.checkout(key); }
+      catch (err) { $("co-msg").textContent = OeilAccount.human(err); $("co-msg").className = "form-msg is-error"; $("co-pay").disabled = false; }
     });
   })();
 </script>
