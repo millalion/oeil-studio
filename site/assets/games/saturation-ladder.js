@@ -31,7 +31,7 @@
     mount(board, s, api) {
       const wrap = api.h("div", "row-wrap");
       s.row = api.h("div", "row-track");
-      wrap.append(s.row);
+      wrap.append(s.row, api.h("p", "row-axis", `<span><span class="material-symbols-outlined">water_drop</span>Plus terne</span><i></i><span>Plus vive<span class="material-symbols-outlined">colors</span></span>`));
       board.append(wrap);
       const items = s.start.map((c) => { const el = api.h("div", "row-swatch"); el.style.background = C.hsl(c); el.dataset.id = c.id; el.setAttribute("aria-label", `Couleur ${c.id + 1}`); return { id: c.id, el }; });
       s.sort = api.sortable(s.row, items);

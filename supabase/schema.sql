@@ -51,10 +51,12 @@ create table if not exists public.scores (
   title text check (char_length(title) <= 80),
   avg int not null check (avg between 0 and 100),
   rounds int[],
-  mode text not null default 'solo' check (mode in ('solo', 'mix', 'daily', 'live')),
+  mode text not null default 'solo' check (mode in ('solo', 'mix', 'daily', 'live', 'round')),
   day date,
   created_at timestamptz not null default now()
 );
+alter table public.scores drop constraint if exists scores_mode_check;
+alter table public.scores add constraint scores_mode_check check (mode in ('solo', 'mix', 'daily', 'live', 'round'));
 create index if not exists scores_user_idx on public.scores (user_id, created_at desc);
 create index if not exists scores_daily_idx on public.scores (day) where mode = 'daily';
 alter table public.scores enable row level security;
@@ -139,7 +141,7 @@ $$;
 
 create or replace function public.class_roster(p_class uuid) returns table (name text, avatar_color text, avatar_icon text, sessions bigint, avg int, last timestamptz)
 language sql stable security definer set search_path = public as $$
-  select p.name, p.avatar_color, p.avatar_icon, count(s.id), round(avg(s.avg))::int, max(s.created_at)
+  select p.name, p.avatar_color, p.avatar_icon, count(s.id) filter (where s.mode <> 'round'), round(avg(s.avg) filter (where s.mode <> 'round'))::int, max(s.created_at)
   from class_members m join profiles p on p.id = m.user_id left join scores s on s.user_id = p.id
   where m.class_id = p_class and exists (select 1 from classes c where c.id = p_class and c.teacher_id = auth.uid())
   group by p.id order by count(s.id) desc, p.name;
@@ -172,3 +174,25 @@ alter table public.contact_requests enable row level security;
 drop policy if exists "tout le monde peut écrire" on public.contact_requests;
 create policy "tout le monde peut écrire" on public.contact_requests for insert to anon, authenticated with check (true);
 grant insert on public.contact_requests to anon, authenticated;
+
+-- ---------------------------------------------------------------- Classement national de la semaine
+-- Semaine du lundi au dimanche (heure de Paris). p_game = un jeu précis, ou null pour le classement général :
+-- la somme des meilleurs scores de chaque jeu joué dans la semaine.
+create index if not exists scores_week_idx on public.scores (created_at, game_id);
+create or replace function public.weekly_leaderboard(p_game text default null)
+returns table (name text, avatar_color text, avatar_icon text, points int, games int, is_me boolean)
+language sql stable security definer set search_path = public as $$
+  with week as (select date_trunc('week', now() at time zone 'Europe/Paris') at time zone 'Europe/Paris' as start),
+  best as (
+    select s.user_id, s.game_id, max(s.avg) as best
+    from scores s, week
+    where s.created_at >= week.start and s.game_id <> 'mix' and (p_game is null or s.game_id = p_game)
+    group by s.user_id, s.game_id
+  )
+  select p.name, p.avatar_color, p.avatar_icon, sum(b.best)::int, count(*)::int, p.id = auth.uid()
+  from best b join profiles p on p.id = b.user_id
+  group by p.id
+  order by sum(b.best) desc, p.name
+  limit 50;
+$$;
+grant execute on function public.weekly_leaderboard to anon, authenticated;

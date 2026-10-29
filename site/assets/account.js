@@ -161,6 +161,13 @@
       const { data } = await c.rpc("daily_leaderboard", { p_day: day });
       return data || [];
     },
+    async weeklyBoard(game) {
+      if (!enabled) return [];
+      const c = await sb();
+      const { data, error } = await c.rpc("weekly_leaderboard", { p_game: game || null });
+      if (error) throw error;
+      return data || [];
+    },
     // ---------- Classes ----------
     async joinClass(code) { const c = await sb(); const { data, error } = await c.rpc("join_class", { p_code: String(code).trim().toUpperCase() }); if (error) throw fail(error.message.includes("pleine") ? "Cette classe est complète." : error.message.includes("introuvable") ? "Code de classe introuvable." : human(error)); await refresh(); return data; },
     async leaveClass(id) { const c = await sb(); const { error } = await c.rpc("leave_class", { p_class: id }); if (error) throw error; await refresh(); },

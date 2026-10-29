@@ -347,7 +347,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
 <div class="dash-card c-7"><h2>Records par discipline</h2><div class="dash-tabs" id="rec-tabs" role="group" aria-label="Discipline"></div><ol class="records" id="rec-list"></ol></div>
 <div class="dash-card c-5"><h2>Dernières sessions</h2><ol class="mt-3 acc-history" id="acc-history"><li class="text-text-muted">Aucune session pour l'instant. <a class="underline" href="jeux.html">Choisis un jeu</a>.</li></ol></div>
 
-<div class="dash-card c-5" id="plan-card"><h2>Mon offre</h2><p class="mt-2 text-[34px] font-medium tracking-[-0.04em]" id="acc-plan">Gratuit</p><p class="text-body-sm text-text-muted" id="acc-plan-sub">10 jeux gratuits, le défi du jour et les parties en direct.</p><div class="btn-row mt-4"><a class="btn" href="tarifs.html" id="plan-cta">Voir les offres</a><button class="btn-line" hidden="" id="plan-portal" type="button">Gérer mon abonnement</button></div><p class="form-msg mt-2" id="plan-msg"></p></div>
+<div class="dash-card c-5" id="plan-card"><h2>Mon offre</h2><p class="mt-2 text-[34px] font-medium tracking-[-0.04em]" id="acc-plan">Gratuit</p><p class="text-body-sm text-text-muted" id="acc-plan-sub">__NFREE__ jeux gratuits, le défi du jour et les parties en direct.</p><div class="btn-row mt-4"><a class="btn" href="tarifs.html" id="plan-cta">Voir les offres</a><button class="btn-line" hidden="" id="plan-portal" type="button">Gérer mon abonnement</button></div><p class="form-msg mt-2" id="plan-msg"></p></div>
 <div class="dash-card c-7" id="class-card" hidden=""><h2 id="class-h">Ma classe</h2>
 <div id="class-student"><p class="text-body-sm text-text-muted mt-1">Ton enseignant·e t'a donné un code de classe ? Entre-le pour obtenir l'accès Pro de la classe.</p><form class="sum-share-row mt-3" id="class-join"><input aria-label="Code de classe" autocapitalize="characters" class="field flex-1 min-w-0 uppercase" id="class-code" maxlength="8" placeholder="Code de classe" required="" type="text"/><button class="btn" type="submit">Rejoindre</button></form><ul class="mt-3 grid gap-2" id="class-mine"></ul></div>
 <div hidden="" id="class-teacher"><p class="text-body-sm text-text-muted mt-1">Crée une classe, donne son code à tes étudiants : ils obtiennent l'accès Pro (40 par classe) et leurs résultats s'affichent ici.</p><form class="sum-share-row mt-3" id="class-new"><input aria-label="Nom de la classe" class="field flex-1 min-w-0" id="class-name" maxlength="60" placeholder="Ex. : DN MADE 2, groupe B" required="" type="text"/><button class="btn" type="submit">Créer</button></form><div class="mt-4 grid gap-4" id="class-list"></div></div>
@@ -362,7 +362,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
     const $ = (id) => document.getElementById(id);
     const games = window.OEIL_GAMES, doms = window.OEIL_DOMAINS;
     const ROLES = { etudiant: "Étudiant·e", enseignant: "Enseignant·e", pro: "Designer en poste" };
-    const PLANS = { free: ["Gratuit", "10 jeux gratuits, le défi du jour et les parties en direct."], pro: ["Œil Pro", "Les 44 jeux, le parcours et ta progression sur tous tes appareils."], parcours: ["Parcours intensif", "Le parcours de 14 jours et tous les jeux, à vie."], classe: ["Offre Classe", "Œil Pro pour toi et 40 étudiants par classe."], ecole: ["Offre École", "Œil Pro pour toute l'équipe et les étudiants."], "classe-eleve": ["Pro via ta classe", "L'accès Pro t'est offert par ta classe."] };
+    const PLANS = { free: ["Gratuit", "__NFREE__ jeux gratuits, le défi du jour et les parties en direct."], pro: ["Œil Pro", "Les 44 jeux, le parcours et ta progression sur tous tes appareils."], parcours: ["Parcours intensif", "Le parcours de 14 jours et tous les jeux, à vie."], classe: ["Offre Classe", "Œil Pro pour toi et 40 étudiants par classe."], ecole: ["Offre École", "Œil Pro pour toute l'équipe et les étudiants."], "classe-eleve": ["Pro via ta classe", "L'accès Pro t'est offert par ta classe."] };
     const plural = (n, w) => `${n} ${w}${n > 1 ? "s" : ""}`;
 
     function header() {
@@ -476,6 +476,59 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
   })();
 </script>
 ''', auth=True)
+
+# ---------------------------------------------------------------- Classement national de la semaine
+domtabs = "".join(f'<button aria-pressed="false" data-dom="{k}" type="button"><i class="board-dot" style="--field:{d["field"]}"></i>{d["label"].split(" ")[0]}</button>' for k, d in DOMAINS.items())
+page("classement.html", "Classement de la semaine — Œil Studio", "classement", f"""<section class="{W} pt-6 lg:pt-10">
+<div class="dot-board px-5 sm:px-10 pt-16 pb-10 grid lg:grid-cols-12 gap-8 items-end">
+<p class="board-strip"><span class="board-dot" style="background:#FFE08A"></span>Classement national · remis à zéro chaque lundi</p>
+<div class="lg:col-span-8">
+<h1 class="text-big">Qui a l'œil<br/>cette semaine ?</h1>
+<p class="mt-5 text-body-lg max-w-[36rem]">Ton meilleur score de la semaine dans chaque jeu compte, défi du jour compris. Le classement général additionne tes meilleurs scores : plus tu joues de jeux différents, plus tu montes.</p>
+</div>
+<div class="lg:col-span-4 dash-card dash-kpi"><span>Ta place cette semaine</span><b id="me-rank">–</b><small id="me-sub">Connecte-toi pour apparaître dans le classement.</small></div>
+</div>
+</section>
+<section class="{W} pt-8 pb-24">
+<div class="rank-filters">
+<div aria-label="Discipline" class="dash-tabs" id="dom-tabs" role="group"><button aria-pressed="true" data-dom="" type="button">Général</button>{domtabs}</div>
+<label class="rank-select" hidden="" id="game-pick-wrap"><span class="sr-only">Jeu</span><select class="field" id="game-pick"></select></label>
+</div>
+<div class="dash-card mt-4 p-0 overflow-hidden"><ol class="rank-list" id="rank-list"><li class="rank-empty">Chargement du classement…</li></ol></div>
+<p class="mt-4 text-body-sm text-text-muted" id="rank-week"></p>
+</section>""", """<script src="assets/catalog.js"></script>
+<script>
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const games = window.OEIL_GAMES;
+    let dom = "", game = "";
+    const monday = new Date(); monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+    $("rank-week").textContent = `Semaine du ${monday.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}. Seuls les joueurs connectés apparaissent.`;
+    function picker() {
+      const list = games.filter((g) => g.domain === dom);
+      $("game-pick-wrap").hidden = !dom;
+      $("game-pick").innerHTML = list.map((g) => `<option value="${g.id}">${esc(g.name)}</option>`).join("");
+      game = dom ? list[0].id : "";
+    }
+    async function load() {
+      const box = $("rank-list");
+      if (!OeilAccount.enabled) { box.innerHTML = '<li class="rank-empty">Le classement ouvre avec les comptes, très bientôt.</li>'; return; }
+      box.innerHTML = '<li class="rank-empty">Chargement du classement…</li>';
+      let rows = [];
+      try { rows = await OeilAccount.weeklyBoard(game); } catch (e) { box.innerHTML = '<li class="rank-empty">Impossible de charger le classement. Réessaie dans un instant.</li>'; return; }
+      const unit = game ? " %" : " pts";
+      box.innerHTML = rows.length ? rows.map((r, i) => `<li class="${r.is_me ? "is-me" : ""}${i < 3 ? " is-top" : ""}"><span class="rank-n">${i < 3 ? `<span class="material-symbols-outlined" aria-label="${i + 1}">${i ? "military_tech" : "workspace_premium"}</span>` : i + 1}</span>${OeilAvatar({ name: r.name, avatar: { color: r.avatar_color, icon: r.avatar_icon } })}<span class="rank-name">${esc(r.name)}${r.is_me ? " (toi)" : ""}<small>${game ? "meilleur score" : `${r.games} jeu${r.games > 1 ? "x" : ""}`}</small></span><b>${r.points}${unit}</b></li>`).join("") : `<li class="rank-empty">Personne n'a encore joué ${game ? "à ce jeu " : ""}cette semaine. <a class="underline" href="${game ? game + ".html" : "defi.html"}">Lance-toi</a>.</li>`;
+      const me = rows.findIndex((r) => r.is_me);
+      $("me-rank").textContent = me > -1 ? `${me + 1}${me ? "e" : "er"} sur ${rows.length}` : "–";
+      $("me-sub").textContent = OeilAccount.get() ? (me > -1 ? `${rows[me].points}${unit} ${game ? "dans ce jeu" : "au total"}.` : "Joue une partie pour entrer dans le classement.") : "Connecte-toi pour apparaître dans le classement.";
+    }
+    $("dom-tabs").querySelectorAll("button").forEach((b) => (b.onclick = () => { dom = b.dataset.dom; $("dom-tabs").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); picker(); load(); }));
+    $("game-pick").addEventListener("change", (e) => { game = e.target.value; load(); });
+    OeilAccount.ready.then(load);
+  })();
+</script>
+""")
 
 # ---------------------------------------------------------------- Contact et devis
 page("contact.html", "Contact et devis — Œil Studio", None, f'''<section class="{W} pt-6 lg:pt-10 pb-20">
@@ -593,7 +646,7 @@ legal("mentions-legales.html", "Mentions légales", "Dernière mise à jour : oc
 ])
 legal("cgv.html", "Conditions générales", "Conditions générales d'utilisation et de vente du site Œil Studio. Dernière mise à jour : octobre 2026.", [
     ("1. Objet", f"<p>Ces conditions encadrent l'utilisation du site Œil Studio et la vente de ses offres payantes. Le site est édité par {ED} (voir les <a href=\"mentions-legales.html\">mentions légales</a>). Créer un compte ou passer commande vaut acceptation de ces conditions.</p>"),
-    ("2. Le service", "<p>Œil Studio propose des jeux d'entraînement au regard pour les designers. Sans compte, 10 jeux, le défi du jour, les défis entre amis et les parties en direct sont gratuits. Le compte gratuit conserve la progression sur tous les appareils. Les offres payantes ouvrent les jeux réservés à Œil Pro et les fonctions décrites sur la page <a href=\"tarifs.html\">Tarifs</a>.</p>"),
+    ("2. Le service", "<p>Œil Studio propose des jeux d'entraînement au regard pour les designers. Sans compte, __NFREE__ jeux, le défi du jour, les défis entre amis et les parties en direct sont gratuits. Le compte gratuit conserve la progression sur tous les appareils. Les offres payantes ouvrent les jeux réservés à Œil Pro et les fonctions décrites sur la page <a href=\"tarifs.html\">Tarifs</a>.</p>"),
     ("3. Compte", "<p>Le compte est personnel. Tu t'engages à fournir une adresse e-mail valide et à garder ton mot de passe confidentiel. Un pseudo injurieux ou trompeur peut être modifié ou supprimé. Tu peux supprimer ton compte à tout moment depuis Mon compte.</p>"),
     ("4. Offres et prix", "<ul><li>Œil Pro : 3 € par mois ou 24 € par an, sans engagement.</li><li>Parcours intensif : 19 €, paiement unique, accès à vie.</li><li>Offre Classe : 9 € par mois et par enseignant, après 14 jours d'essai gratuit, pour 40 étudiants par classe.</li><li>Offre École : sur devis.</li></ul><p>Les prix sont indiqués en euros, toutes taxes comprises. TVA non applicable, article 293 B du Code général des impôts.</p>"),
     ("5. Commande et paiement", "<p>Le paiement est réalisé par carte bancaire (ou Apple Pay et Google Pay) sur la page sécurisée de Stripe. Œil Studio n'a jamais accès à tes données bancaires. L'accès est activé dès la confirmation du paiement et un reçu est envoyé par e-mail.</p>"),

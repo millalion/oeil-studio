@@ -245,6 +245,7 @@
         api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Glisse chaque étiquette sur sa place</span><span class="ctl-hint">ou clique une étiquette puis une place</span>`;
       },
       evaluate(s) {
+        if (def.evaluate) return def.evaluate(s);
         const real = s.it.tokens.filter((t) => t.slot);
         const right = real.filter((t) => s.map[t.id] === t.slot).length;
         const decoys = s.it.tokens.filter((t) => !t.slot && s.map[t.id]).length;

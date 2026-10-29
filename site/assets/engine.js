@@ -103,8 +103,11 @@
         order.splice(i, 1); order.splice(to, 0, it.id); layout(); onChange && onChange(order);
       });
     });
+    if (container.clientWidth) layout();
     requestAnimationFrame(() => layout());
-    window.addEventListener("resize", () => layout());
+    // Recalcule dès que la rangée change de taille (affichage du plateau, rotation du téléphone…)
+    if ("ResizeObserver" in window) new ResizeObserver(() => { if (!container.querySelector(".is-dragging")) layout(); }).observe(container);
+    else window.addEventListener("resize", () => layout());
     return { order: () => [...order], layout };
   }
 
@@ -176,6 +179,7 @@
     }
 
     async function startRound() {
+      const bar = document.querySelector(".game-bar"); if (bar) bar.classList.remove("is-done");
       phase = "play"; hintUsed = false;
       result.hidden = true; summary.hidden = true;
       board.innerHTML = ""; controls.innerHTML = "";
@@ -241,6 +245,8 @@
       store.set("history", hist.slice(0, 500));
       if (mix) scores.forEach((sc, i) => { const k = "best:" + plan[i], b = store.get(k); if (b == null || sc > b) store.set(k, sc); });
       if (window.OeilAccount) window.OeilAccount.saveScore({ id: entry.id, title: entry.title, avg: entry.avg, rounds: scores.map(Math.round), mode: S.daily ? "daily" : challenge?.live ? "live" : mix ? "mix" : "solo", day: S.daily ? S.today : null });
+      // Chaque manche d'un mélange compte aussi pour le record et le classement de son jeu
+      if (window.OeilAccount && mix) scores.forEach((sc, i) => window.OeilAccount.saveScore({ id: plan[i], title: info(plan[i]).name, avg: Math.round(sc), mode: "round" }));
       if (S.daily) {
         const d = store.get("daily") || { streak: 0, last: null, scores: {} };
         const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
@@ -254,7 +260,8 @@
       $("#sum-score").textContent = `${Math.round(avg)} %`;
       $("#sum-grade").textContent = gradeFor(avg);
       $("#sum-record").textContent = isRecord ? "Nouveau record personnel." : `Ton record : ${Math.round(best)} %.`;
-      $("#sum-rounds").innerHTML = scores.map((s, i) => `<li style="--dot:${(domains()[info(plan[i]).domain] || {}).field}"><span>${mix ? esc(info(plan[i]).name) : `Manche ${i + 1}`}</span><b>${Math.round(s)} %</b></li>`).join("");
+      $("#sum-rounds").innerHTML = scores.map((sc, i) => { const g = info(plan[i]), d = domains()[g.domain] || {}; return `<li class="sum-round" style="--dot:${d.field || "#EAE9E3"}"><i aria-hidden="true"></i><span class="sum-round-name"><b>${mix ? esc(g.name) : `Manche ${i + 1}`}</b><small>${mix ? esc(d.label || "") : esc(g.name)}</small></span><strong>${Math.round(sc)}<small> %</small></strong><em aria-hidden="true"><u style="width:${Math.round(sc)}%"></u></em></li>`; }).join("");
+      document.querySelector(".game-bar").classList.add("is-done");
 
       const vs = $("#sum-versus");
       if (challenge && challenge.name != null && challenge.score != null) {

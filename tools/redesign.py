@@ -24,7 +24,7 @@ LOGO = ('<svg aria-hidden="true" class="h-7 w-7 shrink-0" viewBox="0 0 32 32"><r
         '<circle cx="16" cy="16" fill="#F0447A" r="4.6"/><circle cx="17.6" cy="14.4" fill="#141413" r="1.3"/></svg>')
 
 NAV = [("jeux", "jeux.html", "Jeux"), ("defi", "defi.html", "Défi du jour"), ("live", "live.html", "En direct"),
-       ("parcours", "parcours.html", "Parcours"), ("profs", "profs.html", "Écoles"), ("tarifs", "tarifs.html", "Tarifs")]
+       ("classement", "classement.html", "Classement"), ("parcours", "parcours.html", "Parcours"), ("profs", "profs.html", "Écoles"), ("tarifs", "tarifs.html", "Tarifs")]
 
 def header(active=None):
     cur = lambda k: ' aria-current="page"' if k == active else ''
@@ -47,7 +47,7 @@ FOOTER = f'''<footer class="bg-ink text-ground pt-16 lg:pt-24 overflow-hidden">
 <div class="{W}">
 <div class="grid grid-cols-2 md:grid-cols-12 gap-8 pb-4 text-[15px] relative z-10">
 <p class="col-span-2 md:col-span-6 max-w-[28rem] text-body-md text-ground">Œil Studio entraîne le regard typographique, chromatique et géométrique des designers. Pas de score vaniteux : un geste, une correction, un principe.</p>
-<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
+<div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="jeux.html">Les 44 jeux</a><a class="foot-link w-max" href="defi.html">Défi du jour</a><a class="foot-link w-max" href="classement.html">Classement de la semaine</a><a class="foot-link w-max" href="jeux.html#melange">Créer un mélange</a><a class="foot-link w-max" href="live.html">Partie en direct</a><a class="foot-link w-max" href="rejoindre.html">Rejoindre une partie</a></div>
 <div class="md:col-span-3 flex flex-col gap-2"><a class="foot-link w-max" href="tarifs.html">Tarifs et abonnements</a><a class="foot-link w-max" href="parcours.html">Parcours</a><a class="foot-link w-max" href="profs.html">Écoles et enseignants</a><a class="foot-link w-max" href="contact.html">Contact et devis</a><a class="foot-link w-max" href="compte.html">Mon compte</a><a class="foot-link w-max" href="index.html#faq">Questions fréquentes</a><a class="foot-link w-max" href="cgv.html">Conditions générales</a></div>
 </div>
 <p aria-hidden="true" class="font-medium whitespace-nowrap leading-[0.78] tracking-[-0.065em] text-[clamp(3rem,24.5vw,360px)] text-field-typography pointer-events-none select-none mt-10 lg:mt-16" data-fit="" data-fit-always="">Œil Studio</p>

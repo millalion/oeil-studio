@@ -29,7 +29,7 @@ def page(name, title, active, body, scripts="", auth=False):
 <script src="assets/account.js"></script>
 {scripts}<script src="assets/site.js"></script>
 </body></html>
-''')
+'''.replace("__NFREE__", str(sum(1 for g in GAMES if not g["pro"]))))
 DEFAULT_LIVE = {"kern-clinic", "color-impostor", "spacing-repair", "ui-detective", "microcopy-duel", "hue-line"}
 PRO_ATTR, LOCK = ' data-pro=""', '<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b>'
 chips = "".join(f'<label class="mix-chip"><input{CHK if g["id"] in DEFAULT_LIVE else ""}{PRO_ATTR if g["pro"] else ""} type="checkbox" value="{g["id"]}"/><span><i style="background:{DOMAINS[g["domain"]]["field"]}"></i>{g["name"]}{LOCK if g["pro"] else ""}</span></label>' for g in GAMES)

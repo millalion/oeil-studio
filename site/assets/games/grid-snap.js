@@ -9,16 +9,24 @@
     [{ label: "Carte", span: [0, 4], h: 140 }, { label: "Carte", span: [4, 8], h: 140 }, { label: "Carte", span: [8, 12], h: 140 }, { label: "Légende", span: [0, 6], h: 40 }],
     [{ label: "Chapô", span: [2, 10], h: 70 }, { label: "Citation", span: [1, 7], h: 90 }, { label: "Photo", span: [7, 12], h: 140 }],
   ]);
-  function place(b) { b.el.style.left = `${b.x}px`; b.el.style.width = `${b.w}px`; }
-  function fit(board, s) { const k = Math.min(1.2, (board.clientWidth - 60) / W, (board.clientHeight - 60) / s.H); s.k = k; s.frame.style.transform = `translate(-50%, -50%) scale(${k})`; }
+  // Toute position calée sur la grille est juste : on cherche les bords de colonne les plus proches.
+  const nearL = (x) => { let i = Oeil.clamp(Math.round(x / (COL + GUT)), 0, COLS - 1); return { i, x: edgeL(i) }; };
+  const nearR = (x, from) => { let i = Oeil.clamp(Math.round((x - COL) / (COL + GUT)), from, COLS - 1); return { i, x: edgeR(i) }; };
+  function snapOf(b) { const l = nearL(b.x), r = nearR(b.x + b.w, l.i); return { l, r, d: Math.abs(b.x - l.x) + Math.abs(b.x + b.w - r.x) }; }
+  function place(b) {
+    b.el.style.left = `${b.x}px`; b.el.style.width = `${b.w}px`;
+    const n = snapOf(b);
+    b.el.querySelector(".gs-span").textContent = `${n.r.i - n.l.i + 1} col.`;
+  }
+  function fit(board, s) { const pad = board.clientWidth < 600 ? 16 : 60; const k = Math.min(1.2, (board.clientWidth - pad) / W, (board.clientHeight - pad) / s.H); s.k = k; s.frame.style.transform = `translate(-50%, -50%) scale(${k})`; }
   Oeil.play({
     id: "grid-snap", name: "Grid Snap",
     howto: [
       { icon: "view_column", text: "Les bandes roses sont les 12 colonnes de la grille. Les blocs sont posés de travers." },
       { icon: "drag_pan", text: "Glisse chaque bloc pour le déplacer, et sa poignée de droite pour l'élargir ou le rétrécir." },
-      { icon: "lightbulb", text: "Les deux bords de chaque bloc doivent tomber sur des bords de colonne, jamais dans une gouttière." },
+      { icon: "lightbulb", text: "Il n'y a pas une seule bonne place : il suffit que le bord gauche et le bord droit de chaque bloc tombent pile sur un bord de colonne rose, jamais dans le blanc entre deux colonnes." },
     ],
-    brief: "Cale chaque bloc sur les colonnes de la grille.",
+    brief: "Cale les deux bords de chaque bloc sur les bords des colonnes roses.",
     setup(round) {
       const L = LAYOUTS[round % LAYOUTS.length];
       let y = 0;
@@ -53,7 +61,8 @@
     },
     resize(board, s) { fit(board, s); },
     evaluate(s) {
-      const d = s.blocks.map((b) => Math.abs(b.x - b.tx) + Math.abs(b.x + b.w - (b.tx + b.tw)));
+      s.blocks.forEach((b) => (b.snap = snapOf(b)));
+      const d = s.blocks.map((b) => b.snap.d);
       const score = d.reduce((a, x) => a + Math.max(0, 100 - Math.max(0, x - 3) * 2.5), 0) / d.length;
       const ok = d.filter((x) => x <= 4).length;
       return {
@@ -66,7 +75,7 @@
       s.blocks.forEach((b) => {
         b.el.classList.remove("grab");
         const g = api.h("span", "gs-ghost");
-        g.style.cssText = `left:${b.tx}px;width:${b.tw}px;top:${b.y}px;height:${b.h}px`;
+        g.style.cssText = `left:${b.snap.l.x}px;width:${b.snap.r.x - b.snap.l.x}px;top:${b.y}px;height:${b.h}px`;
         s.frame.append(g);
       });
     },

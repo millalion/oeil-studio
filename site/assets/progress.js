@@ -77,7 +77,7 @@
     const keys = new Set(hist.map((h) => h.id + "|" + String(h.date).slice(0, 16)));
     rows.forEach((r) => {
       const date = r.created_at, k = r.game_id + "|" + String(date).slice(0, 16);
-      if (!keys.has(k)) { hist.push({ id: r.game_id, title: r.title || (gameOf(r.game_id) || {}).name || r.game_id, avg: r.avg, date, daily: r.mode === "daily", synced: true }); keys.add(k); }
+      if (r.mode !== "round" && !keys.has(k)) { hist.push({ id: r.game_id, title: r.title || (gameOf(r.game_id) || {}).name || r.game_id, avg: r.avg, date, daily: r.mode === "daily", synced: true }); keys.add(k); }
       if (gameOf(r.game_id)) { const b = get("best:" + r.game_id); if (b == null || r.avg > b) set("best:" + r.game_id, r.avg); }
     });
     hist.sort((a, b) => new Date(b.date) - new Date(a.date));
