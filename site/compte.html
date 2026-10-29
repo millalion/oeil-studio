@@ -117,7 +117,7 @@
       const u = OeilAccount.get(), id = OeilAccount.identity();
       $("acc-avatar").innerHTML = OeilAvatar(u || { name: id.name || "?", avatar: id.name ? id.avatar : { color: id.avatar.color, icon: "person" } }, "avatar-lg");
       $("acc-name").textContent = u ? u.name : "Ta progression";
-      $("acc-role").textContent = u ? `${ROLES[u.role] || ""} · ${u.email}` : "Sur cet appareil";
+      $("acc-role").textContent = u ? `${ROLES[u.role] || ""}${OeilAccount.isPro() ? " · Membre Œil Pro" : ""} · ${u.email}` : "Sur cet appareil";
       ["acc-login", "acc-signup"].forEach((k) => ($(k).hidden = !!u));
       ["acc-edit", "acc-logout", "acc-delete"].forEach((k) => ($(k).hidden = !u));
       $("acc-guest").hidden = !!u;

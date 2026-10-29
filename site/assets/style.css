@@ -1337,3 +1337,24 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: #141413
 .pick-list button[aria-selected="true"]::after { content: "check"; font-family: "Material Symbols Outlined"; margin-left: auto; font-size: 18px; }
 .pro-mini { margin-left: 6px; font-size: 10.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; background: #141413; color: #fff; }
 @media (max-width: 520px) { .pick { width: 100%; } }
+/* Membres Œil Pro : couronne, accent doré */
+.avatar { position: relative; }
+.avatar.is-pro { box-shadow: 0 0 0 2px #FFD15C, 0 0 0 3px #141413; }
+.avatar .crown { position: absolute; top: -10px; right: -9px; width: 19px; height: 19px; border-radius: 999px; border: 1px solid #141413; background: #FFD15C; display: grid; place-items: center; color: #141413; }
+.avatar .crown svg { width: 11px; height: 11px; }
+.avatar-sm .crown { top: -8px; right: -8px; width: 15px; height: 15px; }
+.avatar-sm .crown svg { width: 9px; height: 9px; }
+.avatar-lg .crown { top: -6px; right: -6px; width: 34px; height: 34px; border-width: 1.5px; }
+.avatar-lg .crown svg { width: 20px; height: 20px; }
+.pro-chip { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 999px; border: 1px solid #141413; background: #FFD15C; color: #141413; font-size: 11px; font-weight: 600; }
+html.is-pro header.fixed { box-shadow: inset 0 -3px 0 #FFD15C; }
+html.is-pro .pro-badge { background: #FFD15C; color: #141413; border: 1px solid #141413; }
+html.is-pro .mix-lock { display: none; }
+html.is-pro #plan-card { background: #FFF4CC; border-color: #141413; }
+html.is-pro #plan-card h2::after { content: ""; display: inline-block; width: 20px; height: 20px; margin-left: 8px; vertical-align: -2px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2.5 7.5 7 11.5 12 4l5 7.5 4.5-4L19.5 19h-15z' fill='%23141413'/%3E%3C/svg%3E") center / contain no-repeat; }
+/* Bouton Google */
+.btn-google { width: 100%; height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid #141413; border-radius: 4px; background: #fff; font-size: 15px; font-weight: 500; transition: background-color .15s; }
+.btn-google:hover { background: #F7F6F2; }
+.btn-google svg { width: 18px; height: 18px; }
+.or-line { display: flex; align-items: center; gap: 12px; font-size: 13px; color: #5E5D58; }
+.or-line::before, .or-line::after { content: ""; flex: 1; height: 1px; background: #E0DFD8; }

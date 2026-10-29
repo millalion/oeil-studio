@@ -91,15 +91,19 @@
 // En-tête : avatar et prénom quand un compte est connecté.
 (function () {
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const PRO = ["pro", "parcours", "classe", "ecole", "classe-eleve"];
   function paint() {
     let u = null;
     try { u = JSON.parse(localStorage.getItem("oeil:account")); } catch (e) {}
+    // Membres Pro : couronne sur l'avatar et accent doré dans toute l'interface
+    document.documentElement.classList.toggle("is-pro", !!(u && PRO.includes(u.plan)));
     document.querySelectorAll("[data-account-link]").forEach((a) => {
       if (a.dataset.orig == null) a.dataset.orig = a.innerHTML;
       if (!u) { a.innerHTML = a.dataset.orig; a.href = "connexion.html"; a.classList.remove("account-chip"); return; }
+      const pro = PRO.includes(u.plan);
       a.href = "compte.html";
       const av = u.avatar || {}, inner = av.icon ? `<span class="material-symbols-outlined" aria-hidden="true">${esc(av.icon)}</span>` : esc((u.name || "?").trim()[0].toUpperCase());
-      if (a.dataset.orig.includes("data-account-name")) { a.classList.add("account-chip"); a.innerHTML = `<span class="avatar" style="--av:${esc(av.color || "#B9D9FF")}">${inner}</span><span class="hidden sm:inline">${esc(u.name)}</span>`; }
+      if (a.dataset.orig.includes("data-account-name")) { a.classList.add("account-chip"); a.innerHTML = `<span class="avatar${pro ? " is-pro" : ""}" style="--av:${esc(av.color || "#B9D9FF")}">${inner}${pro ? '<span class="crown" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 7.5 7 11.5 12 4l5 7.5 4.5-4L19.5 19h-15z" fill="#141413"/></svg></span>' : ""}</span><span class="hidden sm:inline">${esc(u.name)}</span>${pro ? '<span class="pro-chip">Pro</span>' : ""}`; }
       else a.textContent = u.name;
     });
   }

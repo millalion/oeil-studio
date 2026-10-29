@@ -63,7 +63,7 @@
     ]);
     const u = {
       id: uid, email: session.user.email,
-      name: (p && p.name) || session.user.email.split("@")[0],
+      name: (p && p.name) || (session.user.user_metadata && session.user.user_metadata.name) || session.user.email.split("@")[0],
       role: (p && p.role) || "etudiant",
       avatar: { color: (p && p.avatar_color) || COLORS[0], icon: (p && p.avatar_icon) || "" },
       plan: access || "free", billing: !!(p && p.stripe_customer_id),
@@ -81,7 +81,9 @@
     // Identité affichée en partie en direct et dans les défis, avec ou sans compte.
     identity() {
       const u = read(KEY), g = read(GUEST) || {};
-      return { name: (u && u.name) || g.name || read("oeil:name") || "", avatar: (u && u.avatar) || g.avatar || { color: COLORS[2], icon: "" } };
+      const avatar = { ...((u && u.avatar) || g.avatar || { color: COLORS[2], icon: "" }) };
+      if (u && PRO_PLANS.includes(u.plan)) avatar.pro = true; else delete avatar.pro;
+      return { name: (u && u.name) || g.name || read("oeil:name") || "", avatar };
     },
     setGuest({ name, avatar }) { const g = read(GUEST) || {}; if (name != null) { g.name = name; write("oeil:name", name); } if (avatar) g.avatar = avatar; write(GUEST, g); emit(); },
     plan() { const u = read(KEY); return (u && u.plan) || "free"; },
@@ -103,6 +105,15 @@
       const { error } = await c.auth.signInWithPassword({ email, password });
       if (error) throw error;
       return refresh();
+    },
+    // Connexion ou inscription avec Google (fournisseur à activer dans Supabase → Authentication → Providers).
+    async signInWithGoogle(next) {
+      const c = await sb();
+      // Vérifie d'abord que Google est activé, sinon Supabase afficherait une page d'erreur brute.
+      const conf = await fetch(SB.url + "/auth/v1/settings", { headers: { apikey: SB.anonKey } }).then((r) => r.json()).catch(() => null);
+      if (conf && conf.external && !conf.external.google) throw fail("La connexion avec Google n'est pas encore activée. Utilise ton adresse e-mail en attendant.");
+      const { error } = await c.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + "/" + (next && /^[a-z0-9-]+\.html/i.test(next) ? next : "compte.html") } });
+      if (error) throw error;
     },
     async signOut() { if (enabled) { const c = await sb(); await c.auth.signOut(); } write(KEY, null); emit(); },
     async resetPassword(email) {
@@ -187,6 +198,7 @@
     const a = (who && who.avatar) || {}, name = (who && who.name) || "?";
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     const inner = a.icon ? `<span class="material-symbols-outlined" aria-hidden="true">${esc(a.icon)}</span>` : esc((name.trim()[0] || "?").toUpperCase());
-    return `<span class="avatar ${cls || ""}" style="--av:${esc(a.color || "#FFE08A")}">${inner}</span>`;
+    const pro = who && (who.pro || a.pro || PRO_PLANS.includes(who.plan));
+    return `<span class="avatar ${cls || ""}${pro ? " is-pro" : ""}" style="--av:${esc(a.color || "#FFE08A")}">${inner}${pro ? '<span class="crown" aria-label="Membre Œil Pro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 7.5 7 11.5 12 4l5 7.5 4.5-4L19.5 19h-15z" fill="#141413"/></svg></span>' : ""}</span>`;
   };
 })();
