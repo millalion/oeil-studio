@@ -1,3 +1,10 @@
+// Contours de focus réservés au clavier : la touche Tab les active, un clic ou un toucher les retire.
+(function () {
+  const root = document.documentElement;
+  addEventListener("keydown", (e) => { if (e.key === "Tab") root.classList.add("kbd"); }, true);
+  addEventListener("pointerdown", () => root.classList.remove("kbd"), true);
+})();
+
 // Remplit les dates du « défi du jour » avec la date du jour.
 (function () {
   const now = new Date();

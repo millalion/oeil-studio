@@ -28,6 +28,9 @@
     seed, challenge, daily, today, params, encode, decode, hash,
     // Chaque manche a sa propre suite de tirages : rejouer une manche redonne la même.
     round(n) { Math.random = mulberry32((seed ^ hash("round-" + n)) >>> 0); },
+    // Avant chaque script de jeu : son tirage ne dépend que de la graine et du jeu,
+    // jamais des autres scripts de la page (mise en forme, connexion…), donc il est identique sur tous les appareils.
+    module(name) { Math.random = mulberry32((seed ^ hash("module-" + name)) >>> 0); },
     free() { Math.random = nativeRandom; },
   };
 })();

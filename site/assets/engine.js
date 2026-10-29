@@ -189,7 +189,10 @@
       submitBtn.firstChild.textContent = "Valider";
       hintBtn.disabled = false;
       S.round(round);
-      state = await game.setup(mix ? 0 : round, api);
+      // En mélange, un jeu qui revient prend l'exercice suivant de sa liste au lieu de répéter le premier.
+      const occ = plan.slice(0, round).filter((x) => x === plan[round]).length;
+      state = await game.setup(mix ? occ : round, api);
+      S.round(round + 1000);
       brief.textContent = typeof game.brief === "function" ? game.brief(state, round) : game.brief;
       game.mount(board, state, api);
       renderDots();

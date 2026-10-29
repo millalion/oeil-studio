@@ -492,7 +492,7 @@ page("classement.html", "Classement de la semaine — Œil Studio", "classement"
 <section class="{W} pt-8 pb-24">
 <div class="rank-filters">
 <div aria-label="Discipline" class="dash-tabs" id="dom-tabs" role="group"><button aria-pressed="true" data-dom="" type="button">Général</button>{domtabs}</div>
-<label class="rank-select" hidden="" id="game-pick-wrap"><span class="sr-only">Jeu</span><select class="field" id="game-pick"></select></label>
+<div class="pick" hidden="" id="game-pick-wrap"><button aria-expanded="false" aria-haspopup="listbox" class="pick-btn" id="game-pick" type="button"><span></span><span aria-hidden="true" class="material-symbols-outlined">expand_more</span></button><div aria-label="Jeu" class="pick-list" hidden="" id="game-pick-list" role="listbox"></div></div>
 </div>
 <div class="dash-card mt-4 p-0 overflow-hidden"><ol class="rank-list" id="rank-list"><li class="rank-empty">Chargement du classement…</li></ol></div>
 <p class="mt-4 text-body-sm text-text-muted" id="rank-week"></p>
@@ -505,11 +505,31 @@ page("classement.html", "Classement de la semaine — Œil Studio", "classement"
     let dom = "", game = "";
     const monday = new Date(); monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
     $("rank-week").textContent = `Semaine du ${monday.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}. Seuls les joueurs connectés apparaissent.`;
+    // Menu de choix du jeu, dans le style du site
+    const btn = $("game-pick"), menu = $("game-pick-list"), wrap = $("game-pick-wrap");
+    const field = () => (window.OEIL_DOMAINS[dom] || {}).field;
+    const open = (on) => { menu.hidden = !on; wrap.classList.toggle("is-open", on); btn.setAttribute("aria-expanded", String(on)); if (on) (menu.querySelector('[aria-selected="true"]') || menu.firstChild).focus(); };
+    function paintPick() {
+      const list = games.filter((g) => g.domain === dom), g = list.find((x) => x.id === game);
+      wrap.style.setProperty("--field", field());
+      btn.firstElementChild.innerHTML = g ? `<i></i>${esc(g.name)}` : "";
+      menu.innerHTML = list.map((x) => `<button aria-selected="${x.id === game}" data-id="${x.id}" role="option" type="button"><i></i>${esc(x.name)}${x.pro ? '<span class="pro-mini">Pro</span>' : ""}</button>`).join("");
+      menu.querySelectorAll("button").forEach((b) => (b.onclick = () => { game = b.dataset.id; open(false); paintPick(); btn.focus(); load(); }));
+    }
+    btn.addEventListener("click", () => open(menu.hidden));
+    menu.addEventListener("keydown", (e) => {
+      const items = [...menu.querySelectorAll("button")], i = items.indexOf(document.activeElement);
+      if (e.key === "ArrowDown") { e.preventDefault(); (items[i + 1] || items[0]).focus(); }
+      if (e.key === "ArrowUp") { e.preventDefault(); (items[i - 1] || items[items.length - 1]).focus(); }
+      if (e.key === "Escape") { open(false); btn.focus(); }
+    });
+    document.addEventListener("click", (e) => { if (!wrap.contains(e.target)) open(false); });
     function picker() {
       const list = games.filter((g) => g.domain === dom);
-      $("game-pick-wrap").hidden = !dom;
-      $("game-pick").innerHTML = list.map((g) => `<option value="${g.id}">${esc(g.name)}</option>`).join("");
+      wrap.hidden = !dom;
       game = dom ? list[0].id : "";
+      open(false);
+      paintPick();
     }
     async function load() {
       const box = $("rank-list");
@@ -524,7 +544,6 @@ page("classement.html", "Classement de la semaine — Œil Studio", "classement"
       $("me-sub").textContent = OeilAccount.get() ? (me > -1 ? `${rows[me].points}${unit} ${game ? "dans ce jeu" : "au total"}.` : "Joue une partie pour entrer dans le classement.") : "Connecte-toi pour apparaître dans le classement.";
     }
     $("dom-tabs").querySelectorAll("button").forEach((b) => (b.onclick = () => { dom = b.dataset.dom; $("dom-tabs").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); picker(); load(); }));
-    $("game-pick").addEventListener("change", (e) => { game = e.target.value; load(); });
     OeilAccount.ready.then(load);
   })();
 </script>

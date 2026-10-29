@@ -37,7 +37,8 @@ def row(g):
 <span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
 </a>'''
 
-SCRIPTS_ALL = "".join(f'<script src="assets/games/{g["id"]}.js"></script>\n' for g in GAMES)
+SEEDED = lambda gid: f'<script>OEIL_SEED.module("{gid}")</script><script src="assets/games/{gid}.js"></script>\n'
+SCRIPTS_ALL = "".join(SEEDED(g["id"]) for g in GAMES)
 
 def app_shell(title_html, sub_html, mix=False, current_id=None):
     nav = ""
@@ -161,7 +162,7 @@ for g in GAMES:
 <script src="assets/engine.js"></script>
 <script src="assets/kits.js"></script>
 <script src="assets/live.js"></script>
-<script src="assets/games/{g["id"]}.js"></script>
+{SEEDED(g["id"])}
 <script src="assets/site.js"></script>
 </body></html>
 '''
@@ -225,6 +226,7 @@ DEFI = f'''{page_head("Défi du jour — Œil Studio", kern=True, daily=True)}
       title = "Mélange"; sub = `${{rounds}} manches, ${{ids.length}} jeux`;
     }} else {{
       // Défi du jour : un jeu tiré au sort dans chaque discipline, le même pour tout le monde jusqu'à minuit.
+      S.module("defi-du-jour");
       ids = Object.keys(window.OEIL_DOMAINS).map((d) => Oeil.pick(games.filter((g) => g.domain === d)).id);
       rounds = ids.length;
       title = "Défi du " + new Date().toLocaleDateString("fr-FR", {{ weekday: "long", day: "numeric", month: "long" }});
