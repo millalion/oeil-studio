@@ -14,8 +14,8 @@ CUR, CHK, MIXA = ' aria-current="page"', ' checked=""', ' data-mix=""'
 MAIL = "bonjour@oeil.studio"  # adresse provisoire, à remplacer
 SKIP = '<a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] btn" href="#contenu">Aller au contenu</a>'
 
-def page_head(title, kern=False, daily=False):
-    hd = head(title, kern=kern)
+def page_head(title, kern=False, daily=False, desc=None):
+    hd = head(title, kern=kern, desc=desc or ns["DESC"])
     if daily: hd = hd.replace('<html lang="fr">', '<html data-daily="1" lang="fr">')
     return hd
 
@@ -147,7 +147,7 @@ def app_shell(title_html, sub_html, mix=False, current_id=None):
 # ---------------------------------------------------------------- Pages de jeu
 for g in GAMES:
     d = DOMAINS[g["domain"]]
-    html = f'''{page_head(g["name"] + " — Œil Studio", kern=g["id"] == "kern-clinic")}
+    html = f'''{page_head(g["name"] + " — Œil Studio", kern=g["id"] == "kern-clinic", desc=g["desc"] + " Un mini-jeu Œil Studio pour entraîner ton œil de designer.")}
 <body class="bg-ground text-ink">
 {SKIP}
 {header("jeux")}

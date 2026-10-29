@@ -3,11 +3,18 @@ import pathlib, re, sys
 site = pathlib.Path(sys.argv[1])
 W = 'max-w-[1440px] mx-auto px-4 sm:px-8'
 
-def head(title, kern=False):
+SITE = "https://oeil-studio-site.vercel.app"
+DESC = "Des mini-jeux de 2 à 5 minutes pour entraîner ton œil de designer : typographie, couleur, composition, UI, UX et motion. Tu fais le geste, puis tu vois l'écart exact."
+def head(title, kern=False, desc=DESC):
     news = ('<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400&amp;display=swap" rel="stylesheet"/>\n' if kern else '')
     return f'''<!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>{title}</title>
+<meta content="{desc}" name="description"/>
+<meta content="website" property="og:type"/><meta content="Œil Studio" property="og:site_name"/><meta content="fr_FR" property="og:locale"/>
+<meta content="{title}" property="og:title"/><meta content="{desc}" property="og:description"/>
+<meta content="{SITE}/og.png" property="og:image"/><meta content="1200" property="og:image:width"/><meta content="630" property="og:image:height"/><meta content="Œil Studio : affine ton œil de designer" property="og:image:alt"/>
+<meta content="summary_large_image" name="twitter:card"/><meta content="{title}" name="twitter:title"/><meta content="{desc}" name="twitter:description"/><meta content="{SITE}/og.png" name="twitter:image"/>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/><link href="favicon.ico" rel="icon" sizes="32x32"/><link href="apple-touch-icon.png" rel="apple-touch-icon"/><link href="site.webmanifest" rel="manifest"/><meta content="#F7F6F2" name="theme-color"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>

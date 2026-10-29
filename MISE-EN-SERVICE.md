@@ -8,7 +8,7 @@ Compte environ 30 minutes.
 
 1. Va sur supabase.com, clique sur **Start your project** et connecte-toi avec GitHub.
 2. **New project** : nom `oeil-studio`, choisis un mot de passe (garde-le), région **West EU (Paris)**, offre gratuite.
-3. Menu **SQL Editor** → **New query** : colle tout le fichier `supabase/schema.sql`, puis **Run**. « Success » doit s'afficher.
+3. Menu **SQL Editor** → **New query** : colle tout le fichier `supabase/schema.sql`, puis **Run**. Recommence avec `supabase/amis-parrainage.sql`. « Success » doit s'afficher.
 4. Menu **Authentication** → **URL Configuration** :
    - Site URL : `https://oeil-studio-site.vercel.app`
    - Redirect URLs : ajoute `https://oeil-studio-site.vercel.app/**`

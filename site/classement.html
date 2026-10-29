@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Classement de la semaine — Œil Studio</title>
+<meta content="Des mini-jeux de 2 à 5 minutes pour entraîner ton œil de designer : typographie, couleur, composition, UI, UX et motion. Tu fais le geste, puis tu vois l'écart exact." name="description"/>
+<meta content="website" property="og:type"/><meta content="Œil Studio" property="og:site_name"/><meta content="fr_FR" property="og:locale"/>
+<meta content="Classement de la semaine — Œil Studio" property="og:title"/><meta content="Des mini-jeux de 2 à 5 minutes pour entraîner ton œil de designer : typographie, couleur, composition, UI, UX et motion. Tu fais le geste, puis tu vois l'écart exact." property="og:description"/>
+<meta content="https://oeil-studio-site.vercel.app/og.png" property="og:image"/><meta content="1200" property="og:image:width"/><meta content="630" property="og:image:height"/><meta content="Œil Studio : affine ton œil de designer" property="og:image:alt"/>
+<meta content="summary_large_image" name="twitter:card"/><meta content="Classement de la semaine — Œil Studio" name="twitter:title"/><meta content="Des mini-jeux de 2 à 5 minutes pour entraîner ton œil de designer : typographie, couleur, composition, UI, UX et motion. Tu fais le geste, puis tu vois l'écart exact." name="twitter:description"/><meta content="https://oeil-studio-site.vercel.app/og.png" name="twitter:image"/>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/><link href="favicon.ico" rel="icon" sizes="32x32"/><link href="apple-touch-icon.png" rel="apple-touch-icon"/><link href="site.webmanifest" rel="manifest"/><meta content="#F7F6F2" name="theme-color"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
@@ -38,6 +43,7 @@
 </section>
 <section class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-8 pb-24">
 <div class="rank-filters">
+<div aria-label="Qui" class="seg-line" hidden="" id="who-tabs" role="group"><button aria-pressed="true" data-who="all" type="button">Tout le monde</button><button aria-pressed="false" data-who="friends" type="button">Mes amis</button></div>
 <div aria-label="Discipline" class="dash-tabs" id="dom-tabs" role="group"><button aria-pressed="true" data-dom="" type="button">Général</button><button aria-pressed="false" data-dom="typo" type="button"><i class="board-dot" style="--field:#F7B4CC"></i>Typographie</button><button aria-pressed="false" data-dom="color" type="button"><i class="board-dot" style="--field:#D8EF71"></i>Couleur</button><button aria-pressed="false" data-dom="layout" type="button"><i class="board-dot" style="--field:#B9D9FF"></i>Composition</button><button aria-pressed="false" data-dom="ui" type="button"><i class="board-dot" style="--field:#FFC08F"></i>UI</button><button aria-pressed="false" data-dom="ux" type="button"><i class="board-dot" style="--field:#FFE08A"></i>UX</button><button aria-pressed="false" data-dom="motion" type="button"><i class="board-dot" style="--field:#9FE3D0"></i>Motion</button></div>
 <div class="pick" hidden="" id="game-pick-wrap"><button aria-expanded="false" aria-haspopup="listbox" class="pick-btn" id="game-pick" type="button"><span></span><span aria-hidden="true" class="material-symbols-outlined">expand_more</span></button><div aria-label="Jeu" class="pick-list" hidden="" id="game-pick-list" role="listbox"></div></div>
 </div>
@@ -64,7 +70,7 @@
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     const games = window.OEIL_GAMES;
-    let dom = "", game = "";
+    let dom = "", game = "", friendsOnly = new URLSearchParams(location.search).get("amis") === "1";
     const monday = new Date(); monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
     $("rank-week").textContent = `Semaine du ${monday.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}. Seuls les joueurs connectés apparaissent.`;
     // Menu de choix du jeu, dans le style du site
@@ -98,15 +104,22 @@
       if (!OeilAccount.enabled) { box.innerHTML = '<li class="rank-empty">Le classement ouvre avec les comptes, très bientôt.</li>'; return; }
       box.innerHTML = '<li class="rank-empty">Chargement du classement…</li>';
       let rows = [];
-      try { rows = await OeilAccount.weeklyBoard(game); } catch (e) { box.innerHTML = '<li class="rank-empty">Impossible de charger le classement. Réessaie dans un instant.</li>'; return; }
+      try { rows = await OeilAccount.weeklyBoard(game, friendsOnly && !!OeilAccount.get()); } catch (e) { box.innerHTML = '<li class="rank-empty">Impossible de charger le classement. Réessaie dans un instant.</li>'; return; }
       const unit = game ? " %" : " pts";
-      box.innerHTML = rows.length ? rows.map((r, i) => `<li class="${r.is_me ? "is-me" : ""}${i < 3 ? " is-top" : ""}"><span class="rank-n">${i < 3 ? `<span class="material-symbols-outlined" aria-label="${i + 1}">${i ? "military_tech" : "workspace_premium"}</span>` : i + 1}</span>${OeilAvatar({ name: r.name, avatar: { color: r.avatar_color, icon: r.avatar_icon } })}<span class="rank-name">${esc(r.name)}${r.is_me ? " (toi)" : ""}<small>${game ? "meilleur score" : `${r.games} jeu${r.games > 1 ? "x" : ""}`}</small></span><b>${r.points}${unit}</b></li>`).join("") : `<li class="rank-empty">Personne n'a encore joué ${game ? "à ce jeu " : ""}cette semaine. <a class="underline" href="${game ? game + ".html" : "defi.html"}">Lance-toi</a>.</li>`;
+      box.innerHTML = rows.length ? rows.map((r, i) => `<li class="${r.is_me ? "is-me" : ""}${i < 3 ? " is-top" : ""}"><span class="rank-n">${i < 3 ? `<span class="material-symbols-outlined" aria-label="${i + 1}">${i ? "military_tech" : "workspace_premium"}</span>` : i + 1}</span>${OeilAvatar({ name: r.name, pro: r.pro, avatar: { color: r.avatar_color, icon: r.avatar_icon } })}<span class="rank-name">${esc(r.name)}${r.is_me ? " (toi)" : ""}<small>${game ? "meilleur score" : `${r.games} jeu${r.games > 1 ? "x" : ""}`}</small></span><b>${r.points}${unit}</b></li>`).join("") : `<li class="rank-empty">Personne n'a encore joué ${game ? "à ce jeu " : ""}cette semaine. <a class="underline" href="${game ? game + ".html" : "defi.html"}">Lance-toi</a>.</li>`;
       const me = rows.findIndex((r) => r.is_me);
       $("me-rank").textContent = me > -1 ? `${me + 1}${me ? "e" : "er"} sur ${rows.length}` : "–";
       $("me-sub").textContent = OeilAccount.get() ? (me > -1 ? `${rows[me].points}${unit} ${game ? "dans ce jeu" : "au total"}.` : "Joue une partie pour entrer dans le classement.") : "Connecte-toi pour apparaître dans le classement.";
     }
     $("dom-tabs").querySelectorAll("button").forEach((b) => (b.onclick = () => { dom = b.dataset.dom; $("dom-tabs").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); picker(); load(); }));
-    OeilAccount.ready.then(load);
+    const whoTabs = $("who-tabs");
+    whoTabs.querySelectorAll("button").forEach((b) => (b.onclick = () => { friendsOnly = b.dataset.who === "friends"; whoTabs.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); load(); }));
+    OeilAccount.ready.then((u) => {
+      whoTabs.hidden = !u;
+      if (!u) friendsOnly = false;
+      whoTabs.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String((x.dataset.who === "friends") === friendsOnly)));
+      load();
+    });
   })();
 </script>
 <script src="assets/site.js"></script>

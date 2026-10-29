@@ -58,7 +58,7 @@
     if (!session) { if (read(KEY)) { write(KEY, null); emit(); } return null; }
     const uid = session.user.id;
     const [{ data: p }, { data: access }] = await Promise.all([
-      c.from("profiles").select("name, role, avatar_color, avatar_icon, plan, parcours, stripe_customer_id").eq("id", uid).maybeSingle(),
+      c.from("profiles").select("name, role, avatar_color, avatar_icon, plan, parcours, stripe_customer_id, friend_code, bonus_until").eq("id", uid).maybeSingle(),
       c.rpc("my_access"),
     ]);
     const u = {
@@ -67,6 +67,7 @@
       role: (p && p.role) || "etudiant",
       avatar: { color: (p && p.avatar_color) || COLORS[0], icon: (p && p.avatar_icon) || "" },
       plan: access || "free", billing: !!(p && p.stripe_customer_id),
+      friendCode: (p && p.friend_code) || "", bonusUntil: (p && p.bonus_until) || null,
     };
     write(KEY, u);
     write("oeil:name", u.name);
@@ -172,12 +173,32 @@
       const { data } = await c.rpc("daily_leaderboard", { p_day: day });
       return data || [];
     },
-    async weeklyBoard(game) {
+    async weeklyBoard(game, friends) {
       if (!enabled) return [];
       const c = await sb();
-      const { data, error } = await c.rpc("weekly_leaderboard", { p_game: game || null });
+      const { data, error } = await c.rpc("weekly_leaderboard", { p_game: game || null, p_friends: !!friends });
       if (error) throw error;
       return data || [];
+    },
+    // ---------- Amis et parrainage ----------
+    inviteLink() { const u = read(KEY); return u && u.friendCode ? `${location.origin}/connexion.html?parrain=${u.friendCode}#inscription` : ""; },
+    async friends() { if (!enabled || !read(KEY)) return []; const c = await sb(); const { data, error } = await c.rpc("my_friends"); if (error) throw error; return data || []; },
+    async addFriend(code) {
+      const c = await sb(); const { data, error } = await c.rpc("add_friend", { p_code: String(code).trim().toUpperCase() });
+      if (error) throw fail(/introuvable/.test(error.message) ? "Aucun compte n'a ce code ami." : /propre code/.test(error.message) ? "C'est ton propre code." : human(error));
+      return data;
+    },
+    async removeFriend(id) { const c = await sb(); const { error } = await c.rpc("remove_friend", { p_friend: id }); if (error) throw error; },
+    async referrerName(code) { if (!enabled) return null; const c = await sb(); const { data } = await c.rpc("referrer_name", { p_code: code }); return data || null; },
+    async referrals() { if (!enabled || !read(KEY)) return 0; const c = await sb(); const { data } = await c.rpc("my_referrals"); return data || 0; },
+    // Après l'inscription : applique le code de parrainage gardé depuis le lien d'invitation.
+    async claimReferral() {
+      const code = read("oeil:ref");
+      if (!code || !enabled || !read(KEY)) return null;
+      const c = await sb(); const { data } = await c.rpc("claim_referral", { p_code: code });
+      write("oeil:ref", null);
+      if (data && !["deja", "trop tard", "invalide"].includes(data)) { await refresh(); return data; }
+      return null;
     },
     // ---------- Classes ----------
     async joinClass(code) { const c = await sb(); const { data, error } = await c.rpc("join_class", { p_code: String(code).trim().toUpperCase() }); if (error) throw fail(error.message.includes("pleine") ? "Cette classe est complète." : error.message.includes("introuvable") ? "Code de classe introuvable." : human(error)); await refresh(); return data; },
@@ -191,6 +212,9 @@
   };
   // Rafraîchit le profil quand une session existe (ou quand la page la réclame, comme Mon compte).
   api.ready = enabled && (hasSession() || document.documentElement.dataset.auth) ? refresh().catch(() => read(KEY)) : Promise.resolve(read(KEY));
+  // Lien d'invitation : on garde le code jusqu'à l'inscription
+  try { const ref = new URLSearchParams(location.search).get("parrain"); if (ref && /^[A-Z0-9]{6}$/i.test(ref)) write("oeil:ref", ref.toUpperCase()); } catch (e) {}
+  api.ready = api.ready.then(async (u) => { if (u && read("oeil:ref")) { try { const who = await api.claimReferral(); if (who) api.justReferred = who; } catch (e) {} return read(KEY); } return u; });
   window.OeilAccount = api;
 
   // Avatar : pastille de couleur avec une icône ou l'initiale.

@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html data-auth="1" lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Mon compte — Œil Studio</title>
+<meta content="Des mini-jeux de 2 à 5 minutes pour entraîner ton œil de designer : typographie, couleur, composition, UI, UX et motion. Tu fais le geste, puis tu vois l'écart exact." name="description"/>
+<meta content="website" property="og:type"/><meta content="Œil Studio" property="og:site_name"/><meta content="fr_FR" property="og:locale"/>
+<meta content="Mon compte — Œil Studio" property="og:title"/><meta content="Des mini-jeux de 2 à 5 minutes pour entraîner ton œil de designer : typographie, couleur, composition, UI, UX et motion. Tu fais le geste, puis tu vois l'écart exact." property="og:description"/>
+<meta content="https://oeil-studio-site.vercel.app/og.png" property="og:image"/><meta content="1200" property="og:image:width"/><meta content="630" property="og:image:height"/><meta content="Œil Studio : affine ton œil de designer" property="og:image:alt"/>
+<meta content="summary_large_image" name="twitter:card"/><meta content="Mon compte — Œil Studio" name="twitter:title"/><meta content="Des mini-jeux de 2 à 5 minutes pour entraîner ton œil de designer : typographie, couleur, composition, UI, UX et motion. Tu fais le geste, puis tu vois l'écart exact." name="twitter:description"/><meta content="https://oeil-studio-site.vercel.app/og.png" name="twitter:image"/>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/><link href="favicon.ico" rel="icon" sizes="32x32"/><link href="apple-touch-icon.png" rel="apple-touch-icon"/><link href="site.webmanifest" rel="manifest"/><meta content="#F7F6F2" name="theme-color"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&amp;display=swap" rel="stylesheet"/>
@@ -68,6 +73,16 @@
 <div id="class-student"><p class="text-body-sm text-text-muted mt-1">Ton enseignant·e t'a donné un code de classe ? Entre-le pour obtenir l'accès Pro de la classe.</p><form class="sum-share-row mt-3" id="class-join"><input aria-label="Code de classe" autocapitalize="characters" class="field flex-1 min-w-0 uppercase" id="class-code" maxlength="8" placeholder="Code de classe" required="" type="text"/><button class="btn" type="submit">Rejoindre</button></form><ul class="mt-3 grid gap-2" id="class-mine"></ul></div>
 <div hidden="" id="class-teacher"><p class="text-body-sm text-text-muted mt-1">Crée une classe, donne son code à tes étudiants : ils obtiennent l'accès Pro (40 par classe) et leurs résultats s'affichent ici.</p><form class="sum-share-row mt-3" id="class-new"><input aria-label="Nom de la classe" class="field flex-1 min-w-0" id="class-name" maxlength="60" placeholder="Ex. : DN MADE 2, groupe B" required="" type="text"/><button class="btn" type="submit">Créer</button></form><div class="mt-4 grid gap-4" id="class-list"></div></div>
 <p class="form-msg mt-2" id="class-msg"></p></div>
+
+<div class="dash-card c-5" hidden="" id="invite-card"><h2>Invite tes amis</h2>
+<p class="text-body-sm text-text-muted mt-1">Chaque ami qui s'inscrit avec ton lien vous offre <b class="text-ink">14 jours d'Œil Pro à chacun</b> (jusqu'à 10 amis), et vous devenez amis automatiquement.</p>
+<div class="invite-code mt-4"><span>Ton code ami</span><b id="my-code">––––––</b></div>
+<div class="btn-row mt-3"><button class="btn" id="invite-copy" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">link</span>Copier mon lien</button><button class="btn-line" hidden="" id="invite-share" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">ios_share</span>Partager</button></div>
+<p class="text-body-sm mt-3" id="invite-stats"></p></div>
+<div class="dash-card c-7" hidden="" id="friends-card"><div class="flex flex-wrap items-baseline justify-between gap-2"><h2>Mes amis</h2><a class="text-[13px] underline" href="classement.html?amis=1">Classement entre amis</a></div>
+<form class="sum-share-row mt-3" id="friend-add"><input aria-label="Code ami" autocapitalize="characters" class="field flex-1 min-w-0 uppercase" id="friend-code" maxlength="6" placeholder="Code ami de ton ami·e" required="" type="text"/><button class="btn" type="submit">Ajouter</button></form>
+<p class="form-msg mt-2" id="friend-msg"></p>
+<ol class="friend-list mt-2" id="friend-list"><li class="friend-empty">Ajoute un ami avec son code, ou envoie-lui ton lien d'invitation.</li></ol></div>
 
 <div class="dash-card c-12" id="danger-card"><h2>Mes données</h2><p class="text-body-sm text-text-muted mt-1">Tes scores sont enregistrés sur cet appareil<span id="sync-note">, et sur ton compte quand tu es connecté·e</span>.</p><div class="btn-row mt-4"><button class="btn-line" hidden="" id="acc-logout" type="button">Se déconnecter</button><button class="btn-line" id="acc-clear" type="button">Effacer les données de cet appareil</button><button class="btn-line" hidden="" id="acc-delete" type="button">Supprimer mon compte</button></div><p class="form-msg mt-2" id="danger-msg"></p></div>
 </div>
@@ -214,12 +229,36 @@
       } catch (err) { say($("danger-msg"), err.message || "La suppression n'a pas abouti. Écris-nous depuis la page contact.", "error"); }
     });
 
+    // Amis et parrainage
+    const fmtDay = (d) => new Date(d).toLocaleDateString("fr-FR", { day: "numeric", month: "long" });
+    async function social() {
+      const u = OeilAccount.get();
+      $("invite-card").hidden = $("friends-card").hidden = !(u && OeilAccount.enabled);
+      if (!u || !OeilAccount.enabled) return;
+      $("my-code").textContent = u.friendCode || "––––––";
+      const link = OeilAccount.inviteLink();
+      $("invite-copy").onclick = async () => { try { await navigator.clipboard.writeText(link); $("invite-copy").lastChild.textContent = "Lien copié"; } catch (e) { prompt("Ton lien d'invitation", link); } };
+      if (navigator.share) { $("invite-share").hidden = false; $("invite-share").onclick = () => navigator.share({ title: "Œil Studio", text: "Entraîne ton œil de designer avec moi sur Œil Studio : 14 jours d'Œil Pro offerts avec mon lien.", url: link }).catch(() => {}); }
+      const n = await OeilAccount.referrals().catch(() => 0);
+      const bonus = u.bonusUntil && new Date(u.bonusUntil) > new Date() ? ` Œil Pro offert jusqu'au ${fmtDay(u.bonusUntil)}.` : "";
+      $("invite-stats").textContent = (n ? `${n} ami${n > 1 ? "s" : ""} parrainé${n > 1 ? "s" : ""}.` : "Aucun ami parrainé pour l'instant.") + bonus;
+      const list = await OeilAccount.friends().catch(() => []);
+      $("friend-list").innerHTML = list.length ? list.map((f) => `<li>${OeilAvatar({ name: f.name, pro: f.pro, avatar: { color: f.avatar_color, icon: f.avatar_icon } })}<span class="friend-name"><b>${esc(f.name)}</b><small>${f.week_games ? `${f.week_points} pts cette semaine · ${f.week_games} jeu${f.week_games > 1 ? "x" : ""}` : f.last ? `dernière partie le ${fmtDay(f.last)}` : "pas encore joué"}</small></span><button aria-label="Retirer ${esc(f.name)} de mes amis" class="friend-x" data-id="${f.id}" type="button"><span aria-hidden="true" class="material-symbols-outlined">person_remove</span></button></li>`).join("") : '<li class="friend-empty">Ajoute un ami avec son code, ou envoie-lui ton lien d’invitation.</li>';
+      $("friend-list").querySelectorAll("[data-id]").forEach((b) => (b.onclick = async () => { if (!confirm("Retirer cet ami ?")) return; await OeilAccount.removeFriend(b.dataset.id).catch(() => {}); social(); }));
+    }
+    $("friend-add").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try { const who = await OeilAccount.addFriend($("friend-code").value); say($("friend-msg"), `${who} fait maintenant partie de tes amis.`, "ok"); $("friend-code").value = ""; social(); }
+      catch (err) { say($("friend-msg"), OeilAccount.human(err), "error"); }
+    });
+
     header(); dashboard();
     OeilAccount.ready.then(async (u) => {
       header();
       if (!u) return;
       OeilProgress.merge(await OeilAccount.scores().catch(() => []));
-      dashboard(); classes();
+      dashboard(); classes(); social();
+      if (OeilAccount.justReferred) say($("friend-msg"), `Bienvenue ! Toi et ${OeilAccount.justReferred} avez 14 jours d'Œil Pro offerts.`, "ok");
     });
   })();
 </script>

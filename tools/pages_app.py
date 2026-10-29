@@ -234,6 +234,7 @@ page("connexion.html", "Connexion — Œil Studio", None, f'''<section class="{W
 <ul class="mt-8 grid gap-3 text-body-md"><li class="flex gap-3"><span class="material-symbols-outlined text-signal">check</span>Tableau de progression par discipline</li><li class="flex gap-3"><span class="material-symbols-outlined text-signal">check</span>Badges et couronnes à débloquer</li><li class="flex gap-3"><span class="material-symbols-outlined text-signal">check</span>Classement du défi du jour</li><li class="flex gap-3"><span class="material-symbols-outlined text-signal">check</span>Pour les enseignants : classes et résultats</li></ul>
 </div>
 <div class="lg:col-span-6">
+<p class="ref-banner" hidden="" id="ref-banner"></p>
 <div class="join-card" id="auth-card">
 <button class="btn-google" id="auth-google" type="button"><svg aria-hidden="true" viewBox="0 0 48 48"><path d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" fill="#FFC107"/><path d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" fill="#FF3D00"/><path d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z" fill="#4CAF50"/><path d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" fill="#1976D2"/></svg>Continuer avec Google</button>
 <p class="or-line">ou avec ton adresse e-mail</p>
@@ -285,6 +286,12 @@ page("connexion.html", "Connexion — Œil Studio", None, f'''<section class="{W
     });
     $("auth-back").addEventListener("click", () => setTab("login"));
     if (location.hash === "#inscription") setTab("signup");
+    // Lien d'invitation d'un ami
+    const ref = new URLSearchParams(location.search).get("parrain");
+    if (ref) {
+      setTab("signup");
+      OeilAccount.referrerName(ref).then((who) => { if (!who) return; const b = $("ref-banner"); b.hidden = false; b.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">redeem</span><span><b>${esc(who)} t'invite sur Œil Studio.</b> Crée ton compte : vous recevez chacun 14 jours d'Œil Pro offerts, et vous devenez amis.</span>`; });
+    }
     // Retour du lien « mot de passe oublié »
     if (location.hash.includes("type=recovery") || location.hash === "#nouveau") {
       OeilAccount.client().then((c) => c && c.auth.onAuthStateChange((ev) => { if (ev === "PASSWORD_RECOVERY") { $("auth-card").hidden = true; $("reset-form").hidden = false; } }));
@@ -301,13 +308,13 @@ page("connexion.html", "Connexion — Œil Studio", None, f'''<section class="{W
       const btn = $("auth-submit"); btn.disabled = true;
       try {
         if (tab === "forgot") { await OeilAccount.resetPassword(email); say($("auth-msg"), `Si un compte existe pour ${email}, un lien pour choisir un nouveau mot de passe vient d'être envoyé.`, "ok"); }
-        else if (tab === "login") { await OeilAccount.signIn({ email, password }); after(); }
+        else if (tab === "login") { await OeilAccount.signIn({ email, password }); await OeilAccount.claimReferral().catch(() => {}); after(); }
         else {
           if (!$("auth-terms").checked) { say($("auth-msg"), "Accepte les conditions générales pour créer ton compte.", "error"); return; }
           const role = (document.querySelector('input[name="role"]:checked') || {}).value;
           const r = await OeilAccount.signUp({ name: $("auth-name").value.trim(), email, password, role, avatar: av() });
           if (r.confirm) say($("auth-msg"), `Compte créé. Ouvre l'e-mail envoyé à ${email} et clique sur le lien pour l'activer.`, "ok");
-          else after();
+          else { await OeilAccount.claimReferral().catch(() => {}); after(); }
         }
       } catch (err) { say($("auth-msg"), OeilAccount.human(err), "error"); }
       finally { btn.disabled = false; }
@@ -358,6 +365,16 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
 <div id="class-student"><p class="text-body-sm text-text-muted mt-1">Ton enseignant·e t'a donné un code de classe ? Entre-le pour obtenir l'accès Pro de la classe.</p><form class="sum-share-row mt-3" id="class-join"><input aria-label="Code de classe" autocapitalize="characters" class="field flex-1 min-w-0 uppercase" id="class-code" maxlength="8" placeholder="Code de classe" required="" type="text"/><button class="btn" type="submit">Rejoindre</button></form><ul class="mt-3 grid gap-2" id="class-mine"></ul></div>
 <div hidden="" id="class-teacher"><p class="text-body-sm text-text-muted mt-1">Crée une classe, donne son code à tes étudiants : ils obtiennent l'accès Pro (40 par classe) et leurs résultats s'affichent ici.</p><form class="sum-share-row mt-3" id="class-new"><input aria-label="Nom de la classe" class="field flex-1 min-w-0" id="class-name" maxlength="60" placeholder="Ex. : DN MADE 2, groupe B" required="" type="text"/><button class="btn" type="submit">Créer</button></form><div class="mt-4 grid gap-4" id="class-list"></div></div>
 <p class="form-msg mt-2" id="class-msg"></p></div>
+
+<div class="dash-card c-5" hidden="" id="invite-card"><h2>Invite tes amis</h2>
+<p class="text-body-sm text-text-muted mt-1">Chaque ami qui s'inscrit avec ton lien vous offre <b class="text-ink">14 jours d'Œil Pro à chacun</b> (jusqu'à 10 amis), et vous devenez amis automatiquement.</p>
+<div class="invite-code mt-4"><span>Ton code ami</span><b id="my-code">––––––</b></div>
+<div class="btn-row mt-3"><button class="btn" id="invite-copy" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">link</span>Copier mon lien</button><button class="btn-line" hidden="" id="invite-share" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">ios_share</span>Partager</button></div>
+<p class="text-body-sm mt-3" id="invite-stats"></p></div>
+<div class="dash-card c-7" hidden="" id="friends-card"><div class="flex flex-wrap items-baseline justify-between gap-2"><h2>Mes amis</h2><a class="text-[13px] underline" href="classement.html?amis=1">Classement entre amis</a></div>
+<form class="sum-share-row mt-3" id="friend-add"><input aria-label="Code ami" autocapitalize="characters" class="field flex-1 min-w-0 uppercase" id="friend-code" maxlength="6" placeholder="Code ami de ton ami·e" required="" type="text"/><button class="btn" type="submit">Ajouter</button></form>
+<p class="form-msg mt-2" id="friend-msg"></p>
+<ol class="friend-list mt-2" id="friend-list"><li class="friend-empty">Ajoute un ami avec son code, ou envoie-lui ton lien d'invitation.</li></ol></div>
 
 <div class="dash-card c-12" id="danger-card"><h2>Mes données</h2><p class="text-body-sm text-text-muted mt-1">Tes scores sont enregistrés sur cet appareil<span id="sync-note">, et sur ton compte quand tu es connecté·e</span>.</p><div class="btn-row mt-4"><button class="btn-line" hidden="" id="acc-logout" type="button">Se déconnecter</button><button class="btn-line" id="acc-clear" type="button">Effacer les données de cet appareil</button><button class="btn-line" hidden="" id="acc-delete" type="button">Supprimer mon compte</button></div><p class="form-msg mt-2" id="danger-msg"></p></div>
 </div>
@@ -472,12 +489,36 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
       } catch (err) { say($("danger-msg"), err.message || "La suppression n'a pas abouti. Écris-nous depuis la page contact.", "error"); }
     });
 
+    // Amis et parrainage
+    const fmtDay = (d) => new Date(d).toLocaleDateString("fr-FR", { day: "numeric", month: "long" });
+    async function social() {
+      const u = OeilAccount.get();
+      $("invite-card").hidden = $("friends-card").hidden = !(u && OeilAccount.enabled);
+      if (!u || !OeilAccount.enabled) return;
+      $("my-code").textContent = u.friendCode || "––––––";
+      const link = OeilAccount.inviteLink();
+      $("invite-copy").onclick = async () => { try { await navigator.clipboard.writeText(link); $("invite-copy").lastChild.textContent = "Lien copié"; } catch (e) { prompt("Ton lien d'invitation", link); } };
+      if (navigator.share) { $("invite-share").hidden = false; $("invite-share").onclick = () => navigator.share({ title: "Œil Studio", text: "Entraîne ton œil de designer avec moi sur Œil Studio : 14 jours d'Œil Pro offerts avec mon lien.", url: link }).catch(() => {}); }
+      const n = await OeilAccount.referrals().catch(() => 0);
+      const bonus = u.bonusUntil && new Date(u.bonusUntil) > new Date() ? ` Œil Pro offert jusqu'au ${fmtDay(u.bonusUntil)}.` : "";
+      $("invite-stats").textContent = (n ? `${n} ami${n > 1 ? "s" : ""} parrainé${n > 1 ? "s" : ""}.` : "Aucun ami parrainé pour l'instant.") + bonus;
+      const list = await OeilAccount.friends().catch(() => []);
+      $("friend-list").innerHTML = list.length ? list.map((f) => `<li>${OeilAvatar({ name: f.name, pro: f.pro, avatar: { color: f.avatar_color, icon: f.avatar_icon } })}<span class="friend-name"><b>${esc(f.name)}</b><small>${f.week_games ? `${f.week_points} pts cette semaine · ${f.week_games} jeu${f.week_games > 1 ? "x" : ""}` : f.last ? `dernière partie le ${fmtDay(f.last)}` : "pas encore joué"}</small></span><button aria-label="Retirer ${esc(f.name)} de mes amis" class="friend-x" data-id="${f.id}" type="button"><span aria-hidden="true" class="material-symbols-outlined">person_remove</span></button></li>`).join("") : '<li class="friend-empty">Ajoute un ami avec son code, ou envoie-lui ton lien d’invitation.</li>';
+      $("friend-list").querySelectorAll("[data-id]").forEach((b) => (b.onclick = async () => { if (!confirm("Retirer cet ami ?")) return; await OeilAccount.removeFriend(b.dataset.id).catch(() => {}); social(); }));
+    }
+    $("friend-add").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try { const who = await OeilAccount.addFriend($("friend-code").value); say($("friend-msg"), `${who} fait maintenant partie de tes amis.`, "ok"); $("friend-code").value = ""; social(); }
+      catch (err) { say($("friend-msg"), OeilAccount.human(err), "error"); }
+    });
+
     header(); dashboard();
     OeilAccount.ready.then(async (u) => {
       header();
       if (!u) return;
       OeilProgress.merge(await OeilAccount.scores().catch(() => []));
-      dashboard(); classes();
+      dashboard(); classes(); social();
+      if (OeilAccount.justReferred) say($("friend-msg"), `Bienvenue ! Toi et ${OeilAccount.justReferred} avez 14 jours d'Œil Pro offerts.`, "ok");
     });
   })();
 </script>
@@ -497,6 +538,7 @@ page("classement.html", "Classement de la semaine — Œil Studio", "classement"
 </section>
 <section class="{W} pt-8 pb-24">
 <div class="rank-filters">
+<div aria-label="Qui" class="seg-line" hidden="" id="who-tabs" role="group"><button aria-pressed="true" data-who="all" type="button">Tout le monde</button><button aria-pressed="false" data-who="friends" type="button">Mes amis</button></div>
 <div aria-label="Discipline" class="dash-tabs" id="dom-tabs" role="group"><button aria-pressed="true" data-dom="" type="button">Général</button>{domtabs}</div>
 <div class="pick" hidden="" id="game-pick-wrap"><button aria-expanded="false" aria-haspopup="listbox" class="pick-btn" id="game-pick" type="button"><span></span><span aria-hidden="true" class="material-symbols-outlined">expand_more</span></button><div aria-label="Jeu" class="pick-list" hidden="" id="game-pick-list" role="listbox"></div></div>
 </div>
@@ -508,7 +550,7 @@ page("classement.html", "Classement de la semaine — Œil Studio", "classement"
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     const games = window.OEIL_GAMES;
-    let dom = "", game = "";
+    let dom = "", game = "", friendsOnly = new URLSearchParams(location.search).get("amis") === "1";
     const monday = new Date(); monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
     $("rank-week").textContent = `Semaine du ${monday.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}. Seuls les joueurs connectés apparaissent.`;
     // Menu de choix du jeu, dans le style du site
@@ -542,15 +584,22 @@ page("classement.html", "Classement de la semaine — Œil Studio", "classement"
       if (!OeilAccount.enabled) { box.innerHTML = '<li class="rank-empty">Le classement ouvre avec les comptes, très bientôt.</li>'; return; }
       box.innerHTML = '<li class="rank-empty">Chargement du classement…</li>';
       let rows = [];
-      try { rows = await OeilAccount.weeklyBoard(game); } catch (e) { box.innerHTML = '<li class="rank-empty">Impossible de charger le classement. Réessaie dans un instant.</li>'; return; }
+      try { rows = await OeilAccount.weeklyBoard(game, friendsOnly && !!OeilAccount.get()); } catch (e) { box.innerHTML = '<li class="rank-empty">Impossible de charger le classement. Réessaie dans un instant.</li>'; return; }
       const unit = game ? " %" : " pts";
-      box.innerHTML = rows.length ? rows.map((r, i) => `<li class="${r.is_me ? "is-me" : ""}${i < 3 ? " is-top" : ""}"><span class="rank-n">${i < 3 ? `<span class="material-symbols-outlined" aria-label="${i + 1}">${i ? "military_tech" : "workspace_premium"}</span>` : i + 1}</span>${OeilAvatar({ name: r.name, avatar: { color: r.avatar_color, icon: r.avatar_icon } })}<span class="rank-name">${esc(r.name)}${r.is_me ? " (toi)" : ""}<small>${game ? "meilleur score" : `${r.games} jeu${r.games > 1 ? "x" : ""}`}</small></span><b>${r.points}${unit}</b></li>`).join("") : `<li class="rank-empty">Personne n'a encore joué ${game ? "à ce jeu " : ""}cette semaine. <a class="underline" href="${game ? game + ".html" : "defi.html"}">Lance-toi</a>.</li>`;
+      box.innerHTML = rows.length ? rows.map((r, i) => `<li class="${r.is_me ? "is-me" : ""}${i < 3 ? " is-top" : ""}"><span class="rank-n">${i < 3 ? `<span class="material-symbols-outlined" aria-label="${i + 1}">${i ? "military_tech" : "workspace_premium"}</span>` : i + 1}</span>${OeilAvatar({ name: r.name, pro: r.pro, avatar: { color: r.avatar_color, icon: r.avatar_icon } })}<span class="rank-name">${esc(r.name)}${r.is_me ? " (toi)" : ""}<small>${game ? "meilleur score" : `${r.games} jeu${r.games > 1 ? "x" : ""}`}</small></span><b>${r.points}${unit}</b></li>`).join("") : `<li class="rank-empty">Personne n'a encore joué ${game ? "à ce jeu " : ""}cette semaine. <a class="underline" href="${game ? game + ".html" : "defi.html"}">Lance-toi</a>.</li>`;
       const me = rows.findIndex((r) => r.is_me);
       $("me-rank").textContent = me > -1 ? `${me + 1}${me ? "e" : "er"} sur ${rows.length}` : "–";
       $("me-sub").textContent = OeilAccount.get() ? (me > -1 ? `${rows[me].points}${unit} ${game ? "dans ce jeu" : "au total"}.` : "Joue une partie pour entrer dans le classement.") : "Connecte-toi pour apparaître dans le classement.";
     }
     $("dom-tabs").querySelectorAll("button").forEach((b) => (b.onclick = () => { dom = b.dataset.dom; $("dom-tabs").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); picker(); load(); }));
-    OeilAccount.ready.then(load);
+    const whoTabs = $("who-tabs");
+    whoTabs.querySelectorAll("button").forEach((b) => (b.onclick = () => { friendsOnly = b.dataset.who === "friends"; whoTabs.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); load(); }));
+    OeilAccount.ready.then((u) => {
+      whoTabs.hidden = !u;
+      if (!u) friendsOnly = false;
+      whoTabs.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String((x.dataset.who === "friends") === friendsOnly)));
+      load();
+    });
   })();
 </script>
 """)
@@ -673,7 +722,7 @@ legal("cgv.html", "Conditions générales", "Conditions générales d'utilisatio
     ("1. Objet", f"<p>Ces conditions encadrent l'utilisation du site Œil Studio et la vente de ses offres payantes. Le site est édité par {ED} (voir les <a href=\"mentions-legales.html\">mentions légales</a>). Créer un compte ou passer commande vaut acceptation de ces conditions.</p>"),
     ("2. Le service", "<p>Œil Studio propose des jeux d'entraînement au regard pour les designers. Sans compte, __NFREE__ jeux, le défi du jour, les défis entre amis et les parties en direct sont gratuits. Le compte gratuit conserve la progression sur tous les appareils. Les offres payantes ouvrent les jeux réservés à Œil Pro et les fonctions décrites sur la page <a href=\"tarifs.html\">Tarifs</a>.</p>"),
     ("3. Compte", "<p>Le compte est personnel. Tu t'engages à fournir une adresse e-mail valide et à garder ton mot de passe confidentiel. Un pseudo injurieux ou trompeur peut être modifié ou supprimé. Tu peux supprimer ton compte à tout moment depuis Mon compte.</p>"),
-    ("4. Offres et prix", "<ul><li>Œil Pro : 3 € par mois ou 24 € par an, sans engagement.</li><li>Parcours intensif : 19 €, paiement unique, accès à vie.</li><li>Offre Classe : 9 € par mois et par enseignant, après 14 jours d'essai gratuit, pour 40 étudiants par classe.</li><li>Offre École : sur devis.</li></ul><p>Les prix sont indiqués en euros, toutes taxes comprises. TVA non applicable, article 293 B du Code général des impôts.</p>"),
+    ("4. Offres et prix", "<ul><li>Œil Pro : 3 € par mois ou 24 € par an, sans engagement.</li><li>Parcours intensif : 19 €, paiement unique, accès à vie.</li><li>Offre Classe : 9 € par mois et par enseignant, après 14 jours d'essai gratuit, pour 40 étudiants par classe.</li><li>Offre École : sur devis.</li></ul><p>Les prix sont indiqués en euros, toutes taxes comprises. TVA non applicable, article 293 B du Code général des impôts.</p><p><b>Parrainage.</b> Quand une personne crée son compte avec ton lien d'invitation, vous recevez chacun 14 jours d'Œil Pro offerts, sans paiement ni engagement. Le bonus du parrain est limité à 10 filleuls. Les comptes créés uniquement pour obtenir le bonus peuvent être supprimés.</p>"),
     ("5. Commande et paiement", "<p>Le paiement est réalisé par carte bancaire (ou Apple Pay et Google Pay) sur la page sécurisée de Stripe. Œil Studio n'a jamais accès à tes données bancaires. L'accès est activé dès la confirmation du paiement et un reçu est envoyé par e-mail.</p>"),
     ("6. Abonnement et résiliation", "<p>Les abonnements se renouvellent automatiquement à la fin de chaque période (mois ou année). Tu peux résilier à tout moment depuis Mon compte, rubrique « Gérer mon abonnement » : l'accès reste ouvert jusqu'à la fin de la période déjà payée, et aucun nouveau prélèvement n'a lieu. Pendant l'essai de l'offre Classe, une résiliation avant la fin des 14 jours évite tout prélèvement.</p>"),
     ("7. Droit de rétractation", "<p>Pour un contenu numérique fourni immédiatement, le droit de rétractation de 14 jours prend fin dès que tu demandes l'accès avant la fin de ce délai et que tu reconnais y renoncer (article L221-28 du Code de la consommation). Œil Studio te rembourse tout de même le parcours intensif et le premier paiement d'un abonnement si tu le demandes dans les 14 jours suivant l'achat, depuis la page <a href=\"contact.html\">contact</a>.</p>"),
