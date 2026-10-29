@@ -173,25 +173,30 @@ DEFI = f'''{page_head("Défi du jour — Œil Studio", kern=True, daily=True)}
 {SKIP}
 {header("defi")}
 <main class="pt-16" id="contenu">
-<section class="{W} pt-6 lg:pt-10 pb-16" hidden="" id="defi-intro">
-<div class="ticket">
-<div class="ticket-main">
-<p class="board-strip"><span class="board-dot" style="background:#F7B4CC"></span>Défi du jour · renouvelé à minuit · le même pour tout le monde</p>
-<div class="ticket-hero">
-<p aria-label="Date du défi" class="cal"><span class="cal-mo" data-today="monthlong">octobre</span><span class="cal-day" data-today="day">28</span><span class="cal-wd" data-today="weekday">mercredi</span></p>
-<h1 class="text-big">Six manches,<br/>six disciplines.</h1>
+<section class="{W} pt-6 lg:pt-10 pb-20" hidden="" id="defi-intro">
+<div class="dot-board daily-head">
+<p class="board-strip"><span class="board-dot" style="background:#F7B4CC"></span><span class="truncate">Défi du jour · le même pour tout le monde</span><span class="daily-next" id="daily-next"></span></p>
+<div class="daily-copy">
+<p class="daily-date"><span aria-hidden="true" class="material-symbols-outlined">calendar_today</span><span data-today="long">jeudi 29 octobre</span></p>
+<h1 class="daily-title">Six manches,<br/>six disciplines.</h1>
+<p class="daily-lead">Un jeu tiré au sort dans chaque discipline, environ 15 minutes. Joue-le une fois par jour pour garder ta série, puis compare ton score.</p>
+<div class="btn-row mt-8"><button class="btn btn-lg" id="ticket-go" type="button">Commencer le défi<span aria-hidden="true" class="material-symbols-outlined text-[20px]">play_arrow</span></button><a class="btn-line btn-lg" href="jeux.html#melange">Composer mon mélange</a></div>
 </div>
-<p class="mt-4 max-w-[36rem] text-body-lg">Un jeu tiré au sort dans chaque discipline. Joue-le une fois par jour, garde ta série, et compare ton score avec tes amis grâce au lien de fin de partie.</p>
-<ol class="ticket-games" id="ticket-games"></ol>
+<aside class="daily-side">
+<dl class="daily-stats">
+<div><dt><span aria-hidden="true" class="material-symbols-outlined">local_fire_department</span>Ta série</dt><dd id="ticket-streak">0 jour</dd></div>
+<div><dt><span aria-hidden="true" class="material-symbols-outlined">target</span>Aujourd'hui</dt><dd id="ticket-today">à jouer</dd></div>
+<div><dt><span aria-hidden="true" class="material-symbols-outlined">timer</span>Durée</dt><dd>15 min</dd></div>
+</dl>
+<div class="daily-rank">
+<div class="flex items-baseline justify-between gap-3"><p class="font-medium">Classement du jour</p><a class="text-[13px] underline" href="classement.html">La semaine</a></div>
+<ol class="ticket-rank mt-3" id="ticket-board"><li class="daily-empty">Personne n'a encore joué aujourd'hui. À toi d'ouvrir le classement.</li></ol>
 </div>
-<aside class="ticket-side">
-<div class="ticket-stat"><span>Ta série</span><b id="ticket-streak">0 jour</b></div>
-<div class="ticket-stat"><span>Ton score aujourd'hui</span><b id="ticket-today">pas encore joué</b></div>
-<div class="ticket-stat"><span>Durée</span><b>environ 15 min</b></div>
-<div class="ticket-stat" hidden="" id="ticket-board-box"><span>Classement du jour</span><ol class="ticket-rank mt-2" id="ticket-board"></ol></div>
-<button class="btn w-full mt-auto" id="ticket-go" type="button">Commencer le défi<span aria-hidden="true" class="material-symbols-outlined text-[18px]">play_arrow</span></button>
-<a class="btn-line w-full" href="jeux.html#melange">Composer mon propre mélange</a>
 </aside>
+</div>
+<div class="daily-program">
+<h2 class="daily-sub">Au programme</h2>
+<ol class="daily-rounds" id="ticket-games"></ol>
 </div>
 </section>
 <div id="defi-app">
@@ -234,7 +239,10 @@ DEFI = f'''{page_head("Défi du jour — Œil Studio", kern=True, daily=True)}
     const intro = document.getElementById("defi-intro"), app = document.getElementById("defi-app");
     intro.hidden = false; app.hidden = true;
     const doms = window.OEIL_DOMAINS;
-    document.getElementById("ticket-games").innerHTML = ids.map((id) => {{ const g = games.find((x) => x.id === id), d = doms[g.domain]; return `<li style="--field:${{d.field}}"><span class="ticket-chip"></span><span><b>${{g.name}}</b><small>${{d.label}} · ${{g.desc}}</small></span></li>`; }}).join("");
+    document.getElementById("ticket-games").innerHTML = ids.map((id, i) => {{ const g = games.find((x) => x.id === id), d = doms[g.domain]; return `<li style="--field:${{d.field}}"><p class="daily-round-top"><b>${{i + 1}}</b><span>${{d.label}}</span></p><div class="daily-round-body"><p class="daily-round-name">${{g.name}}</p><p class="daily-round-desc">${{g.desc}}</p></div></li>`; }}).join("");
+    // Compte à rebours jusqu'au prochain défi (minuit)
+    const tick = () => {{ const n = new Date(), m = new Date(n); m.setHours(24, 0, 0, 0); const t = Math.max(0, m - n), h = Math.floor(t / 36e5), mi = Math.floor(t / 6e4) % 60; document.getElementById("daily-next").textContent = `Prochain défi dans ${{h}} h ${{String(mi).padStart(2, "0")}}`; }};
+    tick(); setInterval(tick, 30000);
     const daily = Oeil.store.get("daily") || {{ streak: 0, last: null, scores: {{}} }};
     const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
     const streak = daily.last === S.today || daily.last === yesterday ? daily.streak : 0;
@@ -244,7 +252,6 @@ DEFI = f'''{page_head("Défi du jour — Œil Studio", kern=True, daily=True)}
     if (window.OeilAccount && OeilAccount.enabled) OeilAccount.dailyBoard(S.today).then((rows) => {{
       if (!rows.length) return;
       const me = OeilAccount.get();
-      document.getElementById("ticket-board-box").hidden = false;
       document.getElementById("ticket-board").innerHTML = rows.slice(0, 5).map((r, i) => `<li class="${{me && r.name === me.name ? "is-me" : ""}}"><span>${{i + 1}}</span>${{OeilAvatar({{ name: r.name, avatar: {{ color: r.avatar_color, icon: r.avatar_icon }} }}, "avatar-sm")}}<span class="truncate">${{String(r.name).replace(/[<>&]/g, "")}}</span><b>${{r.best}} %</b></li>`).join("");
     }}).catch(() => {{}});
     document.getElementById("ticket-go").addEventListener("click", () => {{ intro.hidden = true; app.hidden = false; Oeil.start({{ ids, rounds, title }}); window.scrollTo(0, 0); }});
