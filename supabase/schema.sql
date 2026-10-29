@@ -196,3 +196,9 @@ language sql stable security definer set search_path = public as $$
   limit 50;
 $$;
 grant execute on function public.weekly_leaderboard to anon, authenticated;
+
+-- ---------------------------------------------------------------- Droits d'exécution
+-- Les fonctions liées au compte ne sont appelables qu'une fois connecté ; les classements restent publics.
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
+revoke execute on function public.my_access(), public.create_class(text), public.join_class(text), public.leave_class(uuid), public.my_classes(), public.class_roster(uuid) from public, anon;
+grant execute on function public.my_access(), public.create_class(text), public.join_class(text), public.leave_class(uuid), public.my_classes(), public.class_roster(uuid) to authenticated;

@@ -6,8 +6,8 @@ window.OEIL_CONFIG = {
   // Supabase (comptes, scores, classements, parties en direct sur plusieurs appareils).
   // Supabase → Project Settings → API : copie « Project URL » et la clé « anon public ».
   supabase: {
-    url: "",
-    anonKey: "",
+    url: "https://jqdjfklucovswmjgqgyh.supabase.co",
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxZGpma2x1Y292c3dtamdxZ3loIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyNzQ5NzgsImV4cCI6MjEwODg1MDk3OH0.xrkl4I4Z3OVOyWgNfDlFsgqcDTJ3WabHGK7fEq9NWQA",
   },
 
   // Informations légales affichées dans les mentions légales, les CGV et la page confidentialité.
