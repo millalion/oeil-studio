@@ -153,14 +153,19 @@
       }
       $("#coach-title").textContent = g.name;
       $("#coach-goal").textContent = g.desc || "";
-      $("#coach-steps").innerHTML = game.howto.map((s) => `<li><span class="material-symbols-outlined" aria-hidden="true">${s.icon}</span><span>${s.text}</span></li>`).join("");
+      // Tutoriel court : une phrase par étape, sans les raccourcis clavier (ils marchent quand même).
+      const short = (t) => { const m = String(t).match(/^.*?[.!?](?=\s|$)/); return (m ? m[0] : t).replace(/^Astuce\s*:\s*/i, ""); };
+      const steps = game.howto.filter((st) => st.icon !== "keyboard").slice(0, 3);
+      $("#coach-steps").innerHTML = steps.map((st, i) => `<li><b class="coach-n">${i + 1}</b><span class="material-symbols-outlined" aria-hidden="true">${st.icon}</span><span>${short(st.text)}</span></li>`).join("");
       $("#coach-kicker").textContent = mix ? `Manche ${round + 1} sur ${ROUNDS}` : "Comment jouer";
       hintBtn.hidden = !game.hint;
       if (game.hint) hintBtn.querySelector("span:last-child").textContent = game.hint.label;
     }
 
     const showCoach = (on) => { coach.hidden = !on; if (on) $("#btn-coach-go").focus({ preventScroll: true }); };
-    $("#btn-coach-go").addEventListener("click", () => { showCoach(false); store.set("coach:" + game.id, 1); });
+    // Le jeu (et ses comptes à rebours de mémorisation) ne démarre qu'après « C'est parti ».
+    let coachWait = null;
+    $("#btn-coach-go").addEventListener("click", () => { showCoach(false); store.set("coach:" + game.id, 1); if (coachWait) { const go = coachWait; coachWait = null; go(); } });
     $("#btn-howto") && $("#btn-howto").addEventListener("click", () => showCoach(true));
     hintBtn.addEventListener("click", () => { if (phase !== "play" || !game.hint) return; hintUsed = true; game.hint.run(state, api); });
 
@@ -193,10 +198,14 @@
       const occ = plan.slice(0, round).filter((x) => x === plan[round]).length;
       state = await game.setup(mix ? occ : round, api);
       S.round(round + 1000);
+      renderDots();
+      if (mix || !store.get("coach:" + game.id)) {
+        brief.textContent = "Lis la consigne, puis lance la manche.";
+        showCoach(true);
+        await new Promise((go) => (coachWait = go));
+      }
       brief.textContent = typeof game.brief === "function" ? game.brief(state, round) : game.brief;
       game.mount(board, state, api);
-      renderDots();
-      if (mix || !store.get("coach:" + game.id)) showCoach(true);
     }
 
     function submit() {

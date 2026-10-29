@@ -42,7 +42,7 @@
 <div class="acc-guest" hidden="" id="acc-guest"><span class="material-symbols-outlined" aria-hidden="true">cloud_upload</span><span>Ta progression est enregistrée sur cet appareil. <a class="underline" href="connexion.html#inscription">Crée un compte gratuit</a> pour la retrouver partout et apparaître dans le classement du jour.</span></div>
 <form class="join-card mt-8 max-w-[40rem]" hidden="" id="profile-form">
 <p class="text-headline-md">Mon profil</p>
-<label class="grid gap-1 text-body-sm text-text-muted">Prénom ou pseudo<input class="field" id="pf-name" maxlength="40" required="" type="text"/></label>
+<div class="grid sm:grid-cols-2 gap-4"><label class="grid gap-1 text-body-sm text-text-muted">Prénom<input class="field" id="pf-name" maxlength="40" required="" type="text"/></label><label class="grid gap-1 text-body-sm text-text-muted">Pseudo unique<span class="pseudo-field"><input autocapitalize="none" class="field" id="pf-user" maxlength="20" pattern="[a-zA-Z0-9_.](3, 20)" required="" type="text"/></span></label></div>
 <fieldset><legend class="text-body-sm text-text-muted mb-2">Tu es</legend><span class="flex flex-wrap items-center gap-2"><span class="seg-pick" role="radiogroup"><label><input checked="" name="pf-role" type="radio" value="etudiant"/><span>Étudiant·e</span></label><label><input name="pf-role" type="radio" value="enseignant"/><span>Enseignant·e</span></label><label><input name="pf-role" type="radio" value="pro"/><span>Designer en poste</span></label></span></span></fieldset>
 <fieldset class="av-picker"><legend class="text-body-sm text-text-muted mb-2">Ton avatar</legend>
 <div class="flex items-center gap-4"><span data-av-preview="pav"></span><div class="grid gap-2"><div aria-label="Couleur" class="av-row" role="radiogroup"><label><input name="pav-color" type="radio" value="#F7B4CC"/><span aria-label="Couleur 1" class="av-swatch" style="--av:#F7B4CC"></span></label><label><input name="pav-color" type="radio" value="#D8EF71"/><span aria-label="Couleur 2" class="av-swatch" style="--av:#D8EF71"></span></label><label><input checked="" name="pav-color" type="radio" value="#B9D9FF"/><span aria-label="Couleur 3" class="av-swatch" style="--av:#B9D9FF"></span></label><label><input name="pav-color" type="radio" value="#FFC08F"/><span aria-label="Couleur 4" class="av-swatch" style="--av:#FFC08F"></span></label><label><input name="pav-color" type="radio" value="#FFE08A"/><span aria-label="Couleur 5" class="av-swatch" style="--av:#FFE08A"></span></label><label><input name="pav-color" type="radio" value="#9FE3D0"/><span aria-label="Couleur 6" class="av-swatch" style="--av:#9FE3D0"></span></label><label><input name="pav-color" type="radio" value="#C9B8FF"/><span aria-label="Couleur 7" class="av-swatch" style="--av:#C9B8FF"></span></label><label><input name="pav-color" type="radio" value="#F0447A"/><span aria-label="Couleur 8" class="av-swatch" style="--av:#F0447A"></span></label></div><div aria-label="Symbole" class="av-row" role="radiogroup"><label><input checked="" name="pav-icon" type="radio" value=""/><span class="av-icon">Aa</span></label><label><input name="pav-icon" type="radio" value="visibility"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">visibility</span></span></label><label><input name="pav-icon" type="radio" value="palette"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">palette</span></span></label><label><input name="pav-icon" type="radio" value="grid_view"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">grid_view</span></span></label><label><input name="pav-icon" type="radio" value="format_size"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">format_size</span></span></label><label><input name="pav-icon" type="radio" value="gesture"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">gesture</span></span></label><label><input name="pav-icon" type="radio" value="bolt"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">bolt</span></span></label><label><input name="pav-icon" type="radio" value="local_florist"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">local_florist</span></span></label><label><input name="pav-icon" type="radio" value="rocket_launch"/><span class="av-icon"><span aria-hidden="true" class="material-symbols-outlined">rocket_launch</span></span></label></div></div></div></fieldset>
@@ -80,7 +80,7 @@
 <div class="btn-row mt-3"><button class="btn" id="invite-copy" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">link</span>Copier mon lien</button><button class="btn-line" hidden="" id="invite-share" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">ios_share</span>Partager</button></div>
 <p class="text-body-sm mt-3" id="invite-stats"></p></div>
 <div class="dash-card c-7" hidden="" id="friends-card"><div class="flex flex-wrap items-baseline justify-between gap-2"><h2>Mes amis</h2><a class="text-[13px] underline" href="classement.html?amis=1">Classement entre amis</a></div>
-<form class="sum-share-row mt-3" id="friend-add"><input aria-label="Code ami" autocapitalize="characters" class="field flex-1 min-w-0 uppercase" id="friend-code" maxlength="6" placeholder="Code ami de ton ami·e" required="" type="text"/><button class="btn" type="submit">Ajouter</button></form>
+<form class="sum-share-row mt-3" id="friend-add"><input aria-label="Code ami" autocapitalize="characters" class="field flex-1 min-w-0 uppercase" id="friend-code" maxlength="6" placeholder="Code ami ou @pseudo" required="" type="text"/><button class="btn" type="submit">Ajouter</button></form>
 <p class="form-msg mt-2" id="friend-msg"></p>
 <ol class="friend-list mt-2" id="friend-list"><li class="friend-empty">Ajoute un ami avec son code, ou envoie-lui ton lien d'invitation.</li></ol></div>
 
@@ -132,7 +132,7 @@
       const u = OeilAccount.get(), id = OeilAccount.identity();
       $("acc-avatar").innerHTML = OeilAvatar(u || { name: id.name || "?", avatar: id.name ? id.avatar : { color: id.avatar.color, icon: "person" } }, "avatar-lg");
       $("acc-name").textContent = u ? u.name : "Ta progression";
-      $("acc-role").textContent = u ? `${ROLES[u.role] || ""}${OeilAccount.isPro() ? " · Membre Œil Pro" : ""} · ${u.email}` : "Sur cet appareil";
+      $("acc-role").innerHTML = u ? `${u.username ? `<a class="underline" href="profil.html?u=${encodeURIComponent(u.username)}">@${esc(u.username)}</a> · ` : ""}${ROLES[u.role] || ""}${OeilAccount.isPro() ? " · Membre Œil Pro" : ""}` : "Sur cet appareil";
       ["acc-login", "acc-signup"].forEach((k) => ($(k).hidden = !!u));
       ["acc-edit", "acc-logout", "acc-delete"].forEach((k) => ($(k).hidden = !u));
       $("acc-guest").hidden = !!u;
@@ -205,7 +205,7 @@
     let pav = null;
     $("acc-edit").addEventListener("click", () => {
       const u = OeilAccount.get(); if (!u) return;
-      $("pf-name").value = u.name;
+      $("pf-name").value = u.name; $("pf-user").value = u.username || "";
       document.querySelectorAll('input[name="pf-role"]').forEach((r) => (r.checked = r.value === u.role));
       pav = avatarPicker("pav", $("pf-name"), u.avatar);
       $("profile-form").hidden = false; $("pf-name").focus();
@@ -213,7 +213,7 @@
     $("pf-cancel").addEventListener("click", () => ($("profile-form").hidden = true));
     $("profile-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      try { await OeilAccount.updateProfile({ name: $("pf-name").value.trim(), role: (document.querySelector('input[name="pf-role"]:checked') || {}).value, avatar: pav() }); $("profile-form").hidden = true; header(); }
+      try { await OeilAccount.updateProfile({ name: $("pf-name").value.trim(), username: $("pf-user").value.trim(), role: (document.querySelector('input[name="pf-role"]:checked') || {}).value, avatar: pav() }); $("profile-form").hidden = true; header(); }
       catch (err) { say($("pf-msg"), OeilAccount.human(err), "error"); }
     });
     $("plan-portal").addEventListener("click", async () => { try { await OeilAccount.portal(); } catch (err) { say($("plan-msg"), OeilAccount.human(err), "error"); } });
@@ -243,7 +243,7 @@
       const bonus = u.bonusUntil && new Date(u.bonusUntil) > new Date() ? ` Œil Pro offert jusqu'au ${fmtDay(u.bonusUntil)}.` : "";
       $("invite-stats").textContent = (n ? `${n} ami${n > 1 ? "s" : ""} parrainé${n > 1 ? "s" : ""}.` : "Aucun ami parrainé pour l'instant.") + bonus;
       const list = await OeilAccount.friends().catch(() => []);
-      $("friend-list").innerHTML = list.length ? list.map((f) => `<li>${OeilAvatar({ name: f.name, pro: f.pro, avatar: { color: f.avatar_color, icon: f.avatar_icon } })}<span class="friend-name"><b>${esc(f.name)}</b><small>${f.week_games ? `${f.week_points} pts cette semaine · ${f.week_games} jeu${f.week_games > 1 ? "x" : ""}` : f.last ? `dernière partie le ${fmtDay(f.last)}` : "pas encore joué"}</small></span><button aria-label="Retirer ${esc(f.name)} de mes amis" class="friend-x" data-id="${f.id}" type="button"><span aria-hidden="true" class="material-symbols-outlined">person_remove</span></button></li>`).join("") : '<li class="friend-empty">Ajoute un ami avec son code, ou envoie-lui ton lien d’invitation.</li>';
+      $("friend-list").innerHTML = list.length ? list.map((f) => `<li>${OeilAvatar({ name: f.name, pro: f.pro, avatar: { color: f.avatar_color, icon: f.avatar_icon } })}<span class="friend-name"><b>${OeilWho(f.name, f.username)}</b><small>${f.week_games ? `${f.week_points} pts cette semaine · ${f.week_games} jeu${f.week_games > 1 ? "x" : ""}` : f.last ? `dernière partie le ${fmtDay(f.last)}` : "pas encore joué"}</small></span><button aria-label="Retirer ${esc(f.name)} de mes amis" class="friend-x" data-id="${f.id}" type="button"><span aria-hidden="true" class="material-symbols-outlined">person_remove</span></button></li>`).join("") : '<li class="friend-empty">Ajoute un ami avec son code, ou envoie-lui ton lien d’invitation.</li>';
       $("friend-list").querySelectorAll("[data-id]").forEach((b) => (b.onclick = async () => { if (!confirm("Retirer cet ami ?")) return; await OeilAccount.removeFriend(b.dataset.id).catch(() => {}); social(); }));
     }
     $("friend-add").addEventListener("submit", async (e) => {

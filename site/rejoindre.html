@@ -54,6 +54,11 @@
 <p class="mt-2 flex items-center gap-2 text-body-md"><span class="sm-spin sm-spin-dark"></span>En attente du lancement par l'hôte…</p>
 <ul class="live-players mt-4" id="wait-players"></ul>
 </div>
+<div class="quiz-pad" hidden="" id="quiz-pad">
+<p class="quiz-pad-top"><span id="pad-q"></span><b id="pad-score">0 pt</b></p>
+<p class="quiz-pad-msg" id="pad-msg">Regarde l'écran…</p>
+<div class="quiz-pad-keys" id="pad-keys"></div>
+</div>
 </div>
 </div>
 </div>
@@ -110,7 +115,37 @@
       if (!room) { say($("join-error"), "Code introuvable. Vérifie le code affiché par l'hôte, et que son écran est toujours ouvert.", "error"); return; }
       if (room.status === "finished") { say($("join-error"), "Cette partie est terminée.", "error"); return; }
       if (!acc) OeilAccount.setGuest({ name, avatar });
+      // Quiz projeté : le téléphone devient une manette A, B, C, D
+      const KCOL = ["#F7B4CC", "#D8EF71", "#B9D9FF", "#FFC08F", "#FFE08A", "#9FE3D0"];
+      let sentFor = -1;
+      const pad = (r) => {
+        const q = r.quiz, me = r.players[name] || { scores: [] };
+        const rk = OeilLive.ranking(r), pos = rk.findIndex((p) => p.name === name);
+        const total = (me.scores || []).reduce((a, b) => a + (b || 0), 0);
+        $("join-wait").hidden = true; $("quiz-pad").hidden = false;
+        $("pad-score").textContent = `${total} pt${total > 1 ? "s" : ""}`;
+        $("pad-q").textContent = q ? `Question ${q.i + 1}` : "";
+        const keys = $("pad-keys"), msg = $("pad-msg");
+        if (r.status === "finished") { keys.innerHTML = ""; msg.innerHTML = `<b>Partie terminée.</b><br/>Tu finis ${pos + 1}${pos ? "e" : "er"} sur ${rk.length} avec ${total} points.`; return; }
+        if (!q || q.state === "look") { keys.innerHTML = ""; msg.textContent = "Regarde l'écran…"; return; }
+        if (q.state === "question") {
+          if (sentFor === q.i || (q.mine && q.mine[name])) { keys.innerHTML = ""; msg.textContent = "Réponse envoyée. On attend les autres…"; return; }
+          msg.textContent = "Ta réponse :";
+          if (keys.dataset.q !== String(q.i)) {
+            keys.dataset.q = q.i;
+            keys.innerHTML = Array.from({ length: q.n }, (_, k) => `<button style="--k:${KCOL[k]}" data-k="${k}" type="button">${"ABCDEF"[k]}</button>`).join("");
+            keys.querySelectorAll("button").forEach((b) => (b.onclick = () => { sentFor = q.i; OeilLive.answer(code, name, q.i, +b.dataset.k); if (navigator.vibrate) navigator.vibrate(30); keys.innerHTML = ""; msg.textContent = "Réponse envoyée. On attend les autres…"; }));
+          }
+          return;
+        }
+        if (q.state === "reveal") {
+          keys.innerHTML = ""; keys.dataset.q = "";
+          const pts = (me.scores || [])[q.i] || 0, ok = pts > 0;
+          msg.innerHTML = ok ? `<b class="pad-ok">Bonne réponse ! +${pts}</b><br/>Tu es ${pos + 1}${pos ? "e" : "er"} sur ${rk.length}.` : `<b class="pad-ko">Raté.</b> C'était la ${"ABCDEF"[q.correct]}.<br/>Tu es ${pos + 1}${pos ? "e" : "er"} sur ${rk.length}.`;
+        }
+      };
       const go = (r) => {
+        if (r.mode === "quiz" && r.status !== "lobby") { pad(r); return; }
         if (r.status === "playing") { location.href = OeilLive.playLink(r, name); return; }
         $("wait-title").textContent = r.title;
         $("wait-players").innerHTML = Object.values(r.players).map((p) => `<li>${OeilAvatar(p, "avatar-sm")}${esc(p.name)}</li>`).join("");

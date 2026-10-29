@@ -254,7 +254,7 @@ DEFI = f'''{page_head("Défi du jour — Œil Studio", kern=True, daily=True)}
     if (window.OeilAccount && OeilAccount.enabled) OeilAccount.dailyBoard(S.today).then((rows) => {{
       if (!rows.length) return;
       const me = OeilAccount.get();
-      document.getElementById("ticket-board").innerHTML = rows.slice(0, 5).map((r, i) => `<li class="${{me && r.name === me.name ? "is-me" : ""}}"><span>${{i + 1}}</span>${{OeilAvatar({{ name: r.name, avatar: {{ color: r.avatar_color, icon: r.avatar_icon }} }}, "avatar-sm")}}<span class="truncate">${{String(r.name).replace(/[<>&]/g, "")}}</span><b>${{r.best}} %</b></li>`).join("");
+      document.getElementById("ticket-board").innerHTML = rows.slice(0, 5).map((r, i) => `<li class="${{me && r.name === me.name ? "is-me" : ""}}"><span>${{i + 1}}</span>${{OeilAvatar({{ name: r.name, pro: r.pro, avatar: {{ color: r.avatar_color, icon: r.avatar_icon }} }}, "avatar-sm")}}<span class="truncate">${{OeilWho(r.name, r.username)}}</span><b>${{r.best}} %</b></li>`).join("");
     }}).catch(() => {{}});
     document.getElementById("ticket-go").addEventListener("click", () => {{ intro.hidden = true; app.hidden = false; Oeil.start({{ ids, rounds, title }}); window.scrollTo(0, 0); }});
   }})();

@@ -23,7 +23,7 @@
     const out = ctx.createImageData(W, H);
     for (let i = 0; i < W * H; i++) {
       const counter = !outside[i] && !ink(i);
-      const v = counter ? 20 : ink(i) ? 238 : 255;
+      const v = counter ? 20 : 255; // la lettre elle-même reste invisible
       out.data[i * 4] = out.data[i * 4 + 1] = out.data[i * 4 + 2] = v; out.data[i * 4 + 3] = 255;
     }
     ctx.putImageData(out, 0, 0);

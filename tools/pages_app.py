@@ -3,7 +3,8 @@
 
 DEFAULT_LIVE = {"kern-clinic", "color-impostor", "spacing-repair", "ui-detective", "microcopy-duel", "hue-line"}
 PRO_ATTR, LOCK = ' data-pro=""', '<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b>'
-chips = "".join(f'<label class="mix-chip"><input{CHK if g["id"] in DEFAULT_LIVE else ""}{PRO_ATTR if g["pro"] else ""} type="checkbox" value="{g["id"]}"/><span><i style="background:{DOMAINS[g["domain"]]["field"]}"></i>{g["name"]}{LOCK if g["pro"] else ""}</span></label>' for g in GAMES)
+QUIZ_GAMES = ["microcopy-duel", "form-rescue", "dark-mode-repair", "responsive-rescue", "boolean-builder", "glyph-memory", "five-second-layout", "negative-space"]
+chips = "".join(f'<label class="mix-chip"{" data-quiz=" + chr(34) + chr(34) if g["id"] in QUIZ_GAMES else ""}><input{CHK if g["id"] in DEFAULT_LIVE else ""}{PRO_ATTR if g["pro"] else ""} type="checkbox" value="{g["id"]}"/><span><i style="background:{DOMAINS[g["domain"]]["field"]}"></i>{g["name"]}{LOCK if g["pro"] else ""}</span></label>' for g in GAMES)
 COLORS = ["#F7B4CC", "#D8EF71", "#B9D9FF", "#FFC08F", "#FFE08A", "#9FE3D0", "#C9B8FF", "#F0447A"]
 ICONS = [("", "Aa"), ("visibility", ""), ("palette", ""), ("grid_view", ""), ("format_size", ""), ("gesture", ""), ("bolt", ""), ("local_florist", ""), ("rocket_launch", "")]
 
@@ -43,9 +44,10 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
 <h1 class="text-big">Lance une partie<br/>en direct.</h1>
 <p class="mt-4 max-w-[38rem] text-body-lg">Choisis les jeux, crée la salle, projette cet écran. Chacun rejoint depuis son téléphone avec le code ou le QR code, et tout le monde joue le même tirage.</p>
 <form class="mt-8 flex flex-col gap-6" id="live-form">
+<fieldset><legend class="text-body-sm text-text-muted mb-2">Type de partie</legend>{seg("live-mode", [("rythme", "Chacun à son rythme"), ("quiz", "Quiz projeté, façon Kahoot")], "rythme")}<p class="mt-2 text-body-sm text-text-muted max-w-[36rem]" id="mode-help">Chacun joue les jeux complets sur son téléphone, le classement s'affiche ici.</p></fieldset>
 <label class="grid gap-1 text-body-sm text-text-muted max-w-[28rem]">Nom de la partie<input class="field" id="live-title" placeholder="Ex. : Échauffement typo du mardi" required="" type="text"/></label>
 <fieldset><legend class="text-body-sm text-text-muted mb-2">Jeux de la partie</legend><div class="flex flex-wrap gap-2">{chips}</div><p class="mt-3 text-body-sm text-text-muted" hidden="" id="live-pro-note">Les jeux avec un cadenas font partie d'<a class="underline" href="tarifs.html#pro">Œil Pro</a>.</p></fieldset>
-<div class="flex flex-wrap items-center gap-4">{seg("live-rounds", [("5", "5"), ("6", "6"), ("8", "8"), ("10", "10")], "6", "Manches")}<span class="form-msg" id="live-msg"></span></div>
+<div class="flex flex-wrap items-center gap-4">{seg("live-rounds", [("5", "5"), ("6", "6"), ("8", "8"), ("10", "10")], "6", "Manches")}<span hidden="" id="quiz-time">{seg("live-time", [("15", "15 s"), ("20", "20 s"), ("30", "30 s")], "20", "Temps par question")}</span><span class="form-msg" id="live-msg"></span></div>
 </form>
 </div>
 <aside class="ticket-side" style="background:#FFE08A">
@@ -85,6 +87,15 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
 </aside>
 </div>
 
+<div class="quiz-screen" hidden="" id="step-quiz">
+<div class="quiz-top"><span id="qz-count">Question 1 sur 10</span><span class="quiz-game" id="qz-game"></span><span class="quiz-code">Code <b id="qz-code"></b></span></div>
+<div class="quiz-timer"><i id="qz-bar"></i></div>
+<p class="quiz-prompt" id="qz-prompt"></p>
+<div class="quiz-board" id="board"></div>
+<div class="quiz-foot"><p><b class="tabular" id="qz-answers">0</b> réponse<span id="qz-answers-s">s</span> sur <span id="qz-players">0</span></p><p class="quiz-left tabular" id="qz-left"></p><div class="btn-row"><button class="btn-line" id="qz-skip" type="button">Afficher la réponse</button><button class="btn" hidden="" id="qz-next" type="button">Classement<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></button></div></div>
+<div class="quiz-rank" hidden="" id="qz-rank"><h2 class="text-big">Classement</h2><ol class="live-board" id="qz-rank-list"></ol><div class="flex justify-center mt-6"><button class="btn btn-lg" id="qz-continue" type="button">Question suivante</button></div></div>
+</div>
+
 <div class="dot-board px-5 sm:px-10 pt-16 pb-12" hidden="" id="step-podium">
 <p class="board-strip"><span class="board-dot" style="background:#FFE08A"></span>Fin de partie</p>
 <h1 class="text-big text-center">Le podium</h1>
@@ -93,20 +104,43 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
 <div class="flex flex-wrap justify-center gap-3 mt-8"><a class="btn" href="live.html">Nouvelle partie</a><button class="btn-line" id="podium-csv" type="button">Exporter le classement</button></div>
 </div>
 </section>''', '''<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400&amp;display=swap" rel="stylesheet"/>
 <script src="assets/catalog.js"></script>
 <script src="assets/live.js"></script>
+<script>document.body.dataset.mode = "mix";</script>
+<script src="assets/engine.js"></script>
+<script src="assets/kits.js"></script>
+<script>OEIL_SEED.module("microcopy-duel")</script><script src="assets/games/microcopy-duel.js"></script>
+<script>OEIL_SEED.module("form-rescue")</script><script src="assets/games/form-rescue.js"></script>
+<script>OEIL_SEED.module("dark-mode-repair")</script><script src="assets/games/dark-mode-repair.js"></script>
+<script>OEIL_SEED.module("responsive-rescue")</script><script src="assets/games/responsive-rescue.js"></script>
+<script>OEIL_SEED.module("boolean-builder")</script><script src="assets/games/boolean-builder.js"></script>
+<script>OEIL_SEED.module("glyph-memory")</script><script src="assets/games/glyph-memory.js"></script>
+<script>OEIL_SEED.module("five-second-layout")</script><script src="assets/games/five-second-layout.js"></script>
+<script>OEIL_SEED.module("negative-space")</script><script src="assets/games/negative-space.js"></script>
+<script>OEIL_SEED.free();</script>
 <script>
   (function () {
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     let H = null, room = null;
+    const QUIZ = ["microcopy-duel", "form-rescue", "dark-mode-repair", "responsive-rescue", "boolean-builder", "glyph-memory", "five-second-layout", "negative-space"];
+    const modeOf = () => (document.querySelector('input[name="live-mode"]:checked') || {}).value;
+    function applyMode() {
+      const quiz = modeOf() === "quiz";
+      $("mode-help").textContent = quiz ? "Les questions s'affichent sur cet écran, chacun répond A, B, C ou D sur son téléphone. Plus on répond vite et juste, plus on marque de points." : "Chacun joue les jeux complets sur son téléphone, le classement s'affiche ici.";
+      document.querySelectorAll("#live-form .mix-chip").forEach((c) => { const q = c.hasAttribute("data-quiz"); c.hidden = quiz && !q; const b = c.querySelector("input"); if (quiz) b.checked = q && !b.disabled; });
+      $("quiz-time").hidden = !quiz;
+      document.querySelector('input[name="live-rounds"]').closest(".flex").querySelector(".seg-pick-label").textContent = quiz ? "Questions" : "Manches";
+    }
+    document.querySelectorAll('input[name="live-mode"]').forEach((r) => r.addEventListener("change", applyMode));
     const lockPro = () => {
       const pro = OeilAccount.isPro();
       document.querySelectorAll("#live-form input[data-pro]").forEach((b) => { b.disabled = !pro; if (!pro) b.checked = false; });
       $("live-pro-note").hidden = pro;
     };
     lockPro(); OeilAccount.ready.then(lockPro);
-    const show = (step) => ["setup", "lobby", "live", "podium"].forEach((k) => ($("step-" + k).hidden = k !== step));
+    const show = (step) => ["setup", "lobby", "live", "quiz", "podium"].forEach((k) => ($("step-" + k).hidden = k !== step));
     const joinUrl = () => location.href.split("#")[0].split("?")[0].replace(/[^/]*$/, "") + "rejoindre.html";
     const qr = (el, text, size) => { el.innerHTML = ""; if (window.QRCode) new QRCode(el, { text, width: size, height: size, colorDark: "#141413", colorLight: "#ffffff" }); else el.textContent = text; };
     $("live-form").addEventListener("submit", (e) => {
@@ -114,7 +148,7 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
       const ids = [...document.querySelectorAll("#live-form input[type=checkbox]:checked")].map((b) => b.value);
       if (!ids.length) { $("live-msg").textContent = "Choisis au moins un jeu."; return; }
       const rounds = +document.querySelector('input[name="live-rounds"]:checked').value;
-      H = OeilLive.host({ title: $("live-title").value.trim() || "Partie en direct", ids, rounds }, render);
+      H = OeilLive.host({ title: $("live-title").value.trim() || "Partie en direct", ids, rounds, mode: modeOf() }, render);
       room = H.room;
       const link = `${joinUrl()}?code=${room.code}`;
       $("lobby-code").textContent = room.code;
@@ -133,6 +167,7 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
       $("lobby-count").textContent = `${n} joueur${n > 1 ? "s" : ""}`;
       $("lobby-players").innerHTML = n ? ranking.map((p) => `<li>${OeilAvatar(p, "avatar-sm")}${esc(p.name)}</li>`).join("") : '<li class="live-empty">En attente des premiers joueurs…</li>';
       $("lobby-start").disabled = !n;
+      if (r.status === "playing" && r.mode === "quiz") { quizTick(r); return; }
       if (r.status === "playing") {
         show("live");
         $("live-code-small").textContent = r.code;
@@ -154,6 +189,82 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
         const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = `classement-${room.code}.csv`; a.click();
       };
     }
+    // ---------------------------------------------------------------- Quiz projeté
+    const KCOL = ["#F7B4CC", "#D8EF71", "#B9D9FF", "#FFC08F", "#FFE08A", "#9FE3D0"];
+    let Q = null; // { list, i, state, timer, T }
+    const fakeApi = (board) => ({ board, controls: document.createElement("div"), h: Oeil.h, drag: Oeil.drag, sortable: Oeil.sortable, color: Oeil.color, rand: Oeil.rand, randi: Oeil.randi, pick: Oeil.pick, shuffle: Oeil.shuffle, clamp: Oeil.clamp, setSubmit() {}, setBrief(t) { $("qz-prompt").textContent = t; }, submit() {}, phase: "play", round: 0, hintUsed: false });
+    function buildList() {
+      const ids = room.ids.filter((id) => Oeil.registry[id]);
+      const occ = {}, list = [];
+      for (let i = 0; i < room.rounds; i++) { const id = ids[i % ids.length]; occ[id] = (occ[id] || 0); list.push({ id, n: occ[id]++ }); }
+      return Oeil.shuffle(list);
+    }
+    function ask() {
+      const item = Q.list[Q.i], game = Oeil.registry[item.id], board = $("board");
+      board.innerHTML = ""; $("qz-rank").hidden = true; $("qz-skip").hidden = false; $("qz-next").hidden = true;
+      $("qz-count").textContent = `Question ${Q.i + 1} sur ${Q.list.length}`;
+      $("qz-game").textContent = (window.OEIL_GAMES.find((g) => g.id === item.id) || {}).name || "";
+      const api = fakeApi(board);
+      Q.state = game.setup(item.n, api); Q.api = api; Q.game = game;
+      $("qz-prompt").textContent = Q.state.memo ? "Observe bien…" : Q.state.it.prompt;
+      game.mount(board, Q.state, api);
+      Q.correct = Q.state.opts.findIndex((o) => o.correct);
+      const memo = Q.state.it.memo ? (Q.state.it.memo.seconds || 4) * 1000 : 0;
+      H.update((r) => { r.quiz = { i: Q.i, n: Q.state.opts.length, state: memo ? "look" : "question", answers: {}, at: Date.now() }; });
+      clearTimeout(Q.open); clearInterval(Q.timer);
+      Q.open = setTimeout(() => {
+        H.update((r) => { r.quiz.state = "question"; r.quiz.at = Date.now(); });
+        const T = Q.T * 1000, t0 = Date.now();
+        Q.timer = setInterval(() => {
+          const left = Math.max(0, T - (Date.now() - t0));
+          $("qz-bar").style.width = `${(left / T) * 100}%`;
+          $("qz-left").textContent = `${Math.ceil(left / 1000)} s`;
+          const n = Object.keys(room.players).length;
+          if (left <= 0 || (n && Object.keys(room.quiz.answers).length >= n)) revealQ();
+        }, 200);
+      }, memo + 150);
+      $("qz-bar").style.width = "100%"; $("qz-left").textContent = memo ? "Mémorise…" : "";
+    }
+    function revealQ() {
+      if (!Q || room.quiz.state !== "question") return;
+      clearInterval(Q.timer);
+      const q = room.quiz, T = Q.T * 1000, counts = Array(q.n).fill(0);
+      H.update((r) => {
+        Object.entries(r.quiz.answers).forEach(([name, a]) => {
+          counts[a.k] = (counts[a.k] || 0) + 1;
+          const p = r.players[name]; if (!p) return;
+          const ok = a.k === Q.correct;
+          p.scores[Q.i] = ok ? Math.round(500 + 500 * Math.max(0, 1 - (a.at - r.quiz.at) / T)) : 0;
+        });
+        Object.values(r.players).forEach((p) => { if (p.scores[Q.i] == null) p.scores[Q.i] = 0; });
+        r.quiz.state = "reveal"; r.quiz.correct = Q.correct; r.quiz.counts = counts;
+      });
+      Q.state.picked = -1;
+      Q.game.reveal && Q.game.reveal($("board"), Q.state, {}, Q.api);
+      document.querySelectorAll("#board .kit-opt").forEach((b, k) => b.insertAdjacentHTML("beforeend", `<span class="quiz-votes">${counts[k] || 0}</span>`));
+      if (Q.state.it.explain) $("qz-prompt").textContent = Q.state.it.explain;
+      $("qz-skip").hidden = true; $("qz-next").hidden = false;
+      $("qz-next").firstChild.textContent = Q.i < Q.list.length - 1 ? "Classement" : "Voir le podium";
+      $("qz-left").textContent = "";
+    }
+    function quizTick(r) {
+      show("quiz");
+      $("qz-code").textContent = r.code;
+      const n = Object.keys(r.players).length, a = r.quiz ? Object.keys(r.quiz.answers || {}).length : 0;
+      $("qz-players").textContent = n; $("qz-answers").textContent = a; $("qz-answers-s").textContent = a > 1 ? "s" : "";
+      if (!Q) { Q = { list: buildList(), i: 0, T: +((document.querySelector('input[name="live-time"]:checked') || {}).value || 20) }; ask(); }
+    }
+    $("qz-skip").addEventListener("click", revealQ);
+    $("qz-next").addEventListener("click", () => {
+      if (Q.i >= Q.list.length - 1) { H.finish(); return; }
+      const rk = OeilLive.ranking(room).slice(0, 5);
+      $("qz-rank-list").innerHTML = rk.map((p, i) => `<li class="live-row"><span class="live-rank">${i + 1}</span><span class="live-name">${OeilAvatar(p, "avatar-sm")}${esc(p.name)}</span><span class="text-body-sm text-text-muted">+${p.scores[Q.i] || 0}</span><b class="live-total">${p.total} pts</b></li>`).join("");
+      $("qz-rank").hidden = false;
+    });
+    $("qz-continue").addEventListener("click", () => { Q.i++; ask(); });
+    document.querySelectorAll('input[name="live-time"]').forEach((r) => r.addEventListener("change", () => {}));
+    applyMode();
+
     $("lobby-start").addEventListener("click", () => H && H.start());
     $("lobby-cancel").addEventListener("click", () => { show("setup"); H = null; room = null; });
     $("live-end").addEventListener("click", () => H && H.finish());
@@ -185,6 +296,11 @@ page("rejoindre.html", "Rejoindre une partie — Œil Studio", None, f'''<sectio
 <p class="mt-2 flex items-center gap-2 text-body-md"><span class="sm-spin sm-spin-dark"></span>En attente du lancement par l'hôte…</p>
 <ul class="live-players mt-4" id="wait-players"></ul>
 </div>
+<div class="quiz-pad" hidden="" id="quiz-pad">
+<p class="quiz-pad-top"><span id="pad-q"></span><b id="pad-score">0 pt</b></p>
+<p class="quiz-pad-msg" id="pad-msg">Regarde l'écran…</p>
+<div class="quiz-pad-keys" id="pad-keys"></div>
+</div>
 </div>
 </div>
 </div>
@@ -209,7 +325,37 @@ page("rejoindre.html", "Rejoindre une partie — Œil Studio", None, f'''<sectio
       if (!room) { say($("join-error"), "Code introuvable. Vérifie le code affiché par l'hôte, et que son écran est toujours ouvert.", "error"); return; }
       if (room.status === "finished") { say($("join-error"), "Cette partie est terminée.", "error"); return; }
       if (!acc) OeilAccount.setGuest({ name, avatar });
+      // Quiz projeté : le téléphone devient une manette A, B, C, D
+      const KCOL = ["#F7B4CC", "#D8EF71", "#B9D9FF", "#FFC08F", "#FFE08A", "#9FE3D0"];
+      let sentFor = -1;
+      const pad = (r) => {
+        const q = r.quiz, me = r.players[name] || { scores: [] };
+        const rk = OeilLive.ranking(r), pos = rk.findIndex((p) => p.name === name);
+        const total = (me.scores || []).reduce((a, b) => a + (b || 0), 0);
+        $("join-wait").hidden = true; $("quiz-pad").hidden = false;
+        $("pad-score").textContent = `${total} pt${total > 1 ? "s" : ""}`;
+        $("pad-q").textContent = q ? `Question ${q.i + 1}` : "";
+        const keys = $("pad-keys"), msg = $("pad-msg");
+        if (r.status === "finished") { keys.innerHTML = ""; msg.innerHTML = `<b>Partie terminée.</b><br/>Tu finis ${pos + 1}${pos ? "e" : "er"} sur ${rk.length} avec ${total} points.`; return; }
+        if (!q || q.state === "look") { keys.innerHTML = ""; msg.textContent = "Regarde l'écran…"; return; }
+        if (q.state === "question") {
+          if (sentFor === q.i || (q.mine && q.mine[name])) { keys.innerHTML = ""; msg.textContent = "Réponse envoyée. On attend les autres…"; return; }
+          msg.textContent = "Ta réponse :";
+          if (keys.dataset.q !== String(q.i)) {
+            keys.dataset.q = q.i;
+            keys.innerHTML = Array.from({ length: q.n }, (_, k) => `<button style="--k:${KCOL[k]}" data-k="${k}" type="button">${"ABCDEF"[k]}</button>`).join("");
+            keys.querySelectorAll("button").forEach((b) => (b.onclick = () => { sentFor = q.i; OeilLive.answer(code, name, q.i, +b.dataset.k); if (navigator.vibrate) navigator.vibrate(30); keys.innerHTML = ""; msg.textContent = "Réponse envoyée. On attend les autres…"; }));
+          }
+          return;
+        }
+        if (q.state === "reveal") {
+          keys.innerHTML = ""; keys.dataset.q = "";
+          const pts = (me.scores || [])[q.i] || 0, ok = pts > 0;
+          msg.innerHTML = ok ? `<b class="pad-ok">Bonne réponse ! +${pts}</b><br/>Tu es ${pos + 1}${pos ? "e" : "er"} sur ${rk.length}.` : `<b class="pad-ko">Raté.</b> C'était la ${"ABCDEF"[q.correct]}.<br/>Tu es ${pos + 1}${pos ? "e" : "er"} sur ${rk.length}.`;
+        }
+      };
       const go = (r) => {
+        if (r.mode === "quiz" && r.status !== "lobby") { pad(r); return; }
         if (r.status === "playing") { location.href = OeilLive.playLink(r, name); return; }
         $("wait-title").textContent = r.title;
         $("wait-players").innerHTML = Object.values(r.players).map((p) => `<li>${OeilAvatar(p, "avatar-sm")}${esc(p.name)}</li>`).join("");
@@ -240,7 +386,7 @@ page("connexion.html", "Connexion — Œil Studio", None, f'''<section class="{W
 <p class="or-line">ou avec ton adresse e-mail</p>
 <div aria-label="Type de formulaire" class="seg-line w-max" role="group"><button aria-pressed="true" data-tab="login" type="button">Se connecter</button><button aria-pressed="false" data-tab="signup" type="button">Créer un compte</button></div>
 <form class="flex flex-col gap-4 mt-2" id="auth-form">
-<label class="grid gap-1 text-body-sm text-text-muted" data-only="signup" hidden="">Prénom ou pseudo<input autocomplete="given-name" class="field" id="auth-name" maxlength="40" type="text"/></label>
+<div class="grid sm:grid-cols-2 gap-4" data-only="signup" hidden=""><label class="grid gap-1 text-body-sm text-text-muted">Prénom<input autocomplete="given-name" class="field" id="auth-name" maxlength="40" type="text"/></label><label class="grid gap-1 text-body-sm text-text-muted">Pseudo unique<span class="pseudo-field"><input autocapitalize="none" autocomplete="username" class="field" id="auth-user" maxlength="20" pattern="[a-zA-Z0-9_.]{3,20}" placeholder="ton.pseudo" type="text"/></span><span class="text-[12px]" id="auth-user-msg">Visible dans les classements.</span></label></div>
 <label class="grid gap-1 text-body-sm text-text-muted">Adresse e-mail<input autocomplete="email" class="field" id="auth-email" required="" type="email"/></label>
 <label class="grid gap-1 text-body-sm text-text-muted" data-hide="forgot">Mot de passe<input autocomplete="current-password" class="field" id="auth-pass" minlength="10" required="" type="password"/><span class="text-[12px]" data-only="signup" hidden="">10 caractères minimum. Une phrase fonctionne très bien.</span></label>
 <fieldset data-only="signup" hidden=""><legend class="text-body-sm text-text-muted mb-2">Tu es</legend>{seg("role", [("etudiant", "Étudiant·e"), ("enseignant", "Enseignant·e"), ("pro", "Designer en poste")], "etudiant")}</fieldset>
@@ -275,11 +421,18 @@ page("connexion.html", "Connexion — Œil Studio", None, f'''<section class="{W
       $("auth-submit").textContent = { login: "Se connecter", signup: "Créer mon compte", forgot: "Recevoir le lien" }[t];
       $("auth-pass").autocomplete = t === "login" ? "current-password" : "new-password";
       $("auth-pass").required = t !== "forgot";
-      $("auth-name").required = t === "signup";
+      $("auth-name").required = t === "signup"; $("auth-user").required = t === "signup";
       say($("auth-msg"), "");
     };
     document.querySelectorAll("[data-tab]").forEach((b) => b.addEventListener("click", () => setTab(b.dataset.tab)));
     $("auth-forgot").addEventListener("click", () => setTab("forgot"));
+    // Pseudo : proposé depuis le prénom, vérifié en direct
+    const slug = (t) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9_.]/g, "").slice(0, 20);
+    let touched = false, chk;
+    $("auth-name").addEventListener("input", () => { if (!touched) { $("auth-user").value = slug($("auth-name").value); $("auth-user").dispatchEvent(new Event("check")); } });
+    const check = () => { clearTimeout(chk); const v = $("auth-user").value.trim(); if (v.length < 3) { say($("auth-user-msg"), "Visible dans les classements."); return; } chk = setTimeout(async () => { const ok = await OeilAccount.usernameFree(v).catch(() => true); say($("auth-user-msg"), ok ? `@${v.toLowerCase()} est libre.` : `@${v.toLowerCase()} est déjà pris.`, ok ? "ok" : "error"); }, 350); };
+    $("auth-user").addEventListener("input", () => { touched = true; $("auth-user").value = $("auth-user").value.replace(/[^a-zA-Z0-9_.]/g, ""); check(); });
+    $("auth-user").addEventListener("check", check);
     $("auth-google").addEventListener("click", async () => {
       try { await OeilAccount.signInWithGoogle(next); }
       catch (err) { say($("auth-msg"), err && /provider is not enabled|Unsupported provider/i.test(err.message || "") ? "La connexion avec Google n'est pas encore activée. Utilise ton adresse e-mail en attendant." : OeilAccount.human(err), "error"); }
@@ -312,7 +465,9 @@ page("connexion.html", "Connexion — Œil Studio", None, f'''<section class="{W
         else {
           if (!$("auth-terms").checked) { say($("auth-msg"), "Accepte les conditions générales pour créer ton compte.", "error"); return; }
           const role = (document.querySelector('input[name="role"]:checked') || {}).value;
-          const r = await OeilAccount.signUp({ name: $("auth-name").value.trim(), email, password, role, avatar: av() });
+          const username = $("auth-user").value.trim().toLowerCase();
+          if (!(await OeilAccount.usernameFree(username))) { say($("auth-msg"), "Ce pseudo est déjà pris ou n'est pas valide (3 à 20 caractères : lettres, chiffres, point, tiret bas).", "error"); return; }
+          const r = await OeilAccount.signUp({ name: $("auth-name").value.trim(), username, email, password, role, avatar: av() });
           if (r.confirm) say($("auth-msg"), `Compte créé. Ouvre l'e-mail envoyé à ${email} et clique sur le lien pour l'activer.`, "ok");
           else { await OeilAccount.claimReferral().catch(() => {}); after(); }
         }
@@ -335,7 +490,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
 <div class="acc-guest" hidden="" id="acc-guest"><span class="material-symbols-outlined" aria-hidden="true">cloud_upload</span><span>Ta progression est enregistrée sur cet appareil. <a class="underline" href="connexion.html#inscription">Crée un compte gratuit</a> pour la retrouver partout et apparaître dans le classement du jour.</span></div>
 <form class="join-card mt-8 max-w-[40rem]" hidden="" id="profile-form">
 <p class="text-headline-md">Mon profil</p>
-<label class="grid gap-1 text-body-sm text-text-muted">Prénom ou pseudo<input class="field" id="pf-name" maxlength="40" required="" type="text"/></label>
+<div class="grid sm:grid-cols-2 gap-4"><label class="grid gap-1 text-body-sm text-text-muted">Prénom<input class="field" id="pf-name" maxlength="40" required="" type="text"/></label><label class="grid gap-1 text-body-sm text-text-muted">Pseudo unique<span class="pseudo-field"><input autocapitalize="none" class="field" id="pf-user" maxlength="20" pattern="[a-zA-Z0-9_.]{3,20}" required="" type="text"/></span></label></div>
 <fieldset><legend class="text-body-sm text-text-muted mb-2">Tu es</legend>{seg("pf-role", [("etudiant", "Étudiant·e"), ("enseignant", "Enseignant·e"), ("pro", "Designer en poste")], "etudiant")}</fieldset>
 {av_picker("pav")}
 <div class="btn-row"><button class="btn" type="submit">Enregistrer</button><button class="btn-line" id="pf-cancel" type="button">Annuler</button></div>
@@ -372,7 +527,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
 <div class="btn-row mt-3"><button class="btn" id="invite-copy" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">link</span>Copier mon lien</button><button class="btn-line" hidden="" id="invite-share" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">ios_share</span>Partager</button></div>
 <p class="text-body-sm mt-3" id="invite-stats"></p></div>
 <div class="dash-card c-7" hidden="" id="friends-card"><div class="flex flex-wrap items-baseline justify-between gap-2"><h2>Mes amis</h2><a class="text-[13px] underline" href="classement.html?amis=1">Classement entre amis</a></div>
-<form class="sum-share-row mt-3" id="friend-add"><input aria-label="Code ami" autocapitalize="characters" class="field flex-1 min-w-0 uppercase" id="friend-code" maxlength="6" placeholder="Code ami de ton ami·e" required="" type="text"/><button class="btn" type="submit">Ajouter</button></form>
+<form class="sum-share-row mt-3" id="friend-add"><input aria-label="Code ami" autocapitalize="characters" class="field flex-1 min-w-0 uppercase" id="friend-code" maxlength="6" placeholder="Code ami ou @pseudo" required="" type="text"/><button class="btn" type="submit">Ajouter</button></form>
 <p class="form-msg mt-2" id="friend-msg"></p>
 <ol class="friend-list mt-2" id="friend-list"><li class="friend-empty">Ajoute un ami avec son code, ou envoie-lui ton lien d'invitation.</li></ol></div>
 
@@ -392,7 +547,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
       const u = OeilAccount.get(), id = OeilAccount.identity();
       $("acc-avatar").innerHTML = OeilAvatar(u || { name: id.name || "?", avatar: id.name ? id.avatar : { color: id.avatar.color, icon: "person" } }, "avatar-lg");
       $("acc-name").textContent = u ? u.name : "Ta progression";
-      $("acc-role").textContent = u ? `${ROLES[u.role] || ""}${OeilAccount.isPro() ? " · Membre Œil Pro" : ""} · ${u.email}` : "Sur cet appareil";
+      $("acc-role").innerHTML = u ? `${u.username ? `<a class="underline" href="profil.html?u=${encodeURIComponent(u.username)}">@${esc(u.username)}</a> · ` : ""}${ROLES[u.role] || ""}${OeilAccount.isPro() ? " · Membre Œil Pro" : ""}` : "Sur cet appareil";
       ["acc-login", "acc-signup"].forEach((k) => ($(k).hidden = !!u));
       ["acc-edit", "acc-logout", "acc-delete"].forEach((k) => ($(k).hidden = !u));
       $("acc-guest").hidden = !!u;
@@ -465,7 +620,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
     let pav = null;
     $("acc-edit").addEventListener("click", () => {
       const u = OeilAccount.get(); if (!u) return;
-      $("pf-name").value = u.name;
+      $("pf-name").value = u.name; $("pf-user").value = u.username || "";
       document.querySelectorAll('input[name="pf-role"]').forEach((r) => (r.checked = r.value === u.role));
       pav = avatarPicker("pav", $("pf-name"), u.avatar);
       $("profile-form").hidden = false; $("pf-name").focus();
@@ -473,7 +628,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
     $("pf-cancel").addEventListener("click", () => ($("profile-form").hidden = true));
     $("profile-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      try { await OeilAccount.updateProfile({ name: $("pf-name").value.trim(), role: (document.querySelector('input[name="pf-role"]:checked') || {}).value, avatar: pav() }); $("profile-form").hidden = true; header(); }
+      try { await OeilAccount.updateProfile({ name: $("pf-name").value.trim(), username: $("pf-user").value.trim(), role: (document.querySelector('input[name="pf-role"]:checked') || {}).value, avatar: pav() }); $("profile-form").hidden = true; header(); }
       catch (err) { say($("pf-msg"), OeilAccount.human(err), "error"); }
     });
     $("plan-portal").addEventListener("click", async () => { try { await OeilAccount.portal(); } catch (err) { say($("plan-msg"), OeilAccount.human(err), "error"); } });
@@ -503,7 +658,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
       const bonus = u.bonusUntil && new Date(u.bonusUntil) > new Date() ? ` Œil Pro offert jusqu'au ${fmtDay(u.bonusUntil)}.` : "";
       $("invite-stats").textContent = (n ? `${n} ami${n > 1 ? "s" : ""} parrainé${n > 1 ? "s" : ""}.` : "Aucun ami parrainé pour l'instant.") + bonus;
       const list = await OeilAccount.friends().catch(() => []);
-      $("friend-list").innerHTML = list.length ? list.map((f) => `<li>${OeilAvatar({ name: f.name, pro: f.pro, avatar: { color: f.avatar_color, icon: f.avatar_icon } })}<span class="friend-name"><b>${esc(f.name)}</b><small>${f.week_games ? `${f.week_points} pts cette semaine · ${f.week_games} jeu${f.week_games > 1 ? "x" : ""}` : f.last ? `dernière partie le ${fmtDay(f.last)}` : "pas encore joué"}</small></span><button aria-label="Retirer ${esc(f.name)} de mes amis" class="friend-x" data-id="${f.id}" type="button"><span aria-hidden="true" class="material-symbols-outlined">person_remove</span></button></li>`).join("") : '<li class="friend-empty">Ajoute un ami avec son code, ou envoie-lui ton lien d’invitation.</li>';
+      $("friend-list").innerHTML = list.length ? list.map((f) => `<li>${OeilAvatar({ name: f.name, pro: f.pro, avatar: { color: f.avatar_color, icon: f.avatar_icon } })}<span class="friend-name"><b>${OeilWho(f.name, f.username)}</b><small>${f.week_games ? `${f.week_points} pts cette semaine · ${f.week_games} jeu${f.week_games > 1 ? "x" : ""}` : f.last ? `dernière partie le ${fmtDay(f.last)}` : "pas encore joué"}</small></span><button aria-label="Retirer ${esc(f.name)} de mes amis" class="friend-x" data-id="${f.id}" type="button"><span aria-hidden="true" class="material-symbols-outlined">person_remove</span></button></li>`).join("") : '<li class="friend-empty">Ajoute un ami avec son code, ou envoie-lui ton lien d’invitation.</li>';
       $("friend-list").querySelectorAll("[data-id]").forEach((b) => (b.onclick = async () => { if (!confirm("Retirer cet ami ?")) return; await OeilAccount.removeFriend(b.dataset.id).catch(() => {}); social(); }));
     }
     $("friend-add").addEventListener("submit", async (e) => {
@@ -586,7 +741,7 @@ page("classement.html", "Classement de la semaine — Œil Studio", "classement"
       let rows = [];
       try { rows = await OeilAccount.weeklyBoard(game, friendsOnly && !!OeilAccount.get()); } catch (e) { box.innerHTML = '<li class="rank-empty">Impossible de charger le classement. Réessaie dans un instant.</li>'; return; }
       const unit = game ? " %" : " pts";
-      box.innerHTML = rows.length ? rows.map((r, i) => `<li class="${r.is_me ? "is-me" : ""}${i < 3 ? " is-top" : ""}"><span class="rank-n">${i < 3 ? `<span class="material-symbols-outlined" aria-label="${i + 1}">${i ? "military_tech" : "workspace_premium"}</span>` : i + 1}</span>${OeilAvatar({ name: r.name, pro: r.pro, avatar: { color: r.avatar_color, icon: r.avatar_icon } })}<span class="rank-name">${esc(r.name)}${r.is_me ? " (toi)" : ""}<small>${game ? "meilleur score" : `${r.games} jeu${r.games > 1 ? "x" : ""}`}</small></span><b>${r.points}${unit}</b></li>`).join("") : `<li class="rank-empty">Personne n'a encore joué ${game ? "à ce jeu " : ""}cette semaine. <a class="underline" href="${game ? game + ".html" : "defi.html"}">Lance-toi</a>.</li>`;
+      box.innerHTML = rows.length ? rows.map((r, i) => `<li class="${r.is_me ? "is-me" : ""}${i < 3 ? " is-top" : ""}"><span class="rank-n">${i < 3 ? `<span class="material-symbols-outlined" aria-label="${i + 1}">${i ? "military_tech" : "workspace_premium"}</span>` : i + 1}</span>${OeilAvatar({ name: r.name, pro: r.pro, avatar: { color: r.avatar_color, icon: r.avatar_icon } })}<span class="rank-name">${OeilWho(r.name, r.username)}${r.is_me ? " <small>(toi)</small>" : ""}<small>${game ? "meilleur score" : `${r.games} jeu${r.games > 1 ? "x" : ""}`}</small></span><b>${r.points}${unit}</b></li>`).join("") : `<li class="rank-empty">Personne n'a encore joué ${game ? "à ce jeu " : ""}cette semaine. <a class="underline" href="${game ? game + ".html" : "defi.html"}">Lance-toi</a>.</li>`;
       const me = rows.findIndex((r) => r.is_me);
       $("me-rank").textContent = me > -1 ? `${me + 1}${me ? "e" : "er"} sur ${rows.length}` : "–";
       $("me-sub").textContent = OeilAccount.get() ? (me > -1 ? `${rows[me].points}${unit} ${game ? "dans ce jeu" : "au total"}.` : "Joue une partie pour entrer dans le classement.") : "Connecte-toi pour apparaître dans le classement.";
@@ -600,6 +755,64 @@ page("classement.html", "Classement de la semaine — Œil Studio", "classement"
       whoTabs.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String((x.dataset.who === "friends") === friendsOnly)));
       load();
     });
+  })();
+</script>
+""")
+
+# ---------------------------------------------------------------- Profil public d'un joueur
+page("profil.html", "Profil — Œil Studio", None, f"""<section class="{W} pt-6 lg:pt-10">
+<div class="dot-board">
+<p class="board-strip"><span class="board-dot"></span>Profil joueur</p>
+<div class="px-5 sm:px-10 pt-16 pb-8">
+<div class="flex flex-wrap items-end justify-between gap-6">
+<div class="flex items-center gap-5 min-w-0"><span id="pp-avatar"></span><div class="min-w-0"><p class="text-body-md text-text-muted" id="pp-meta">Chargement du profil…</p><h1 class="text-[clamp(44px,6.4vw,96px)] font-medium leading-[0.92] tracking-[-0.05em] break-words" id="pp-name">Profil</h1></div></div>
+<div class="btn-row" id="pp-actions"></div>
+</div>
+<p class="form-msg mt-3" id="pp-msg"></p>
+</div>
+</div>
+</section>
+<section class="{W} pt-4 pb-24" hidden="" id="pp-body">
+<div class="dash-grid">
+<div class="dash-card c-4 dash-kpi"><span>Sessions jouées</span><b id="pp-sessions">0</b></div>
+<div class="dash-card c-4 dash-kpi"><span>Points cette semaine</span><b id="pp-week">0</b><small><a class="underline" href="classement.html">Voir le classement</a></small></div>
+<div class="dash-card c-4 dash-kpi"><span>Jeux essayés</span><b id="pp-games">0 sur 44</b></div>
+<div class="dash-card c-6"><h2>Ses disciplines</h2><p class="text-body-sm text-text-muted mt-1">Moyenne de ses records.</p><div class="dom-bars" id="pp-doms"></div></div>
+<div class="dash-card c-6"><h2>Ses meilleurs records</h2><ol class="records" id="pp-records"></ol></div>
+</div>
+</section>""", """<script src="assets/catalog.js"></script>
+<script>
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const esc = (t) => String(t || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const games = window.OEIL_GAMES, doms = window.OEIL_DOMAINS;
+    const ROLES = { etudiant: "Étudiant·e", enseignant: "Enseignant·e", pro: "Designer en poste" };
+    const who = new URLSearchParams(location.search).get("u") || (OeilAccount.get() || {}).username;
+    async function load() {
+      if (!who || !OeilAccount.enabled) { $("pp-meta").textContent = "Aucun profil à afficher."; return; }
+      let p = null;
+      try { p = await OeilAccount.publicProfile(who); } catch (e) {}
+      if (!p) { $("pp-meta").textContent = `Aucun joueur ne s'appelle @${who}.`; $("pp-name").textContent = "Profil introuvable"; return; }
+      document.title = `${p.name} (@${p.username}) — Œil Studio`;
+      $("pp-avatar").innerHTML = OeilAvatar({ name: p.name, pro: p.pro, avatar: { color: p.avatar_color, icon: p.avatar_icon } }, "avatar-lg");
+      $("pp-name").textContent = p.name;
+      $("pp-meta").textContent = `@${p.username} · ${ROLES[p.role] || ""}${p.pro ? " · Membre Œil Pro" : ""} · sur Œil Studio depuis ${new Date(p.since).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}`;
+      const me = OeilAccount.get();
+      const acts = $("pp-actions");
+      if (p.is_me) acts.innerHTML = '<a class="btn-line" href="compte.html">Modifier mon profil</a>';
+      else if (p.is_friend) acts.innerHTML = '<span class="pro-chip" style="height:32px;padding:0 12px;font-size:13px">Vous êtes amis</span>';
+      else if (me) { acts.innerHTML = '<button class="btn" id="pp-add" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">person_add</span>Ajouter en ami</button>'; $("pp-add").onclick = async () => { try { await OeilAccount.addFriendByUsername(p.username); load(); } catch (err) { $("pp-msg").textContent = OeilAccount.human(err); $("pp-msg").className = "form-msg is-error"; } }; }
+      else acts.innerHTML = `<a class="btn" href="connexion.html?suite=${encodeURIComponent("profil.html?u=" + p.username)}">Se connecter pour l'ajouter</a>`;
+      const bests = p.bests || {};
+      $("pp-body").hidden = false;
+      $("pp-sessions").textContent = p.sessions;
+      $("pp-week").textContent = `${p.week_points} pts`;
+      $("pp-games").textContent = `${Object.keys(bests).filter((k) => games.some((g) => g.id === k)).length} sur ${games.length}`;
+      $("pp-doms").innerHTML = Object.entries(doms).map(([k, d]) => { const list = games.filter((g) => g.domain === k && bests[g.id] != null); const avg = list.length ? list.reduce((a, g) => a + bests[g.id], 0) / list.length : null; return `<div class="dom-bar" style="--field:${d.field}"><span><i class="board-dot"></i>${d.label.split(" ")[0]}</span><span class="track"><i style="width:${avg != null ? Math.round(avg) : 0}%"></i></span><b>${avg != null ? Math.round(avg) + " %" : "–"}</b></div>`; }).join("");
+      const top = games.filter((g) => bests[g.id] != null).sort((a, b) => bests[b.id] - bests[a.id]).slice(0, 8);
+      $("pp-records").innerHTML = top.length ? top.map((g) => `<li><span aria-hidden="true" class="material-symbols-outlined">${bests[g.id] >= 90 ? "workspace_premium" : "check_circle"}</span><a class="truncate hover:underline" href="${g.id}.html">${esc(g.name)}</a><span class="track"><i style="width:${bests[g.id]}%"></i></span><b>${bests[g.id]} %</b></li>`).join("") : '<li class="text-text-muted">Pas encore de record.</li>';
+    }
+    OeilAccount.ready.then(load);
   })();
 </script>
 """)

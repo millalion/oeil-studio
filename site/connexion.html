@@ -47,7 +47,7 @@
 <p class="or-line">ou avec ton adresse e-mail</p>
 <div aria-label="Type de formulaire" class="seg-line w-max" role="group"><button aria-pressed="true" data-tab="login" type="button">Se connecter</button><button aria-pressed="false" data-tab="signup" type="button">Créer un compte</button></div>
 <form class="flex flex-col gap-4 mt-2" id="auth-form">
-<label class="grid gap-1 text-body-sm text-text-muted" data-only="signup" hidden="">Prénom ou pseudo<input autocomplete="given-name" class="field" id="auth-name" maxlength="40" type="text"/></label>
+<div class="grid sm:grid-cols-2 gap-4" data-only="signup" hidden=""><label class="grid gap-1 text-body-sm text-text-muted">Prénom<input autocomplete="given-name" class="field" id="auth-name" maxlength="40" type="text"/></label><label class="grid gap-1 text-body-sm text-text-muted">Pseudo unique<span class="pseudo-field"><input autocapitalize="none" autocomplete="username" class="field" id="auth-user" maxlength="20" pattern="[a-zA-Z0-9_.](3, 20)" placeholder="ton.pseudo" type="text"/></span><span class="text-[12px]" id="auth-user-msg">Visible dans les classements.</span></label></div>
 <label class="grid gap-1 text-body-sm text-text-muted">Adresse e-mail<input autocomplete="email" class="field" id="auth-email" required="" type="email"/></label>
 <label class="grid gap-1 text-body-sm text-text-muted" data-hide="forgot">Mot de passe<input autocomplete="current-password" class="field" id="auth-pass" minlength="10" required="" type="password"/><span class="text-[12px]" data-only="signup" hidden="">10 caractères minimum. Une phrase fonctionne très bien.</span></label>
 <fieldset data-only="signup" hidden=""><legend class="text-body-sm text-text-muted mb-2">Tu es</legend><span class="flex flex-wrap items-center gap-2"><span class="seg-pick" role="radiogroup"><label><input checked="" name="role" type="radio" value="etudiant"/><span>Étudiant·e</span></label><label><input name="role" type="radio" value="enseignant"/><span>Enseignant·e</span></label><label><input name="role" type="radio" value="pro"/><span>Designer en poste</span></label></span></span></fieldset>
@@ -115,11 +115,18 @@
       $("auth-submit").textContent = { login: "Se connecter", signup: "Créer mon compte", forgot: "Recevoir le lien" }[t];
       $("auth-pass").autocomplete = t === "login" ? "current-password" : "new-password";
       $("auth-pass").required = t !== "forgot";
-      $("auth-name").required = t === "signup";
+      $("auth-name").required = t === "signup"; $("auth-user").required = t === "signup";
       say($("auth-msg"), "");
     };
     document.querySelectorAll("[data-tab]").forEach((b) => b.addEventListener("click", () => setTab(b.dataset.tab)));
     $("auth-forgot").addEventListener("click", () => setTab("forgot"));
+    // Pseudo : proposé depuis le prénom, vérifié en direct
+    const slug = (t) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9_.]/g, "").slice(0, 20);
+    let touched = false, chk;
+    $("auth-name").addEventListener("input", () => { if (!touched) { $("auth-user").value = slug($("auth-name").value); $("auth-user").dispatchEvent(new Event("check")); } });
+    const check = () => { clearTimeout(chk); const v = $("auth-user").value.trim(); if (v.length < 3) { say($("auth-user-msg"), "Visible dans les classements."); return; } chk = setTimeout(async () => { const ok = await OeilAccount.usernameFree(v).catch(() => true); say($("auth-user-msg"), ok ? `@${v.toLowerCase()} est libre.` : `@${v.toLowerCase()} est déjà pris.`, ok ? "ok" : "error"); }, 350); };
+    $("auth-user").addEventListener("input", () => { touched = true; $("auth-user").value = $("auth-user").value.replace(/[^a-zA-Z0-9_.]/g, ""); check(); });
+    $("auth-user").addEventListener("check", check);
     $("auth-google").addEventListener("click", async () => {
       try { await OeilAccount.signInWithGoogle(next); }
       catch (err) { say($("auth-msg"), err && /provider is not enabled|Unsupported provider/i.test(err.message || "") ? "La connexion avec Google n'est pas encore activée. Utilise ton adresse e-mail en attendant." : OeilAccount.human(err), "error"); }
@@ -152,7 +159,9 @@
         else {
           if (!$("auth-terms").checked) { say($("auth-msg"), "Accepte les conditions générales pour créer ton compte.", "error"); return; }
           const role = (document.querySelector('input[name="role"]:checked') || {}).value;
-          const r = await OeilAccount.signUp({ name: $("auth-name").value.trim(), email, password, role, avatar: av() });
+          const username = $("auth-user").value.trim().toLowerCase();
+          if (!(await OeilAccount.usernameFree(username))) { say($("auth-msg"), "Ce pseudo est déjà pris ou n'est pas valide (3 à 20 caractères : lettres, chiffres, point, tiret bas).", "error"); return; }
+          const r = await OeilAccount.signUp({ name: $("auth-name").value.trim(), username, email, password, role, avatar: av() });
           if (r.confirm) say($("auth-msg"), `Compte créé. Ouvre l'e-mail envoyé à ${email} et clique sur le lien pour l'activer.`, "ok");
           else { await OeilAccount.claimReferral().catch(() => {}); after(); }
         }

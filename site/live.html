@@ -39,9 +39,10 @@
 <h1 class="text-big">Lance une partie<br/>en direct.</h1>
 <p class="mt-4 max-w-[38rem] text-body-lg">Choisis les jeux, crée la salle, projette cet écran. Chacun rejoint depuis son téléphone avec le code ou le QR code, et tout le monde joue le même tirage.</p>
 <form class="mt-8 flex flex-col gap-6" id="live-form">
+<fieldset><legend class="text-body-sm text-text-muted mb-2">Type de partie</legend><span class="flex flex-wrap items-center gap-2"><span class="seg-pick" role="radiogroup"><label><input checked="" name="live-mode" type="radio" value="rythme"/><span>Chacun à son rythme</span></label><label><input name="live-mode" type="radio" value="quiz"/><span>Quiz projeté, façon Kahoot</span></label></span></span><p class="mt-2 text-body-sm text-text-muted max-w-[36rem]" id="mode-help">Chacun joue les jeux complets sur son téléphone, le classement s'affiche ici.</p></fieldset>
 <label class="grid gap-1 text-body-sm text-text-muted max-w-[28rem]">Nom de la partie<input class="field" id="live-title" placeholder="Ex. : Échauffement typo du mardi" required="" type="text"/></label>
-<fieldset><legend class="text-body-sm text-text-muted mb-2">Jeux de la partie</legend><div class="flex flex-wrap gap-2"><label class="mix-chip"><input checked="" type="checkbox" value="kern-clinic"/><span><i style="background:#F7B4CC"></i>Kern Clinic</span></label><label class="mix-chip"><input type="checkbox" value="optical-center"/><span><i style="background:#F7B4CC"></i>Optical Center</span></label><label class="mix-chip"><input type="checkbox" value="leading-lab"/><span><i style="background:#F7B4CC"></i>Leading Lab</span></label><label class="mix-chip"><input type="checkbox" value="weight-match"/><span><i style="background:#F7B4CC"></i>Weight Match</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="bezier-letters"/><span><i style="background:#F7B4CC"></i>Bézier Letters<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="type-detective"/><span><i style="background:#F7B4CC"></i>Type Detective<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input type="checkbox" value="rag-rescue"/><span><i style="background:#F7B4CC"></i>Rag Rescue</span></label><label class="mix-chip"><input type="checkbox" value="widow-hunter"/><span><i style="background:#F7B4CC"></i>Widow Hunter</span></label><label class="mix-chip"><input type="checkbox" value="type-scale"/><span><i style="background:#F7B4CC"></i>Type Scale</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="glyph-memory"/><span><i style="background:#F7B4CC"></i>Glyph Memory<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input type="checkbox" value="color-recall"/><span><i style="background:#D8EF71"></i>Color Recall</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="palette-recall"/><span><i style="background:#D8EF71"></i>Palette Recall<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="hue-line"/><span><i style="background:#D8EF71"></i>Hue Line</span></label><label class="mix-chip"><input type="checkbox" value="saturation-ladder"/><span><i style="background:#D8EF71"></i>Saturation Ladder</span></label><label class="mix-chip"><input type="checkbox" value="lightness-ladder"/><span><i style="background:#D8EF71"></i>Lightness Ladder</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="gradient-repair"/><span><i style="background:#D8EF71"></i>Gradient Repair<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="contrast-rescue"/><span><i style="background:#D8EF71"></i>Contrast Rescue<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="color-impostor"/><span><i style="background:#D8EF71"></i>Color Impostor</span></label><label class="mix-chip"><input type="checkbox" value="semantic-colors"/><span><i style="background:#D8EF71"></i>Semantic Colors</span></label><label class="mix-chip"><input checked="" type="checkbox" value="spacing-repair"/><span><i style="background:#B9D9FF"></i>Spacing Repair</span></label><label class="mix-chip"><input type="checkbox" value="grid-snap"/><span><i style="background:#B9D9FF"></i>Grid Snap</span></label><label class="mix-chip"><input type="checkbox" value="pixel-guess"/><span><i style="background:#B9D9FF"></i>Pixel Guess</span></label><label class="mix-chip"><input type="checkbox" value="alignment-hunter"/><span><i style="background:#B9D9FF"></i>Alignment Hunter</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="whitespace-budget"/><span><i style="background:#B9D9FF"></i>Whitespace Budget<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input type="checkbox" value="crop-it"/><span><i style="background:#B9D9FF"></i>Crop It</span></label><label class="mix-chip"><input type="checkbox" value="balance-lab"/><span><i style="background:#B9D9FF"></i>Balance Lab</span></label><label class="mix-chip"><input type="checkbox" value="responsive-rescue"/><span><i style="background:#B9D9FF"></i>Responsive Rescue</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="five-second-layout"/><span><i style="background:#B9D9FF"></i>Five-Second Layout<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="token-detective"/><span><i style="background:#FFC08F"></i>Token Detective<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="ui-detective"/><span><i style="background:#FFC08F"></i>UI Detective</span></label><label class="mix-chip"><input type="checkbox" value="state-machine"/><span><i style="background:#FFC08F"></i>State Machine</span></label><label class="mix-chip"><input type="checkbox" value="button-priority"/><span><i style="background:#FFC08F"></i>Button Priority</span></label><label class="mix-chip"><input type="checkbox" value="form-rescue"/><span><i style="background:#FFC08F"></i>Form Rescue</span></label><label class="mix-chip"><input type="checkbox" value="icon-family"/><span><i style="background:#FFC08F"></i>Icon Family</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="dark-mode-repair"/><span><i style="background:#FFC08F"></i>Dark Mode Repair<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="focus-order"/><span><i style="background:#FFE08A"></i>Focus Order<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="microcopy-duel"/><span><i style="background:#FFE08A"></i>Microcopy Duel</span></label><label class="mix-chip"><input type="checkbox" value="keyboard-quest"/><span><i style="background:#FFE08A"></i>Keyboard Quest</span></label><label class="mix-chip"><input type="checkbox" value="easing-lab"/><span><i style="background:#9FE3D0"></i>Easing Lab</span></label><label class="mix-chip"><input type="checkbox" value="motion-order"/><span><i style="background:#9FE3D0"></i>Motion Order</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="curve-continuity"/><span><i style="background:#9FE3D0"></i>Curve Continuity<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="node-budget"/><span><i style="background:#9FE3D0"></i>Node Budget<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input type="checkbox" value="boolean-builder"/><span><i style="background:#9FE3D0"></i>Boolean Builder</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="negative-space"/><span><i style="background:#9FE3D0"></i>Negative Space<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label></div><p class="mt-3 text-body-sm text-text-muted" hidden="" id="live-pro-note">Les jeux avec un cadenas font partie d'<a class="underline" href="tarifs.html#pro">Œil Pro</a>.</p></fieldset>
-<div class="flex flex-wrap items-center gap-4"><span class="flex flex-wrap items-center gap-2"><span class="seg-pick-label">Manches</span><span class="seg-pick" role="radiogroup"><label><input name="live-rounds" type="radio" value="5"/><span>5</span></label><label><input checked="" name="live-rounds" type="radio" value="6"/><span>6</span></label><label><input name="live-rounds" type="radio" value="8"/><span>8</span></label><label><input name="live-rounds" type="radio" value="10"/><span>10</span></label></span></span><span class="form-msg" id="live-msg"></span></div>
+<fieldset><legend class="text-body-sm text-text-muted mb-2">Jeux de la partie</legend><div class="flex flex-wrap gap-2"><label class="mix-chip"><input checked="" type="checkbox" value="kern-clinic"/><span><i style="background:#F7B4CC"></i>Kern Clinic</span></label><label class="mix-chip"><input type="checkbox" value="optical-center"/><span><i style="background:#F7B4CC"></i>Optical Center</span></label><label class="mix-chip"><input type="checkbox" value="leading-lab"/><span><i style="background:#F7B4CC"></i>Leading Lab</span></label><label class="mix-chip"><input type="checkbox" value="weight-match"/><span><i style="background:#F7B4CC"></i>Weight Match</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="bezier-letters"/><span><i style="background:#F7B4CC"></i>Bézier Letters<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="type-detective"/><span><i style="background:#F7B4CC"></i>Type Detective<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input type="checkbox" value="rag-rescue"/><span><i style="background:#F7B4CC"></i>Rag Rescue</span></label><label class="mix-chip"><input type="checkbox" value="widow-hunter"/><span><i style="background:#F7B4CC"></i>Widow Hunter</span></label><label class="mix-chip"><input type="checkbox" value="type-scale"/><span><i style="background:#F7B4CC"></i>Type Scale</span></label><label class="mix-chip" data-quiz=""><input data-pro="" type="checkbox" value="glyph-memory"/><span><i style="background:#F7B4CC"></i>Glyph Memory<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input type="checkbox" value="color-recall"/><span><i style="background:#D8EF71"></i>Color Recall</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="palette-recall"/><span><i style="background:#D8EF71"></i>Palette Recall<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="hue-line"/><span><i style="background:#D8EF71"></i>Hue Line</span></label><label class="mix-chip"><input type="checkbox" value="saturation-ladder"/><span><i style="background:#D8EF71"></i>Saturation Ladder</span></label><label class="mix-chip"><input type="checkbox" value="lightness-ladder"/><span><i style="background:#D8EF71"></i>Lightness Ladder</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="gradient-repair"/><span><i style="background:#D8EF71"></i>Gradient Repair<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="contrast-rescue"/><span><i style="background:#D8EF71"></i>Contrast Rescue<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="color-impostor"/><span><i style="background:#D8EF71"></i>Color Impostor</span></label><label class="mix-chip"><input type="checkbox" value="semantic-colors"/><span><i style="background:#D8EF71"></i>Semantic Colors</span></label><label class="mix-chip"><input checked="" type="checkbox" value="spacing-repair"/><span><i style="background:#B9D9FF"></i>Spacing Repair</span></label><label class="mix-chip"><input type="checkbox" value="grid-snap"/><span><i style="background:#B9D9FF"></i>Grid Snap</span></label><label class="mix-chip"><input type="checkbox" value="pixel-guess"/><span><i style="background:#B9D9FF"></i>Pixel Guess</span></label><label class="mix-chip"><input type="checkbox" value="alignment-hunter"/><span><i style="background:#B9D9FF"></i>Alignment Hunter</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="whitespace-budget"/><span><i style="background:#B9D9FF"></i>Whitespace Budget<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input type="checkbox" value="crop-it"/><span><i style="background:#B9D9FF"></i>Crop It</span></label><label class="mix-chip"><input type="checkbox" value="balance-lab"/><span><i style="background:#B9D9FF"></i>Balance Lab</span></label><label class="mix-chip" data-quiz=""><input type="checkbox" value="responsive-rescue"/><span><i style="background:#B9D9FF"></i>Responsive Rescue</span></label><label class="mix-chip" data-quiz=""><input data-pro="" type="checkbox" value="five-second-layout"/><span><i style="background:#B9D9FF"></i>Five-Second Layout<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="token-detective"/><span><i style="background:#FFC08F"></i>Token Detective<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input checked="" type="checkbox" value="ui-detective"/><span><i style="background:#FFC08F"></i>UI Detective</span></label><label class="mix-chip"><input type="checkbox" value="state-machine"/><span><i style="background:#FFC08F"></i>State Machine</span></label><label class="mix-chip"><input type="checkbox" value="button-priority"/><span><i style="background:#FFC08F"></i>Button Priority</span></label><label class="mix-chip" data-quiz=""><input type="checkbox" value="form-rescue"/><span><i style="background:#FFC08F"></i>Form Rescue</span></label><label class="mix-chip"><input type="checkbox" value="icon-family"/><span><i style="background:#FFC08F"></i>Icon Family</span></label><label class="mix-chip" data-quiz=""><input data-pro="" type="checkbox" value="dark-mode-repair"/><span><i style="background:#FFC08F"></i>Dark Mode Repair<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="focus-order"/><span><i style="background:#FFE08A"></i>Focus Order<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip" data-quiz=""><input checked="" type="checkbox" value="microcopy-duel"/><span><i style="background:#FFE08A"></i>Microcopy Duel</span></label><label class="mix-chip"><input type="checkbox" value="keyboard-quest"/><span><i style="background:#FFE08A"></i>Keyboard Quest</span></label><label class="mix-chip"><input type="checkbox" value="easing-lab"/><span><i style="background:#9FE3D0"></i>Easing Lab</span></label><label class="mix-chip"><input type="checkbox" value="motion-order"/><span><i style="background:#9FE3D0"></i>Motion Order</span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="curve-continuity"/><span><i style="background:#9FE3D0"></i>Curve Continuity<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip"><input data-pro="" type="checkbox" value="node-budget"/><span><i style="background:#9FE3D0"></i>Node Budget<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label><label class="mix-chip" data-quiz=""><input type="checkbox" value="boolean-builder"/><span><i style="background:#9FE3D0"></i>Boolean Builder</span></label><label class="mix-chip" data-quiz=""><input data-pro="" type="checkbox" value="negative-space"/><span><i style="background:#9FE3D0"></i>Negative Space<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b></span></label></div><p class="mt-3 text-body-sm text-text-muted" hidden="" id="live-pro-note">Les jeux avec un cadenas font partie d'<a class="underline" href="tarifs.html#pro">Œil Pro</a>.</p></fieldset>
+<div class="flex flex-wrap items-center gap-4"><span class="flex flex-wrap items-center gap-2"><span class="seg-pick-label">Manches</span><span class="seg-pick" role="radiogroup"><label><input name="live-rounds" type="radio" value="5"/><span>5</span></label><label><input checked="" name="live-rounds" type="radio" value="6"/><span>6</span></label><label><input name="live-rounds" type="radio" value="8"/><span>8</span></label><label><input name="live-rounds" type="radio" value="10"/><span>10</span></label></span></span><span hidden="" id="quiz-time"><span class="flex flex-wrap items-center gap-2"><span class="seg-pick-label">Temps par question</span><span class="seg-pick" role="radiogroup"><label><input name="live-time" type="radio" value="15"/><span>15 s</span></label><label><input checked="" name="live-time" type="radio" value="20"/><span>20 s</span></label><label><input name="live-time" type="radio" value="30"/><span>30 s</span></label></span></span></span><span class="form-msg" id="live-msg"></span></div>
 </form>
 </div>
 <aside class="ticket-side" style="background:#FFE08A">
@@ -81,6 +82,15 @@
 </aside>
 </div>
 
+<div class="quiz-screen" hidden="" id="step-quiz">
+<div class="quiz-top"><span id="qz-count">Question 1 sur 10</span><span class="quiz-game" id="qz-game"></span><span class="quiz-code">Code <b id="qz-code"></b></span></div>
+<div class="quiz-timer"><i id="qz-bar"></i></div>
+<p class="quiz-prompt" id="qz-prompt"></p>
+<div class="quiz-board" id="board"></div>
+<div class="quiz-foot"><p><b class="tabular" id="qz-answers">0</b> réponse<span id="qz-answers-s">s</span> sur <span id="qz-players">0</span></p><p class="quiz-left tabular" id="qz-left"></p><div class="btn-row"><button class="btn-line" id="qz-skip" type="button">Afficher la réponse</button><button class="btn" hidden="" id="qz-next" type="button">Classement<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></button></div></div>
+<div class="quiz-rank" hidden="" id="qz-rank"><h2 class="text-big">Classement</h2><ol class="live-board" id="qz-rank-list"></ol><div class="flex justify-center mt-6"><button class="btn btn-lg" id="qz-continue" type="button">Question suivante</button></div></div>
+</div>
+
 <div class="dot-board px-5 sm:px-10 pt-16 pb-12" hidden="" id="step-podium">
 <p class="board-strip"><span class="board-dot" style="background:#FFE08A"></span>Fin de partie</p>
 <h1 class="text-big text-center">Le podium</h1>
@@ -104,20 +114,43 @@
 <script src="assets/config.js"></script>
 <script src="assets/account.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400&amp;display=swap" rel="stylesheet"/>
 <script src="assets/catalog.js"></script>
 <script src="assets/live.js"></script>
+<script>document.body.dataset.mode = "mix";</script>
+<script src="assets/engine.js"></script>
+<script src="assets/kits.js"></script>
+<script>OEIL_SEED.module("microcopy-duel")</script><script src="assets/games/microcopy-duel.js"></script>
+<script>OEIL_SEED.module("form-rescue")</script><script src="assets/games/form-rescue.js"></script>
+<script>OEIL_SEED.module("dark-mode-repair")</script><script src="assets/games/dark-mode-repair.js"></script>
+<script>OEIL_SEED.module("responsive-rescue")</script><script src="assets/games/responsive-rescue.js"></script>
+<script>OEIL_SEED.module("boolean-builder")</script><script src="assets/games/boolean-builder.js"></script>
+<script>OEIL_SEED.module("glyph-memory")</script><script src="assets/games/glyph-memory.js"></script>
+<script>OEIL_SEED.module("five-second-layout")</script><script src="assets/games/five-second-layout.js"></script>
+<script>OEIL_SEED.module("negative-space")</script><script src="assets/games/negative-space.js"></script>
+<script>OEIL_SEED.free();</script>
 <script>
   (function () {
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     let H = null, room = null;
+    const QUIZ = ["microcopy-duel", "form-rescue", "dark-mode-repair", "responsive-rescue", "boolean-builder", "glyph-memory", "five-second-layout", "negative-space"];
+    const modeOf = () => (document.querySelector('input[name="live-mode"]:checked') || {}).value;
+    function applyMode() {
+      const quiz = modeOf() === "quiz";
+      $("mode-help").textContent = quiz ? "Les questions s'affichent sur cet écran, chacun répond A, B, C ou D sur son téléphone. Plus on répond vite et juste, plus on marque de points." : "Chacun joue les jeux complets sur son téléphone, le classement s'affiche ici.";
+      document.querySelectorAll("#live-form .mix-chip").forEach((c) => { const q = c.hasAttribute("data-quiz"); c.hidden = quiz && !q; const b = c.querySelector("input"); if (quiz) b.checked = q && !b.disabled; });
+      $("quiz-time").hidden = !quiz;
+      document.querySelector('input[name="live-rounds"]').closest(".flex").querySelector(".seg-pick-label").textContent = quiz ? "Questions" : "Manches";
+    }
+    document.querySelectorAll('input[name="live-mode"]').forEach((r) => r.addEventListener("change", applyMode));
     const lockPro = () => {
       const pro = OeilAccount.isPro();
       document.querySelectorAll("#live-form input[data-pro]").forEach((b) => { b.disabled = !pro; if (!pro) b.checked = false; });
       $("live-pro-note").hidden = pro;
     };
     lockPro(); OeilAccount.ready.then(lockPro);
-    const show = (step) => ["setup", "lobby", "live", "podium"].forEach((k) => ($("step-" + k).hidden = k !== step));
+    const show = (step) => ["setup", "lobby", "live", "quiz", "podium"].forEach((k) => ($("step-" + k).hidden = k !== step));
     const joinUrl = () => location.href.split("#")[0].split("?")[0].replace(/[^/]*$/, "") + "rejoindre.html";
     const qr = (el, text, size) => { el.innerHTML = ""; if (window.QRCode) new QRCode(el, { text, width: size, height: size, colorDark: "#141413", colorLight: "#ffffff" }); else el.textContent = text; };
     $("live-form").addEventListener("submit", (e) => {
@@ -125,7 +158,7 @@
       const ids = [...document.querySelectorAll("#live-form input[type=checkbox]:checked")].map((b) => b.value);
       if (!ids.length) { $("live-msg").textContent = "Choisis au moins un jeu."; return; }
       const rounds = +document.querySelector('input[name="live-rounds"]:checked').value;
-      H = OeilLive.host({ title: $("live-title").value.trim() || "Partie en direct", ids, rounds }, render);
+      H = OeilLive.host({ title: $("live-title").value.trim() || "Partie en direct", ids, rounds, mode: modeOf() }, render);
       room = H.room;
       const link = `${joinUrl()}?code=${room.code}`;
       $("lobby-code").textContent = room.code;
@@ -144,6 +177,7 @@
       $("lobby-count").textContent = `${n} joueur${n > 1 ? "s" : ""}`;
       $("lobby-players").innerHTML = n ? ranking.map((p) => `<li>${OeilAvatar(p, "avatar-sm")}${esc(p.name)}</li>`).join("") : '<li class="live-empty">En attente des premiers joueurs…</li>';
       $("lobby-start").disabled = !n;
+      if (r.status === "playing" && r.mode === "quiz") { quizTick(r); return; }
       if (r.status === "playing") {
         show("live");
         $("live-code-small").textContent = r.code;
@@ -165,6 +199,82 @@
         const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = `classement-${room.code}.csv`; a.click();
       };
     }
+    // ---------------------------------------------------------------- Quiz projeté
+    const KCOL = ["#F7B4CC", "#D8EF71", "#B9D9FF", "#FFC08F", "#FFE08A", "#9FE3D0"];
+    let Q = null; // { list, i, state, timer, T }
+    const fakeApi = (board) => ({ board, controls: document.createElement("div"), h: Oeil.h, drag: Oeil.drag, sortable: Oeil.sortable, color: Oeil.color, rand: Oeil.rand, randi: Oeil.randi, pick: Oeil.pick, shuffle: Oeil.shuffle, clamp: Oeil.clamp, setSubmit() {}, setBrief(t) { $("qz-prompt").textContent = t; }, submit() {}, phase: "play", round: 0, hintUsed: false });
+    function buildList() {
+      const ids = room.ids.filter((id) => Oeil.registry[id]);
+      const occ = {}, list = [];
+      for (let i = 0; i < room.rounds; i++) { const id = ids[i % ids.length]; occ[id] = (occ[id] || 0); list.push({ id, n: occ[id]++ }); }
+      return Oeil.shuffle(list);
+    }
+    function ask() {
+      const item = Q.list[Q.i], game = Oeil.registry[item.id], board = $("board");
+      board.innerHTML = ""; $("qz-rank").hidden = true; $("qz-skip").hidden = false; $("qz-next").hidden = true;
+      $("qz-count").textContent = `Question ${Q.i + 1} sur ${Q.list.length}`;
+      $("qz-game").textContent = (window.OEIL_GAMES.find((g) => g.id === item.id) || {}).name || "";
+      const api = fakeApi(board);
+      Q.state = game.setup(item.n, api); Q.api = api; Q.game = game;
+      $("qz-prompt").textContent = Q.state.memo ? "Observe bien…" : Q.state.it.prompt;
+      game.mount(board, Q.state, api);
+      Q.correct = Q.state.opts.findIndex((o) => o.correct);
+      const memo = Q.state.it.memo ? (Q.state.it.memo.seconds || 4) * 1000 : 0;
+      H.update((r) => { r.quiz = { i: Q.i, n: Q.state.opts.length, state: memo ? "look" : "question", answers: {}, at: Date.now() }; });
+      clearTimeout(Q.open); clearInterval(Q.timer);
+      Q.open = setTimeout(() => {
+        H.update((r) => { r.quiz.state = "question"; r.quiz.at = Date.now(); });
+        const T = Q.T * 1000, t0 = Date.now();
+        Q.timer = setInterval(() => {
+          const left = Math.max(0, T - (Date.now() - t0));
+          $("qz-bar").style.width = `${(left / T) * 100}%`;
+          $("qz-left").textContent = `${Math.ceil(left / 1000)} s`;
+          const n = Object.keys(room.players).length;
+          if (left <= 0 || (n && Object.keys(room.quiz.answers).length >= n)) revealQ();
+        }, 200);
+      }, memo + 150);
+      $("qz-bar").style.width = "100%"; $("qz-left").textContent = memo ? "Mémorise…" : "";
+    }
+    function revealQ() {
+      if (!Q || room.quiz.state !== "question") return;
+      clearInterval(Q.timer);
+      const q = room.quiz, T = Q.T * 1000, counts = Array(q.n).fill(0);
+      H.update((r) => {
+        Object.entries(r.quiz.answers).forEach(([name, a]) => {
+          counts[a.k] = (counts[a.k] || 0) + 1;
+          const p = r.players[name]; if (!p) return;
+          const ok = a.k === Q.correct;
+          p.scores[Q.i] = ok ? Math.round(500 + 500 * Math.max(0, 1 - (a.at - r.quiz.at) / T)) : 0;
+        });
+        Object.values(r.players).forEach((p) => { if (p.scores[Q.i] == null) p.scores[Q.i] = 0; });
+        r.quiz.state = "reveal"; r.quiz.correct = Q.correct; r.quiz.counts = counts;
+      });
+      Q.state.picked = -1;
+      Q.game.reveal && Q.game.reveal($("board"), Q.state, {}, Q.api);
+      document.querySelectorAll("#board .kit-opt").forEach((b, k) => b.insertAdjacentHTML("beforeend", `<span class="quiz-votes">${counts[k] || 0}</span>`));
+      if (Q.state.it.explain) $("qz-prompt").textContent = Q.state.it.explain;
+      $("qz-skip").hidden = true; $("qz-next").hidden = false;
+      $("qz-next").firstChild.textContent = Q.i < Q.list.length - 1 ? "Classement" : "Voir le podium";
+      $("qz-left").textContent = "";
+    }
+    function quizTick(r) {
+      show("quiz");
+      $("qz-code").textContent = r.code;
+      const n = Object.keys(r.players).length, a = r.quiz ? Object.keys(r.quiz.answers || {}).length : 0;
+      $("qz-players").textContent = n; $("qz-answers").textContent = a; $("qz-answers-s").textContent = a > 1 ? "s" : "";
+      if (!Q) { Q = { list: buildList(), i: 0, T: +((document.querySelector('input[name="live-time"]:checked') || {}).value || 20) }; ask(); }
+    }
+    $("qz-skip").addEventListener("click", revealQ);
+    $("qz-next").addEventListener("click", () => {
+      if (Q.i >= Q.list.length - 1) { H.finish(); return; }
+      const rk = OeilLive.ranking(room).slice(0, 5);
+      $("qz-rank-list").innerHTML = rk.map((p, i) => `<li class="live-row"><span class="live-rank">${i + 1}</span><span class="live-name">${OeilAvatar(p, "avatar-sm")}${esc(p.name)}</span><span class="text-body-sm text-text-muted">+${p.scores[Q.i] || 0}</span><b class="live-total">${p.total} pts</b></li>`).join("");
+      $("qz-rank").hidden = false;
+    });
+    $("qz-continue").addEventListener("click", () => { Q.i++; ask(); });
+    document.querySelectorAll('input[name="live-time"]').forEach((r) => r.addEventListener("change", () => {}));
+    applyMode();
+
     $("lobby-start").addEventListener("click", () => H && H.start());
     $("lobby-cancel").addEventListener("click", () => { show("setup"); H = null; room = null; });
     $("live-end").addEventListener("click", () => H && H.finish());

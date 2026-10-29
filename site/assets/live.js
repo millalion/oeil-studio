@@ -43,20 +43,33 @@
   window.OeilLive = {
     ranking,
     // ---------- Écran de l'hôte ----------
-    host({ title, ids, rounds }, onChange) {
+    host({ title, ids, rounds, mode }, onChange) {
       let code = "";
       for (let i = 0; i < 5; i++) code += ALPHA[Math.floor(Math.random() * ALPHA.length)];
-      const room = { code, title, ids, rounds, seed: Math.floor(Math.random() * 1e9), status: "lobby", players: {}, created: Date.now() };
-      const publish = () => { room.updated = Date.now(); save(room); send(code, { t: "room", room }); onChange && onChange(room); };
+      const room = { code, title, ids, rounds, mode: mode || "rythme", seed: Math.floor(Math.random() * 1e9), status: "lobby", players: {}, created: Date.now() };
+      // Pendant une question de quiz, les joueurs ne reçoivent que le nombre de réponses, pas les réponses des autres.
+      const shared = () => {
+        if (!room.quiz || room.quiz.state === "reveal") return room;
+        const { answers, ...q } = room.quiz;
+        return { ...room, quiz: { ...q, count: Object.keys(answers || {}).length, mine: Object.fromEntries(Object.keys(answers || {}).map((n) => [n, true])) } };
+      };
+      const publish = () => { room.updated = Date.now(); save(room); send(code, { t: "room", room: shared() }); onChange && onChange(room); };
       const player = (name, avatar) => room.players[name] || (room.players[name] = { name, avatar, scores: [], done: false, joined: Date.now() });
       channel(code).on((m) => {
         if (!m || !m.t) return;
-        if (m.t === "hello") return send(code, { t: "room", room });
+        if (m.t === "hello") return send(code, { t: "room", room: shared() });
         if (!m.name) return;
         const name = String(m.name).slice(0, 24);
         if (m.t === "join") { if (room.status === "finished") return; const p = player(name, m.avatar); if (m.avatar) p.avatar = m.avatar; }
         else if (m.t === "report") { const p = player(name, m.avatar); const r = +m.round; if (r >= 0 && r < 50) p.scores[r] = Math.max(0, Math.min(100, Math.round(+m.score || 0))); }
         else if (m.t === "done") { const p = room.players[name]; if (p) p.done = true; }
+        // Quiz en classe : une seule réponse par joueur et par question, tant que la question est ouverte
+        else if (m.t === "answer") {
+          const q = room.quiz;
+          if (room.mode !== "quiz" || !q || q.state !== "question" || +m.q !== q.i || q.answers[name]) return;
+          player(name, m.avatar);
+          q.answers[name] = { k: +m.k, at: Date.now() };
+        }
         else return;
         publish();
       });
@@ -64,6 +77,7 @@
       return {
         room,
         start() { room.status = "playing"; room.started = Date.now(); publish(); },
+        update(fn) { fn(room); publish(); },
         finish() { room.status = "finished"; publish(); },
         kick(name) { delete room.players[name]; publish(); },
       };
@@ -87,6 +101,7 @@
       return send(code, { t: "report", name, round, score: Math.round(score), avatar: id.avatar });
     },
     done(code, name) { return send(code, { t: "done", name }); },
+    answer(code, name, q, k) { const id = window.OeilAccount ? window.OeilAccount.identity() : {}; return send(code, { t: "answer", name, q, k, avatar: id.avatar }); },
     // Lien que les joueurs ouvrent pour jouer, une fois la partie lancée.
     playLink(room, name) {
       const S = window.OEIL_SEED;

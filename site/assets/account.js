@@ -58,7 +58,7 @@
     if (!session) { if (read(KEY)) { write(KEY, null); emit(); } return null; }
     const uid = session.user.id;
     const [{ data: p }, { data: access }] = await Promise.all([
-      c.from("profiles").select("name, role, avatar_color, avatar_icon, plan, parcours, stripe_customer_id, friend_code, bonus_until").eq("id", uid).maybeSingle(),
+      c.from("profiles").select("name, username, role, avatar_color, avatar_icon, plan, parcours, stripe_customer_id, friend_code, bonus_until").eq("id", uid).maybeSingle(),
       c.rpc("my_access"),
     ]);
     const u = {
@@ -67,7 +67,7 @@
       role: (p && p.role) || "etudiant",
       avatar: { color: (p && p.avatar_color) || COLORS[0], icon: (p && p.avatar_icon) || "" },
       plan: access || "free", billing: !!(p && p.stripe_customer_id),
-      friendCode: (p && p.friend_code) || "", bonusUntil: (p && p.bonus_until) || null,
+      friendCode: (p && p.friend_code) || "", bonusUntil: (p && p.bonus_until) || null, username: (p && p.username) || "",
     };
     write(KEY, u);
     write("oeil:name", u.name);
@@ -90,11 +90,11 @@
     plan() { const u = read(KEY); return (u && u.plan) || "free"; },
     isPro() { return PRO_PLANS.includes(this.plan()); },
     refresh,
-    async signUp({ name, email, password, role, avatar }) {
+    async signUp({ name, username, email, password, role, avatar }) {
       const c = await sb();
       const { data, error } = await c.auth.signUp({
         email, password,
-        options: { data: { name, role, avatar_color: avatar && avatar.color, avatar_icon: avatar && avatar.icon }, emailRedirectTo: location.origin + "/compte.html" },
+        options: { data: { name, username: username && username.toLowerCase(), role, avatar_color: avatar && avatar.color, avatar_icon: avatar && avatar.icon }, emailRedirectTo: location.origin + "/compte.html" },
       });
       if (error) throw error;
       if (data.user && data.user.identities && !data.user.identities.length) throw fail("Un compte existe déjà avec cette adresse. Connecte-toi.");
@@ -123,15 +123,16 @@
       if (error) throw error;
     },
     async updatePassword(password) { const c = await sb(); const { error } = await c.auth.updateUser({ password }); if (error) throw error; },
-    async updateProfile({ name, role, avatar }) {
+    async updateProfile({ name, username, role, avatar }) {
       const c = await sb(); const u = read(KEY);
       if (!u) throw fail("Connecte-toi d'abord.");
       const patch = {};
       if (name != null) patch.name = String(name).slice(0, 40);
       if (role) patch.role = role;
+      if (username) patch.username = String(username).trim().toLowerCase();
       if (avatar) { patch.avatar_color = avatar.color; patch.avatar_icon = avatar.icon || ""; }
       const { error } = await c.from("profiles").update(patch).eq("id", u.id);
-      if (error) throw error;
+      if (error) throw /username/.test(error.message) ? fail(/format/.test(error.message) ? "Le pseudo doit faire 3 à 20 caractères : lettres, chiffres, point ou tiret bas." : "Ce pseudo est déjà pris.") : error;
       return refresh();
     },
     async token() { const c = await sb(); const { data: { session } } = await c.auth.getSession(); return session && session.access_token; },
@@ -183,12 +184,25 @@
     // ---------- Amis et parrainage ----------
     inviteLink() { const u = read(KEY); return u && u.friendCode ? `${location.origin}/connexion.html?parrain=${u.friendCode}#inscription` : ""; },
     async friends() { if (!enabled || !read(KEY)) return []; const c = await sb(); const { data, error } = await c.rpc("my_friends"); if (error) throw error; return data || []; },
+    // Ajoute un ami par son code ami (6 caractères) ou par son @pseudo
     async addFriend(code) {
-      const c = await sb(); const { data, error } = await c.rpc("add_friend", { p_code: String(code).trim().toUpperCase() });
-      if (error) throw fail(/introuvable/.test(error.message) ? "Aucun compte n'a ce code ami." : /propre code/.test(error.message) ? "C'est ton propre code." : human(error));
-      return data;
+      const v = String(code).trim();
+      if (!v.startsWith("@") && /^[A-Za-z0-9]{6}$/.test(v)) {
+        const c = await sb(); const { data, error } = await c.rpc("add_friend", { p_code: v.toUpperCase() });
+        if (!error) return data;
+        if (/propre code/.test(error.message)) throw fail("C'est ton propre code.");
+        if (!/introuvable/.test(error.message)) throw fail(human(error));
+      }
+      return this.addFriendByUsername(v);
     },
     async removeFriend(id) { const c = await sb(); const { error } = await c.rpc("remove_friend", { p_friend: id }); if (error) throw error; },
+    async usernameFree(name) { if (!enabled) return true; const c = await sb(); const { data } = await c.rpc("username_free", { p_username: name }); return !!data; },
+    async publicProfile(username) { const c = await sb(); const { data, error } = await c.rpc("public_profile", { p_username: username }); if (error) throw error; return (data && data[0]) || null; },
+    async addFriendByUsername(username) {
+      const c = await sb(); const { data, error } = await c.rpc("add_friend_by_username", { p_username: String(username).replace(/^@/, "") });
+      if (error) throw fail(/introuvable/.test(error.message) ? "Aucun compte n'a ce pseudo." : /propre code/.test(error.message) ? "C'est toi !" : human(error));
+      return data;
+    },
     async referrerName(code) { if (!enabled) return null; const c = await sb(); const { data } = await c.rpc("referrer_name", { p_code: code }); return data || null; },
     async referrals() { if (!enabled || !read(KEY)) return 0; const c = await sb(); const { data } = await c.rpc("my_referrals"); return data || 0; },
     // Après l'inscription : applique le code de parrainage gardé depuis le lien d'invitation.
@@ -218,6 +232,12 @@
   window.OeilAccount = api;
 
   // Avatar : pastille de couleur avec une icône ou l'initiale.
+  // Prénom + pseudo, avec lien vers le profil public
+  window.OeilWho = function (name, username, link = true) {
+    const esc = (t) => String(t || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const u = username ? `<small class="who-at">@${esc(username)}</small>` : "";
+    return link && username ? `<a class="who" href="profil.html?u=${encodeURIComponent(username)}">${esc(name)}${u}</a>` : `<span class="who">${esc(name)}${u}</span>`;
+  };
   window.OeilAvatar = function (who, cls) {
     const a = (who && who.avatar) || {}, name = (who && who.name) || "?";
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
