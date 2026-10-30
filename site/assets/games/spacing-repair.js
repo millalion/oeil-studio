@@ -201,7 +201,7 @@
   function fitRoot(board, s) {
     s.root.style.transform = "";
     const w = s.root.firstElementChild.offsetWidth, h = s.root.firstElementChild.offsetHeight;
-    s.k = Math.max(1, Math.min(1.8, (board.clientWidth - 80) / w, (board.clientHeight - 90) / h));
+    s.k = Math.max(1, Math.min(1.15, (board.clientWidth - 80) / w, (board.clientHeight - 90) / h));
     s.root.style.transform = `scale(${s.k})`;
   }
 

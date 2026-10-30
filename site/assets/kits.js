@@ -65,12 +65,14 @@
         clearInterval(s.iv);
         const o = s.opts[s.picked];
         const ok = o && o.correct;
+        const best = s.opts.find((x) => x.correct);
         return {
           score: o ? (o.correct ? 100 : o.partial || 0) : 0,
           verdict: ok ? undefined : "Pas celle-là",
           metrics: [
             { label: "Ton choix", value: o ? `${"ABCDEF"[s.picked]}${o.label ? ` · ${o.label}` : ""}` : "aucun", good: !!ok },
-            ...(o && o.why ? [{ label: "Pourquoi", value: o.why, good: !!ok }] : []),
+            ...(o && o.why ? [{ label: ok ? "Pourquoi" : "Ton choix", value: o.why, good: !!ok }] : []),
+            ...(!ok && best && best.why ? [{ label: "La bonne réponse", value: best.why }] : []),
           ],
           principle: s.it.explain,
         };
@@ -132,18 +134,20 @@
           metrics: [
             { label: "Trouvés", value: `${hits} sur ${bads.length}`, good: hits === bads.length },
             { label: "Fausses alertes", value: `${fa}`, good: fa === 0 },
+            ...bads.filter((i) => s.nodes[i].dataset.why).map((i, n) => ({ label: `Problème ${n + 1}`, value: s.nodes[i].dataset.why, good: s.picked.has(i) })),
           ],
           principle: s.it.explain,
         };
       },
       reveal(board, s, r, api) {
+        let rank = 0;
         s.nodes.forEach((n, i) => {
           n.classList.remove("pickable");
           n.tabIndex = -1;
           if (n.dataset.h === "bad") {
             n.classList.add(s.picked.has(i) ? "kit-found" : "kit-missed");
             if (n.dataset.why) {
-              const t = api.h("span", "tag-ref kit-why", esc(n.dataset.why));
+              const t = api.h("span", "tag-ref kit-why", `Problème ${++rank}`);
               n.append(t);
             }
           } else if (s.picked.has(i)) n.classList.add("kit-false");
@@ -160,7 +164,7 @@
       brief: (s) => s.it.prompt,
       setup(round) {
         const it = items[round % items.length];
-        const cards = it.cards.map((c, i) => ({ ...c, rank: i }));
+        const cards = it.cards.map((c, i) => (typeof c === "string" ? { html: c, rank: i } : { ...c, rank: i }));
         let start;
         do { start = Oeil.shuffle(cards); } while (start.every((c, i) => c.rank === i));
         return { it, cards, start };
@@ -225,15 +229,22 @@
           el.addEventListener("click", () => { if (el._dragged) { el._dragged = false; return; } if (api.phase !== "play") return; s.sel = s.sel === t.id ? null : t.id; Object.values(s.tokEls).forEach((x) => x.classList.toggle("is-picked", x.dataset.id === s.sel)); });
           api.drag(el, {
             start: (e) => { const r = el.getBoundingClientRect(); return { ox: e.clientX - r.left, oy: e.clientY - r.top, moved: false }; },
-            move: (dx, dy, ev, c) => { if (Math.hypot(dx, dy) > 4) c.moved = true; el.style.transform = `translate(${dx}px, ${dy}px)`; el.style.zIndex = 10; },
+            move: (dx, dy, ev, c) => {
+              if (Math.hypot(dx, dy) > 4) c.moved = true;
+              el.style.transform = `translate(${dx}px, ${dy}px)`; el.style.zIndex = 10;
+              const under = document.elementsFromPoint(ev.clientX, ev.clientY).find((n) => n !== el && !el.contains(n));
+              const over = under && under.closest(".kit-slot:not(.is-fixed)");
+              Object.values(s.slotEls).forEach((x) => x.classList.toggle("is-over", x === over));
+            },
             end: (ev, c) => {
               el.style.transform = ""; el.style.zIndex = "";
+              Object.values(s.slotEls).forEach((x) => x.classList.remove("is-over"));
               if (!c.moved) return;
               el._dragged = true;
               // L'étiquette tenue est sous le doigt : on cherche ce qu'il y a en dessous d'elle
               const target = document.elementsFromPoint(ev.clientX, ev.clientY).find((n) => n !== el && !el.contains(n));
-              const slot = target && target.closest("[data-slot]");
-              if (slot) place(s, api, t.id, slot.dataset.slot);
+              const slot = target && target.closest(".kit-slot:not(.is-fixed)");
+              if (slot) place(s, api, t.id, slot.dataset.slotWrap);
               else if (target && target.closest(".kit-bank")) place(s, api, t.id, null);
             },
           });

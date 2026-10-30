@@ -30,11 +30,11 @@
   Oeil.play({
     id: "contrast-rescue", name: "Contrast Rescue",
     howto: [
-      { icon: "height", text: "Glisse la poignée sur la barre de clarté pour changer la couleur du texte." },
-      { icon: "contrast", text: "Trouve la limite : le texte le plus proche du fond qui reste lisible selon les WCAG (4,5:1 pour un texte courant, 3:1 pour un grand texte)." },
+      { icon: "height", text: "Au départ le texte se confond avec le fond : monte vers le clair ou descends vers le foncé, les deux sont possibles." },
+      { icon: "contrast", text: "Arrête-toi dès que le texte devient lisible : le but est le contraste minimum (4,5:1 pour un texte courant, 3:1 pour un grand texte)." },
       { icon: "keyboard", text: "↑ ↓ pour affiner, Entrée pour valider. Le ratio exact n'apparaît qu'à la correction." },
     ],
-    brief: (s) => `Rends ce texte juste assez lisible : ${s.large ? "grand texte, 3:1" : "texte courant, 4,5:1"}.`,
+    brief: (s) => `Le texte se confond avec le fond : éclaircis-le ou fonce-le, juste assez pour atteindre ${s.large ? "3:1" : "4,5:1"}.`,
     setup(round) {
       const c = CASES[round % CASES.length];
       const ratio = c.large ? 3 : 4.5;
@@ -42,8 +42,9 @@
       const canUp = C.contrast(C.hslToRgb(c.bg.h, 18, 100), bgRgb) >= ratio;
       const canDown = C.contrast(C.hslToRgb(c.bg.h, 18, 0), bgRgb) >= ratio;
       const dir = canUp && (!canDown || c.bg.l < 60) ? 1 : -1;
-      const limit = threshold(c.bg, dir, ratio);
-      return { ...c, ratio, dir, limit, l: Oeil.clamp(c.bg.l + dir * Oeil.randi(4, 10), 0, 100) };
+      // Deux réponses sont justes quand le fond le permet : texte clair ou texte foncé.
+      const limits = { up: canUp ? threshold(c.bg, 1, ratio) : null, down: canDown ? threshold(c.bg, -1, ratio) : null };
+      return { ...c, ratio, limits, limit: dir > 0 ? limits.up : limits.down, l: c.bg.l };
     },
     mount(board, s, api) {
       const wrap = api.h("div", "cx-wrap");
@@ -57,6 +58,7 @@
       s.handle.style.left = "50%";
       s.handle.tabIndex = 0; s.handle.setAttribute("role", "slider"); s.handle.setAttribute("aria-label", "Clarté du texte");
       strip.append(s.handle);
+      strip.insertAdjacentHTML("beforeend", `<span class="cx-end cx-end-top">Plus clair</span><span class="cx-end cx-end-bot">Plus foncé</span>`);
       wrap.append(ui, strip);
       board.append(wrap);
       const fromStrip = (ev) => { const r = strip.getBoundingClientRect(); return 100 - api.clamp((ev.clientY - r.top) / r.height, 0, 1) * 100; };
@@ -74,6 +76,9 @@
       const bgRgb = C.hslToRgb(s.bg.h, s.bg.s, s.bg.l);
       const ratio = C.contrast(C.hslToRgb(s.bg.h, 18, s.l), bgRgb);
       const pass = ratio >= s.ratio - 0.005;
+      // La limite visée est celle du côté choisi par le joueur
+      const side = s.l >= s.bg.l ? s.limits.up : s.limits.down;
+      s.limit = side != null ? side : s.limits.up != null ? s.limits.up : s.limits.down;
       const beyond = Math.abs(s.l - s.limit);
       const fmt = (x) => x.toFixed(2).replace(".", ",");
       return {

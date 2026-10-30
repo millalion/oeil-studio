@@ -23,10 +23,10 @@
           { html: field({ label: "Adresse e-mail", value: "lea@atelier", red: true }), why: "seule la couleur signale l'erreur" },
         ], explain: "Un bon message d'erreur dit ce qui ne va pas et comment le corriger, sans accuser. La couleur seule ne suffit pas : une partie des gens ne la perçoit pas." },
       { prompt: "Quel champ « mot de passe » aide le mieux ?", cols: 3, options: [
-          { html: field({ label: "Mot de passe", value: "••••••", help: "12 caractères minimum. Tu peux utiliser une phrase." }), correct: true, why: "la règle est visible avant l'erreur" },
+          { html: field({ label: "Mot de passe", value: "••••••", help: "12 caractères minimum. Tu peux utiliser une phrase." }), correct: true, why: "une seule règle, claire, visible avant de taper" },
           { html: field({ label: "Mot de passe", value: "••••••", error: "Mot de passe invalide." }), why: "la règle n'apparaît qu'après l'échec" },
-          { html: field({ label: "Mot de passe", value: "••••••", help: "Doit contenir une majuscule, un chiffre, un symbole, sans espace, 8 à 14 caractères." }), why: "règles longues et contraignantes" },
-        ], explain: "Les contraintes s'affichent avant la saisie, à côté du champ, et restent raisonnables : une longueur minimale protège mieux qu'une liste de règles qui pousse à noter le mot de passe." },
+          { html: field({ label: "Mot de passe", value: "••••••", help: "Doit contenir une majuscule, un chiffre, un symbole, sans espace, 8 à 14 caractères." }), why: "beaucoup de règles : on finit par écrire Motdepasse1!, facile à deviner" },
+        ], explain: "Oui, on a l'habitude des « une majuscule, un chiffre, un symbole ». Mais ces règles donnent des mots de passe prévisibles. Les recommandations actuelles (ANSSI, NIST) préfèrent la longueur : une phrase est plus sûre et plus facile à retenir." },
       { prompt: "Quelle mise en forme des champs « nom » est la plus claire ?", cols: 3, options: [
           { html: `<div class="fr-pair">${field({ label: "Prénom", value: "Léa" })}${field({ label: "Nom", value: "Martin" })}</div>`, correct: true, why: "deux champs, deux libellés" },
           { html: field({ label: "Nom complet", value: "Léa Martin", help: "Prénom puis nom" }), correct: true, why: "un seul champ, accepté aussi : plus inclusif pour les noms composés" },

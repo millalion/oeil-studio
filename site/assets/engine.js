@@ -204,22 +204,22 @@
     function showCue(id) {
       clearTimeout(cueTimer);
       stage.querySelectorAll(".cue").forEach((n) => n.remove());
-      if (store.get("cue:" + id)) return;
+      if (round > 0 && !mix) return;
       let tries = 0;
       const seek = () => {
         if (phase !== "play") return;
         if (board.querySelector(".memo-gate, .memo-bar")) { cueTimer = setTimeout(seek, 600); return; }
-        const el = [...board.querySelectorAll(".handle, .grab, .kit-token, .kit-opt, .pickable")].find((n) => !n.closest(".is-locked") && n.getBoundingClientRect().width > 0);
+        // Seulement pour les gestes à montrer : pointer une case reviendrait à donner une réponse.
+        const el = [...board.querySelectorAll(".handle, .grab, .kit-token")].find((n) => !n.closest(".is-locked") && n.getBoundingClientRect().width > 0);
         if (!el) { if (++tries < 16) cueTimer = setTimeout(seek, 500); return; }
-        const dragging = el.matches(".handle, .grab, .kit-token");
         const sr = stage.getBoundingClientRect(), r = el.getBoundingClientRect();
-        const axis = dragging ? CUE_AXIS[id] || (el.closest(".sortable") ? "x" : "xy") : "tap";
-        const icon = { x: "swap_horiz", y: "swap_vert", xy: "open_with", tap: "touch_app" }[axis];
-        const cue = h("div", `cue is-${axis}`, `<i><span class="material-symbols-outlined" aria-hidden="true">${icon}</span></i><b>${dragging ? "Glisse" : "Touche"}</b>`);
+        const axis = CUE_AXIS[id] || (el.closest(".sortable") ? "x" : "xy");
+        const icon = { x: "swap_horiz", y: "swap_vert", xy: "open_with" }[axis];
+        const cue = h("div", `cue is-${axis}`, `<i><span class="material-symbols-outlined" aria-hidden="true">${icon}</span></i><b>Glisse</b>`);
         cue.style.left = `${clamp(r.left + r.width / 2 - sr.left, 50, sr.width - 50)}px`;
         cue.style.top = `${clamp(r.top + r.height / 2 - sr.top, 70, sr.height - 40)}px`;
         stage.append(cue);
-        const off = () => { cue.remove(); store.set("cue:" + id, 1); stage.removeEventListener("pointerdown", off, true); };
+        const off = () => { cue.remove(); stage.removeEventListener("pointerdown", off, true); };
         stage.addEventListener("pointerdown", off, true);
       };
       cueTimer = setTimeout(seek, 400);
@@ -255,7 +255,7 @@
       state = await game.setup(mix ? occ : round, api);
       S.round(round + 1000);
       renderDots();
-      if (mix || !store.get("coach:" + game.id)) {
+      if (mix || round === 0) {
         brief.textContent = "Lis la consigne, puis lance la manche.";
         showCoach(true);
         await new Promise((go) => (coachWait = go));

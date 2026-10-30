@@ -16,17 +16,19 @@
   function place(b) {
     b.el.style.left = `${b.x}px`; b.el.style.width = `${b.w}px`;
     const n = snapOf(b);
-    b.el.querySelector(".gs-span").textContent = `${n.r.i - n.l.i + 1} col.`;
+    const tag = b.el.querySelector(".gs-span");
+    tag.textContent = `tu es sur ${n.l.i + 1} à ${n.r.i + 1}`;
+    tag.hidden = b.w < 280 || b.h < 50;
   }
   function fit(board, s) { const pad = board.clientWidth < 600 ? 16 : 60; const k = Math.min(1.2, (board.clientWidth - pad) / W, (board.clientHeight - pad) / s.H); s.k = k; s.frame.style.transform = `translate(-50%, -50%) scale(${k})`; }
   Oeil.play({
     id: "grid-snap", name: "Grid Snap",
     howto: [
-      { icon: "view_column", text: "Les bandes roses sont les 12 colonnes de la grille. Les blocs sont posés de travers." },
-      { icon: "drag_pan", text: "Glisse chaque bloc pour le déplacer, et sa poignée de droite pour l'élargir ou le rétrécir." },
-      { icon: "lightbulb", text: "Il n'y a pas une seule bonne place : il suffit que le bord gauche et le bord droit de chaque bloc tombent pile sur un bord de colonne rose, jamais dans le blanc entre deux colonnes." },
+      { icon: "view_column", text: "Les 12 colonnes roses sont numérotées. Chaque bloc indique où il doit aller." },
+      { icon: "drag_pan", text: "Glisse le bloc pour le déplacer, tire sa poignée de droite pour changer sa largeur." },
+      { icon: "lightbulb", text: "Les bords s'aimantent aux colonnes quand tu lâches, comme dans Figma." },
     ],
-    brief: "Cale les deux bords de chaque bloc sur les bords des colonnes roses.",
+    brief: "Place chaque bloc sur les colonnes écrites dessus.",
     setup(round) {
       const L = LAYOUTS[round % LAYOUTS.length];
       let y = 0;
@@ -42,9 +44,9 @@
     mount(board, s, api) {
       s.frame = api.h("div", "gs-frame");
       s.frame.style.cssText = `width:${W}px;height:${s.H}px`;
-      s.frame.innerHTML = Array.from({ length: COLS }, (_, i) => `<span class="gs-col" style="left:${edgeL(i)}px;width:${COL}px"></span>`).join("");
+      s.frame.innerHTML = Array.from({ length: COLS }, (_, i) => `<span class="gs-col" style="left:${edgeL(i)}px;width:${COL}px"><i>${i + 1}</i></span>`).join("");
       s.blocks.forEach((b) => {
-        b.el = api.h("div", "gs-block grab", `<span>${b.label}</span><span class="gs-span"></span>`);
+        b.el = api.h("div", "gs-block grab", `<span>${b.label} · colonnes ${b.span[0] + 1} à ${b.span[1]}</span><span class="gs-span"></span>`);
         b.el.style.cssText = `top:${b.y}px;height:${b.h}px`;
         const hd = api.h("span", "gs-resize");
         hd.setAttribute("aria-label", `Largeur de ${b.label}`);
@@ -52,8 +54,10 @@
         b.el.append(hd);
         s.frame.append(b.el);
         place(b);
-        api.drag(b.el, { start: (e) => (e.target === hd ? null : { x: b.x }), move: (dx, dy, ev, c) => { if (!c) return; b.x = api.clamp(c.x + dx / s.k, 0, W - b.w); place(b); } });
-        api.drag(hd, { start: () => ({ w: b.w }), move: (dx, dy, ev, c) => { b.w = api.clamp(c.w + dx / s.k, 30, W - b.x); place(b); } });
+        // Aimant : au lâcher, un bord proche d'une colonne se cale dessus
+        const magnet = () => { const n = snapOf(b); if (Math.abs(b.x - n.l.x) < 14) { const right = b.x + b.w; b.x = n.l.x; b.w = right - b.x; } const m = snapOf(b); if (Math.abs(b.x + b.w - m.r.x) < 14) b.w = m.r.x - b.x; place(b); };
+        api.drag(b.el, { start: (e) => (e.target === hd ? null : { x: b.x }), move: (dx, dy, ev, c) => { if (!c) return; b.x = api.clamp(c.x + dx / s.k, 0, W - b.w); place(b); }, end: magnet });
+        api.drag(hd, { start: () => ({ w: b.w }), move: (dx, dy, ev, c) => { b.w = api.clamp(c.w + dx / s.k, 30, W - b.x); place(b); }, end: magnet });
       });
       board.append(s.frame);
       fit(board, s);
@@ -61,21 +65,20 @@
     },
     resize(board, s) { fit(board, s); },
     evaluate(s) {
-      s.blocks.forEach((b) => (b.snap = snapOf(b)));
-      const d = s.blocks.map((b) => b.snap.d);
+      const d = s.blocks.map((b) => Math.abs(b.x - b.tx) + Math.abs(b.x + b.w - (b.tx + b.tw)));
       const score = d.reduce((a, x) => a + Math.max(0, 100 - Math.max(0, x - 3) * 2.5), 0) / d.length;
       const ok = d.filter((x) => x <= 4).length;
       return {
         score,
         metrics: [{ label: "Blocs calés sur la grille", value: `${ok} sur ${d.length}`, good: ok === d.length }, { label: "Écart moyen des bords", value: `${(d.reduce((a, x) => a + x, 0) / d.length / 2).toFixed(1).replace(".", ",")} px` }],
-        principle: "Une grille ne sert que si on la respecte : un bloc qui s'arrête dans une gouttière casse l'alignement de toute la colonne. Dans un outil, active le magnétisme sur les colonnes plutôt que d'aligner à l'œil.",
+        principle: "Une grille ne sert que si on la respecte : un bloc qui s'arrête entre deux colonnes casse l'alignement de toute la page.",
       };
     },
     reveal(board, s, r, api) {
       s.blocks.forEach((b) => {
         b.el.classList.remove("grab");
         const g = api.h("span", "gs-ghost");
-        g.style.cssText = `left:${b.snap.l.x}px;width:${b.snap.r.x - b.snap.l.x}px;top:${b.y}px;height:${b.h}px`;
+        g.style.cssText = `left:${b.tx}px;width:${b.tw}px;top:${b.y}px;height:${b.h}px`;
         s.frame.append(g);
       });
     },

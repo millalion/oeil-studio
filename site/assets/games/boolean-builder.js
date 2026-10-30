@@ -13,12 +13,14 @@
   const circ = (cx, cy, r) => `M${cx - r} ${cy} a${r} ${r} 0 1 0 ${r * 2} 0 a${r} ${r} 0 1 0 ${-r * 2} 0Z`;
   const rect = (x, y, w, h) => `M${x} ${y}h${w}v${h}h${-w}Z`;
   let uid = 0;
+  // Schéma de l'opération : deux cercles, la zone gardée en noir
+  const pictogram = (k) => { const A = circ(46, 50, 30), B = circ(74, 50, 30); return svg(`${ops[k](A, B, `p${++uid}`)}<path d="${A}" fill="none" stroke="#141413"/><path d="${B}" fill="none" stroke="#141413"/><text x="30" y="16" class="bb-t">A</text><text x="84" y="16" class="bb-t">B</text>`); };
   const item = (A, B, op, explain) => {
     const id = ++uid;
     return {
       prompt: "Quelle opération entre A et B donne la forme cible ?", cols: 4,
       context: `<div class="bb-ctx"><figure>${svg(`<path d="${A}" fill="none" stroke="#141413" stroke-width="1.5"/><path d="${B}" fill="rgba(240,68,122,.25)" stroke="#F0447A" stroke-width="1.5"/><text x="8" y="14" class="bb-t">A</text><text x="104" y="14" class="bb-t bb-tb">B</text>`)}<figcaption>A (noir) et B (rose)</figcaption></figure><span class="material-symbols-outlined">arrow_forward</span><figure>${svg(ops[op](A, B, id))}<figcaption>Forme cible</figcaption></figure></div>`,
-      options: Object.keys(LABELS).filter((k) => k !== (op === "subtract" ? "subtractBA" : op === "subtractBA" ? "subtract" : "subtractBA")).slice(0, 4).map((k) => ({ html: `<span class="material-symbols-outlined bb-icon">${ICONS[k]}</span>`, label: LABELS[k], correct: k === op })),
+      options: Object.keys(LABELS).filter((k) => k !== (op === "subtract" ? "subtractBA" : op === "subtractBA" ? "subtract" : "subtractBA")).slice(0, 4).map((k) => ({ html: pictogram(k), label: LABELS[k], correct: k === op })),
       explain,
     };
   };

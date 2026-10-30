@@ -6,13 +6,13 @@
   function item(a, b, n, missing, prompt, explain) {
     const steps = Array.from({ length: n }, (_, i) => mix(a, b, i / (n - 1)));
     const slots = steps.map((c, i) => (missing.includes(i)
-      ? { id: `g${i}`, render: (t) => (t ? "" : `<span class="gr-sw gr-empty"></span>`) }
+      ? { id: `g${i}`, render: () => "" }
       : { id: `f${i}`, html: sw(c), fixed: true }));
     const tokens = missing.map((i) => ({ id: `t${i}`, html: sw(steps[i]), slot: `g${i}` }));
     // Leurres : la même étape un peu trop claire, trop saturée ou décalée en teinte
     const m = missing[0], base = steps[m];
     tokens.push({ id: "d1", html: sw({ ...base, l: base.l + 9 }), slot: null }, { id: "d2", html: sw({ ...base, s: Math.min(100, base.s + 22), h: base.h + 12 }), slot: null });
-    return { prompt, layout: "gradient", slots, tokens, explain };
+    return { prompt: `${prompt} : glisse les bonnes nuances dans les trous`, layout: "gradient", slots, tokens, explain };
   }
   Oeil.kits.assign({
     id: "gradient-repair", name: "Gradient Repair",

@@ -67,8 +67,12 @@
       };
     },
     reveal(board, s, r, api) {
+      // Montre la correction sur le composant lui-même
       [s.d1, s.d2].forEach((d) => d.classList.add("is-locked"));
+      s.gaps = [...s.c.target];
+      apply(s);
       s.gapEls.forEach((g, i) => g.insertAdjacentHTML("beforeend", `<span class="tag-ref wb-tagref">${s.c.target[i]}</span>`));
+      board.querySelector(".wb-wrap, .wb-card, [class^=wb-]").insertAdjacentHTML("afterbegin", `<p class="wb-fixed">Correction appliquée</p>`);
     },
   });
 })();

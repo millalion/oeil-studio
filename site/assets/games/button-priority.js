@@ -8,9 +8,9 @@
   };
   const action = (label) => (t) => `<span class="bp-btn" style="${t ? STYLES[t.style].css : "border:1px dashed #CFCEC6;color:#8A8983"}">${label}</span>`;
   const item = (title, text, actions, explain) => ({
-    prompt: `${title} : donne à chaque bouton son niveau`, layout: "dialog", explain,
+    prompt: `${title} : glisse un style sur chaque bouton`, layout: "dialog", explain,
     context: text,
-    slots: actions.map(([label]) => ({ id: label, label, render: action(label) })),
+    slots: actions.map(([label]) => ({ id: label, render: action(label) })),
     tokens: actions.map(([label, style]) => ({ id: `${style}-${label}`, style, html: `<span class="bp-mini" style="${STYLES[style].css}">Aa</span>${STYLES[style].label}`, slot: label })),
   });
   Oeil.kits.assign({

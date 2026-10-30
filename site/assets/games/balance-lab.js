@@ -33,7 +33,11 @@
     return { x: all.reduce((a, o) => a + o.m * o.x, 0) / M, y: all.reduce((a, o) => a + o.m * o.y, 0) / M };
   }
 
-  function place(s) { s.movEl.style.left = `${s.pos.x - s.mov.w / 2}px`; s.movEl.style.top = `${s.pos.y - s.mov.h / 2}px`; }
+  function place(s) {
+    s.movEl.style.left = `${s.pos.x - s.mov.w / 2}px`; s.movEl.style.top = `${s.pos.y - s.mov.h / 2}px`;
+    const c = centroid(s, s.pos);
+    s.cross.style.left = `${c.x}px`; s.cross.style.top = `${c.y}px`;
+  }
   function fit(board, s) {
     const k = Math.min((board.clientWidth - 48) / FW, (board.clientHeight - 56) / FH, 1.4);
     s.k = k;
@@ -43,15 +47,14 @@
   Oeil.play({
     id: "balance-lab", name: "Balance Lab",
     howto: [
-      { icon: "drag_pan", text: "Les formes grises sont fixes. Attrape le disque au contour pointillé et déplace-le." },
-      { icon: "balance", text: "Imagine le cadre posé en équilibre sur une pointe, en son centre : place le disque pour qu'il ne bascule d'aucun côté. Un petit poids loin du centre compense un gros poids proche." },
-      { icon: "check", text: "Valide : le centre de masse de ta composition apparaît, comparé au centre optique du cadre." },
+      { icon: "drag_pan", text: "Les formes noires sont fixes. Seul le disque pointillé bouge." },
+      { icon: "balance", text: "La croix noire montre le centre de gravité de ta composition : amène-la dans le rond rose." },
+      { icon: "check", text: "Quand la croix est dans le rond, la composition est équilibrée." },
     ],
-    brief: "Déplace le disque pointillé pour que la composition ne penche d'aucun côté.",
-    hint: { label: "Voir le centre optique", run(s) { s.frame.classList.toggle("bl-show-target"); } },
+    brief: "Déplace le disque pointillé pour amener la croix noire dans le rond rose.",
     setup() { return makeRound(); },
     mount(board, s, api) {
-      s.frame = api.h("div", "bl-frame");
+      s.frame = api.h("div", "bl-frame bl-show-target");
       s.frame.style.cssText = `width:${FW}px;height:${FH}px`;
       s.fixed.forEach((o) => {
         const el = api.h("span", "bl-shape");
@@ -63,6 +66,8 @@
       s.movEl.style.cssText = `width:${s.mov.w}px;height:${s.mov.h}px;border-radius:999px`;
       s.movEl.tabIndex = 0; s.movEl.setAttribute("aria-label", "Disque à déplacer");
       s.frame.append(s.movEl);
+      s.cross = api.h("span", "bl-centroid");
+      s.frame.append(s.cross);
       board.append(s.frame);
       fit(board, s);
       place(s);
@@ -104,8 +109,7 @@
     reveal(board, s, r, api) {
       s.movEl.classList.remove("grab");
       s.frame.classList.add("bl-show-target");
-      s.frame.insertAdjacentHTML("beforeend", `<span class="bl-ghost" style="left:${s.target.x - s.mov.w / 2}px;top:${s.target.y - s.mov.h / 2}px;width:${s.mov.w}px;height:${s.mov.h}px"></span><span class="bl-centroid" style="left:${s.c.x}px;top:${s.c.y}px"></span>`);
-      board.append(api.h("p", "absolute left-4 bottom-4 text-[13px] flex flex-wrap gap-4", `<span><b class="text-signal">Rose</b> : centre optique et position idéale</span><span><b>Croix noire</b> : ton centre de masse</span>`));
+      s.frame.insertAdjacentHTML("beforeend", `<span class="bl-ghost" style="left:${s.target.x - s.mov.w / 2}px;top:${s.target.y - s.mov.h / 2}px;width:${s.mov.w}px;height:${s.mov.h}px"></span>`);
     },
   });
 })();
