@@ -29,7 +29,7 @@ PRO_BADGE = ' <span class="pro-badge">Pro</span>'
 # Le niveau se lit au texte et au nombre de barres, pas seulement à la couleur
 def lvl(g):
     n = {"Débutant": 1, "Intermédiaire": 2, "Avancé": 3}.get(g["level"], 0)
-    return f' <span class="lvl lvl-{n}"><span aria-hidden="true"><i></i><i></i><i></i></span>{g["level"]}</span>'
+    return f' <span class="lvl lvl-{n}">{g["level"]}</span>'
 def row(g):
     d = DOMAINS[g["domain"]]
     return f'''<a class="game-row {COLS}" data-domain="{g["domain"]}" data-level="{LEVEL_KEY[g["level"]]}" href="{g["id"]}.html" role="listitem" style="--row:{d["field"]}">
@@ -72,7 +72,7 @@ def app_shell(title_html, sub_html, mix=False, current_id=None):
 <div class="flex items-center gap-3 sm:gap-4">
 <div aria-label="Manches" class="round-dots" id="round-dots"></div>
 <p class="session-score">Moyenne<b id="session-score">–</b></p>
-<button aria-label="Affichage et daltonisme" class="icon-btn" data-vision-open="" title="Affichage et daltonisme" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[20px]">visibility</span></button>
+<button aria-label="Accessibilité : daltonisme et contraste" class="btn-line btn-sm" data-vision-open="" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">accessibility_new</span><span class="hidden sm:inline">Accessibilité</span></button>
 <button class="btn-line btn-sm hidden sm:inline-flex" id="btn-howto" type="button">Comment jouer ?</button>
 <button aria-label="Recommencer la session" class="icon-btn" id="btn-reset-session" title="Recommencer la session" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[20px]">restart_alt</span></button>
 </div>
@@ -287,7 +287,7 @@ JEUX = f'''{page_head("Bibliothèque des jeux — Œil Studio")}
 <main class="pt-16" id="contenu">
 <section class="{W} pt-6 lg:pt-10">
 <div class="dot-board px-5 sm:px-10 pt-16 pb-10 lg:pb-14">
-<p class="board-strip"><span class="board-dot"></span>{len(GAMES)} jeux · 6 disciplines · gratuits, sans compte</p>
+<p class="board-strip"><span class="board-dot"></span>{len(GAMES)} jeux · 6 disciplines</p>
 <h1 class="text-[clamp(4.25rem,9.6vw,9.5rem)] font-medium leading-[0.88] tracking-[-0.06em] reveal">Bibliothèque</h1>
 <p class="mt-6 lg:mt-10 max-w-[38rem] text-[20px] sm:text-[24px] leading-[1.35] tracking-[-0.015em] reveal" style="--d:80ms">Des jeux de 2 à 5 minutes en typographie, couleur, composition, UI, UX et motion. Joue-les un par un, ou mélange-les : une manche, un jeu.</p>
 <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 reveal" style="--d:140ms"><button class="btn" id="rand-game" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">casino</span>Jeu au hasard</button><a class="lib-link" href="#melange">Composer un mélange</a><a class="lib-link" href="live.html">Jouer à plusieurs</a></div>
@@ -416,7 +416,7 @@ INDEX = f'''{page_head("Œil Studio — Affine ton œil")}
 <main class="pt-16" id="contenu">
 <section class="{W} pt-6 lg:pt-10">
 <div class="dot-board">
-<p class="board-strip"><span class="board-dot"></span>Le terrain d'entraînement des designers · {len(GAMES)} jeux · gratuit, sans compte</p>
+<p class="board-strip"><span class="board-dot"></span>Le terrain d'entraînement des designers · {len(GAMES)} jeux · compte gratuit</p>
 <div class="grid lg:grid-cols-12 gap-10 lg:gap-8 items-end px-5 sm:px-10 pt-16 lg:pt-20 pb-8 lg:pb-12">
 <div class="lg:col-span-7">
 <h1 class="text-[clamp(4.25rem,9.6vw,9.5rem)] font-medium leading-[0.88] tracking-[-0.06em] reveal">Affine<br/>ton œil.</h1>
@@ -430,9 +430,10 @@ INDEX = f'''{page_head("Œil Studio — Affine ton œil")}
 <div class="quiz-card">
 <p class="text-body-sm text-ink/70">Test éclair · 5 secondes, sans inscription</p>
 <h2 class="mt-1 text-[24px] sm:text-[28px] font-medium tracking-[-0.03em] leading-tight">Lequel est centré à l'œil ?</h2>
-<div class="mt-5 grid grid-cols-2 gap-3">
+<div class="mt-5 grid grid-cols-2 gap-3 quiz-opts" id="quiz-opts">
 <button aria-label="Réponse A" aria-pressed="false" class="quiz-opt" id="quiz-btn-a" onclick="testEye('A')" type="button"><span class="quiz-fake"><span>Valider</span><span class="material-symbols-outlined text-[16px] pl-2">check</span></span><span class="quiz-letter">A</span></button>
 <button aria-label="Réponse B" aria-pressed="false" class="quiz-opt" id="quiz-btn-b" onclick="testEye('B')" type="button"><span class="quiz-fake"><span>Valider</span><span class="material-symbols-outlined text-[16px]">check</span></span><span class="quiz-letter">B</span></button>
+<svg aria-hidden="true" class="quiz-mouse" viewBox="0 0 32 40"><path d="M6 4v26l7-6 5 12 6-3-5-11h10z" fill="#141413" transform="translate(2 2)"/><path d="M4 2v26l7-6 5 12 6-3-5-11h10z" fill="#fff" stroke="#141413" stroke-linejoin="round" stroke-width="2"/></svg>
 </div>
 <p class="mt-3 text-body-sm text-ink/70" id="quiz-hint">Clique sur ta réponse, ou appuie sur A ou B.</p>
 <div aria-live="polite" class="hidden mt-5" id="quiz-feedback"><p class="font-medium text-[17px]" id="feedback-verdict"></p><p class="mt-1 text-body-sm" id="feedback-expl"></p><a class="btn btn-sm mt-3" href="optical-center.html">Jouer à Optical Center<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
@@ -507,9 +508,9 @@ INDEX = f'''{page_head("Œil Studio — Affine ton œil")}
 </section>
 
 <section class="{W} pb-24 lg:pb-32 scroll-mt-20" id="offres">
-<div class="method-head"><h2 class="text-big reveal">Gratuit pour jouer.</h2><p class="reveal text-body-lg max-w-[30rem]" style="--d:60ms">Sans compte ni carte bancaire pour commencer. Passe à Pro quand tu veux progresser.</p></div>
+<div class="method-head"><h2 class="text-big reveal">Gratuit pour jouer.</h2><p class="reveal text-body-lg max-w-[30rem]" style="--d:60ms">Ta première partie est offerte, sans compte. Un compte gratuit suffit pour continuer, sans carte bancaire.</p></div>
 <div class="plan-grid reveal" style="--d:100ms">
-<article class="plan-card"><h3>Gratuit</h3><p class="plan-price tabular">0 €</p><p class="plan-note">Pour toujours</p><ul><li>{sum(1 for g in GAMES if not g["pro"])} jeux</li><li>Le défi du jour</li><li>Parties en direct et défis entre amis</li><li>Progression sur cet appareil</li></ul><a class="btn-line" href="jeux.html">Commencer à jouer</a></article>
+<article class="plan-card"><h3>Gratuit</h3><p class="plan-price tabular">0 €</p><p class="plan-note">Pour toujours</p><ul><li>{sum(1 for g in GAMES if not g["pro"])} jeux</li><li>Le défi du jour</li><li>Parties en direct et défis entre amis</li><li>Un compte gratuit, sans carte</li></ul><a class="btn-line" href="jeux.html">Commencer à jouer</a></article>
 <article class="plan-card is-top"><p class="plan-flag">Le plus complet</p><h3>Œil Pro</h3><p class="plan-price tabular">3 €<small> / mois</small></p><p class="plan-note">Ou 24 € par an, soit 2 mois offerts</p><ul><li>Les {len(GAMES)} jeux, sans limite</li><li>Le parcours de 14 jours inclus</li><li>Progression sur tous tes appareils</li><li>Résiliable à tout moment</li></ul><a class="btn" href="abonnement.html?plan=pro-mensuel">Passer à Pro</a></article>
 <article class="plan-card"><h3>Parcours intensif</h3><p class="plan-price tabular">19 €</p><p class="plan-note">Payé une fois, accès à vie</p><ul><li>14 jours, un principe et un jeu par jour</li><li>Fiches de synthèse à garder</li><li>Certificat de fin de parcours</li><li>Sans abonnement</li></ul><a class="btn-line" href="parcours.html">Voir le programme</a></article>
 </div>
@@ -522,7 +523,7 @@ INDEX = f'''{page_head("Œil Studio — Affine ton œil")}
 <details class="faq border-t border-border-subtle"><summary class="flex items-center justify-between gap-6 py-6 text-[19px] sm:text-[21px] font-medium tracking-[-0.015em]">Faut-il être designer senior pour s'entraîner ?<span aria-hidden="true" class="faq-icon material-symbols-outlined">add</span></summary><p class="pb-6 max-w-[40rem] text-on-surface-variant">Non. Chaque jeu a un niveau indiqué et une aide au premier lancement. Étudiant, développeur front ou directrice artistique : la correction est claire et sans jugement.</p></details>
 <details class="faq border-t border-border-subtle"><summary class="flex items-center justify-between gap-6 py-6 text-[19px] sm:text-[21px] font-medium tracking-[-0.015em]">Comment défier un ami ?<span aria-hidden="true" class="faq-icon material-symbols-outlined">add</span></summary><p class="pb-6 max-w-[40rem] text-on-surface-variant">À la fin d'une session, écris ton prénom et copie le lien de défi. Ton ami rejoue exactement les mêmes manches et voit ton score à battre.</p></details>
 <details class="faq border-t border-border-subtle"><summary class="flex items-center justify-between gap-6 py-6 text-[19px] sm:text-[21px] font-medium tracking-[-0.015em]">Mon écran fausse-t-il les couleurs ?<span aria-hidden="true" class="faq-icon material-symbols-outlined">add</span></summary><p class="pb-6 max-w-[40rem] text-on-surface-variant">Un peu : la perception varie avec le calibrage et la luminosité. Les jeux de couleur comparent ta réponse à la cible sur le même écran, avec une tolérance dans le score.</p></details>
-<details class="faq border-y border-border-subtle"><summary class="flex items-center justify-between gap-6 py-6 text-[19px] sm:text-[21px] font-medium tracking-[-0.015em]">Qu'est-ce qui est gratuit ?<span aria-hidden="true" class="faq-icon material-symbols-outlined">add</span></summary><p class="pb-6 max-w-[40rem] text-on-surface-variant">{sum(1 for g in GAMES if not g["pro"])} jeux, le défi du jour (jeux Pro compris), les défis entre amis et les parties en direct sont gratuits, sans compte. <a class="underline" href="tarifs.html">Œil Pro</a> ouvre les {len(GAMES)} jeux pour 3 € par mois.</p></details>
+<details class="faq border-y border-border-subtle"><summary class="flex items-center justify-between gap-6 py-6 text-[19px] sm:text-[21px] font-medium tracking-[-0.015em]">Qu'est-ce qui est gratuit ?<span aria-hidden="true" class="faq-icon material-symbols-outlined">add</span></summary><p class="pb-6 max-w-[40rem] text-on-surface-variant">{sum(1 for g in GAMES if not g["pro"])} jeux, le défi du jour (jeux Pro compris), les défis entre amis et les parties en direct sont gratuits avec un compte gratuit. La première partie se joue sans compte, et rejoindre une partie en direct n'en demande jamais. <a class="underline" href="tarifs.html">Œil Pro</a> ouvre les {len(GAMES)} jeux pour 3 € par mois.</p></details>
 </div>
 </section>
 </main>
@@ -537,6 +538,7 @@ INDEX = f'''{page_head("Œil Studio — Affine ton œil")}
       : "Les marges de A sont égales dans le code, mais l'icône éloignée tire le regard vers la droite. L'œil demande une compensation.";
     document.querySelectorAll(".quiz-opt").forEach((b) => {{ b.setAttribute("aria-pressed", String(b.id === "quiz-btn-" + choice.toLowerCase())); b.classList.toggle("is-answer", b.id === "quiz-btn-b"); }});
     document.getElementById("quiz-hint").hidden = true;
+    document.getElementById("quiz-opts").classList.add("is-answered");
   }}
   document.addEventListener("keydown", (e) => {{
     if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest("input, textarea, select")) return;

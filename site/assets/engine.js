@@ -153,7 +153,7 @@
     let round = 0, scores = [], state = null, phase = "play", hintUsed = false, game = null, skipCoach = false;
     const challenge = S.challenge;
     const canLevel = !mix && !challenge && !S.daily;
-    const levelSeg = h("div", "seg-line level-seg", `<span>Niveau</span><button data-level="easy" type="button">Facile</button><button data-level="adv" type="button">Avancé</button>`);
+    const levelSeg = h("div", "seg-line level-seg", `<button data-level="easy" type="button">Facile</button><button data-level="adv" type="button">Avancé</button>`);
     levelSeg.setAttribute("role", "group"); levelSeg.setAttribute("aria-label", "Niveau"); levelSeg.hidden = true;
     stage.append(levelSeg);
     levelSeg.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { store.set("level:" + game.id, b.dataset.level); coachWait = null; showCoach(false); skipCoach = true; startRound(); }));
@@ -301,6 +301,16 @@
       renderDots();
     }
 
+    // Sans compte : une partie offerte, puis il faut s'inscrire pour voir le bilan et continuer.
+    // Rejoindre une partie en direct ou une session de classe ne demande jamais de compte.
+    const gated = () => window.OeilAccount && window.OeilAccount.enabled && !window.OeilAccount.get() && !challenge?.live && !challenge?.cls;
+    function authGate(title, text) {
+      const back = encodeURIComponent(location.pathname.split("/").pop() + location.search + location.hash);
+      levelSeg.hidden = true;
+      stage.append(h("div", "auth-gate", `<div class="auth-card"><h2>${title}</h2><p>${text}</p><a class="btn w-full" href="connexion.html?suite=${back}#inscription">Créer mon compte gratuit</a><a class="btn-line w-full" href="connexion.html?suite=${back}">J'ai déjà un compte</a></div>`));
+      submitBtn.disabled = true; hintBtn.hidden = true;
+      document.querySelector(".game-bar").classList.add("is-done");
+    }
     function next() {
       if (phase !== "result") return;
       if (round < ROUNDS - 1) { round++; startRound(); }
@@ -337,6 +347,13 @@
         store.set("daily", d);
       }
       if (window.OeilLive && challenge?.live) window.OeilLive.done(challenge.live, challenge.player);
+      if (gated()) {
+        // Le bilan attend l'inscription : il sera enregistré sur le compte au retour
+        store.set("anon-done", 1);
+        store.set("pending", { id: entry.id, title: entry.title, avg: entry.avg, rounds: scores.map(Math.round), mode: S.daily ? "daily" : mix ? "mix" : "solo", day: S.daily ? S.today : null });
+        authGate("Partie terminée !", "Crée ton compte gratuit pour voir ton résultat et continuer à jouer.");
+        return;
+      }
       $("#sum-score").textContent = `${Math.round(avg)} %`;
       $("#sum-grade").textContent = gradeFor(avg);
       $("#sum-record").textContent = isRecord ? "Nouveau record personnel." : `Ton record : ${Math.round(best)} %.`;
@@ -440,6 +457,21 @@
       banner.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">school</span><span>Session de classe <b>${esc(challenge.title || challenge.cls)}</b> : à la fin, envoie ton code résultat à ton enseignant.</span>`;
     }
 
+    // De retour après l'inscription : le résultat en attente rejoint le compte
+    const pending = store.get("pending");
+    if (pending && window.OeilAccount && window.OeilAccount.get()) {
+      window.OeilAccount.saveScore(pending);
+      store.set("pending", null);
+      if (banner) { banner.hidden = false; banner.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Ton résultat à ${esc(pending.title)} : <b>${pending.avg} %</b>.</span>`; }
+    }
+    if (gated()) {
+      $("#game-app").classList.add("is-anon");
+      if (store.get("anon-done")) {
+        authGate("Tu as joué ta partie offerte", "Connecte-toi pour continuer : c'est gratuit et ta progression est gardée.");
+        window.OeilAccount.ready.then((u) => { if (u) location.reload(); });
+        return;
+      }
+    }
     // Freemium : un jeu Pro joué seul demande l'offre Pro (le défi du jour et les défis reçus restent ouverts).
     if (!mix && info(ids[0]).pro && !(window.OeilAccount && window.OeilAccount.isPro()) && !challenge) {
       const pw = $("#paywall");

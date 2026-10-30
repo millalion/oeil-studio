@@ -1676,16 +1676,12 @@ a.who:hover { text-decoration: underline; text-underline-offset: 3px; }
 .ticket-rank li.is-me .who-at, .ticket-rank li.is-me a { color: #141413; }
 /* Niveau bien visible */
 .stage > .level-seg { position: absolute; z-index: 3; top: 8px; right: 10px; align-items: center; background: #fff; }
-.level-seg > span { padding: 0 10px; font-size: 13px; font-weight: 500; border-right: 1px solid #141413; }
-.level-seg button:first-of-type { border-left: 0; }
-.level-seg button { height: 34px; }
-.coach-card > .level-seg { display: flex; width: 100%; margin: 12px 0; }
-.coach-card > .level-seg > span { display: flex; align-items: center; }
-.coach-card > .level-seg button { flex: 1; height: 40px; font-size: 14px; }
-.stage:has(> .level-seg:not([hidden])) .stage-brief { padding-right: 250px; }
+.level-seg { gap: 2px; padding: 2px; border-radius: 999px; }
+.level-seg button, .level-seg button + button { height: 30px; padding: 0 12px; border: 0; border-radius: 999px; font-size: 13px; }
+.coach-card > .level-seg { display: flex; width: max-content; margin: 12px auto; }
+.stage:has(> .level-seg:not([hidden])) .stage-brief { padding-right: 180px; }
 @media (max-width: 767px) {
   .stage > .level-seg { top: 5px; right: 6px; }
-  .stage > .level-seg > span { display: none; }
   .stage > .level-seg button { height: 32px; padding: 0 8px; font-size: 12px; }
   .stage:has(> .level-seg:not([hidden])) .stage-brief { padding-right: 130px; }
 }
@@ -1764,32 +1760,26 @@ a.who:hover { text-decoration: underline; text-underline-offset: 3px; }
 .demo-ux .demo-obj { width: 52px; height: 52px; border-radius: 999px; background: #141413; transform: var(--t0); }
 .demo-rail { position: absolute; left: 12%; right: 12%; height: 1px; background: #C9C8C1; }
 .demo-motion .demo-obj { position: relative; width: 20px; height: 20px; border-radius: 999px; background: #141413; }
-.disc-card:hover .demo-obj, .disc-card:focus-within .demo-obj { animation: demo-move 7s infinite; }
-.disc-card:hover .demo-color .demo-obj, .disc-card:focus-within .demo-color .demo-obj { animation-name: demo-tint; }
-.disc-card:hover .demo-cap span:nth-child(1), .disc-card:focus-within .demo-cap span:nth-child(1) { animation: demo-c1 7s infinite; }
-.disc-card:hover .demo-cap span:nth-child(2), .disc-card:focus-within .demo-cap span:nth-child(2) { animation: demo-c2 7s infinite; }
-.disc-card:hover .demo-cap span:nth-child(3), .disc-card:focus-within .demo-cap span:nth-child(3) { animation: demo-c3 7s infinite; }
+.demo-obj { animation: demo-move 10s ease-in-out infinite; animation-delay: calc(var(--d, 0) * -1.6s); }
+.demo-color .demo-obj { animation-name: demo-tint; }
+.demo-cap span:nth-child(1) { animation: demo-c1 10s infinite; animation-delay: calc(var(--d, 0) * -1.6s); }
+.demo-cap span:nth-child(2) { animation: demo-c2 10s infinite; animation-delay: calc(var(--d, 0) * -1.6s); }
+.demo-cap span:nth-child(3) { animation: demo-c3 10s infinite; animation-delay: calc(var(--d, 0) * -1.6s); }
+.disc-card:nth-child(2) { --d: 1; } .disc-card:nth-child(3) { --d: 2; } .disc-card:nth-child(4) { --d: 3; } .disc-card:nth-child(5) { --d: 4; } .disc-card:nth-child(6) { --d: 5; }
 @keyframes demo-move { 0%, 6% { transform: var(--t0); } 26%, 40% { transform: var(--t1); } 66%, 100% { transform: var(--t2); } }
 @keyframes demo-tint { 0%, 6% { background: var(--c0); } 26%, 40% { background: var(--c1); } 66%, 100% { background: var(--c2); } }
 @keyframes demo-c1 { 0%, 30% { opacity: 1; } 34%, 100% { opacity: 0; } }
 @keyframes demo-c2 { 0%, 32% { opacity: 0; } 36%, 62% { opacity: 1; } 66%, 100% { opacity: 0; } }
 @keyframes demo-c3 { 0%, 64% { opacity: 0; } 68%, 100% { opacity: 1; } }
-/* Sans survol possible : la boucle tourne seule */
-@media (hover: none) { .demo-obj { animation: demo-move 7s infinite; } .demo-color .demo-obj { animation-name: demo-tint; } .demo-cap span:nth-child(1) { animation: demo-c1 7s infinite; } .demo-cap span:nth-child(2) { animation: demo-c2 7s infinite; } .demo-cap span:nth-child(3) { animation: demo-c3 7s infinite; } }
 @media (prefers-reduced-motion: reduce) {
   .demo-obj, .disc-card:hover .demo-obj { animation: none !important; transform: var(--t2, none); }
   .demo-color .demo-obj { background: var(--c2); }
   .demo-cap span { animation: none !important; opacity: 0; } .demo-cap span:nth-child(3) { opacity: 1; }
 }
 /* Niveau de chaque jeu */
-.lvl { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-.lvl > span { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
-.lvl i { display: block; width: 4px; background: #D6D5CE; border-radius: 1px; }
-.lvl i:nth-child(1) { height: 5px; } .lvl i:nth-child(2) { height: 8px; } .lvl i:nth-child(3) { height: 12px; }
-.lvl-0 > span { display: none; }
-.lvl-1 i:nth-child(1) { background: #2E8B57; }
-.lvl-2 i:nth-child(-n+2) { background: #C77700; }
-.lvl-3 i { background: #C4222B; }
+.lvl { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: 12.5px; font-weight: 500; color: #141413; white-space: nowrap; }
+.lvl-0 { padding: 0; }
+.lvl-1 { background: #D8EF71; } .lvl-2 { background: #FFE08A; } .lvl-3 { background: #F7B4CC; }
 /* Test éclair : de vrais boutons de réponse */
 .quiz-opt { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 148px; padding: 18px 10px 14px; border: 1.5px solid #141413; border-radius: 10px; background: #fff; cursor: pointer; transition: transform .15s, box-shadow .15s, background-color .15s; }
 .quiz-opt:hover, .quiz-opt:focus-visible { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 #141413; }
@@ -1832,3 +1822,30 @@ html[data-vision="contrast"] { --muted-fix: #141413; }
 html[data-vision="contrast"] .text-text-muted, html[data-vision="contrast"] .text-on-surface-variant, html[data-vision="contrast"] small, html[data-vision="contrast"] figcaption, html[data-vision="contrast"] .ctl-hint, html[data-vision="contrast"] .game-sub { color: #141413 !important; }
 html[data-vision="contrast"] .game-row, html[data-vision="contrast"] .chip, html[data-vision="contrast"] .lib-pill { border-color: #141413; }
 html[data-vision="contrast"] a:focus-visible, html[data-vision="contrast"] button:focus-visible { outline: 3px solid #141413; outline-offset: 2px; }
+/* La souris qui hésite entre A et B */
+.quiz-opts { position: relative; }
+.quiz-mouse { position: absolute; left: 0; top: 0; width: 34px; pointer-events: none; z-index: 3; animation: quiz-mouse 8s cubic-bezier(.45,.05,.3,1) infinite; transition: opacity .2s; }
+@keyframes quiz-mouse {
+  0%, 8% { left: 62%; top: 62%; }
+  20%, 30% { left: 18%; top: 58%; }
+  38% { left: 42%; top: 66%; }
+  50%, 60% { left: 72%; top: 54%; }
+  70% { left: 46%; top: 60%; }
+  82%, 92% { left: 22%; top: 62%; }
+  100% { left: 62%; top: 62%; }
+}
+.quiz-opt { animation: quiz-lift 8s infinite; }
+#quiz-btn-b { animation-name: quiz-lift-b; }
+@keyframes quiz-lift { 0%, 17%, 33%, 79%, 95%, 100% { transform: none; box-shadow: none; } 20%, 30%, 82%, 92% { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 #141413; } }
+@keyframes quiz-lift-b { 0%, 47%, 63%, 100% { transform: none; box-shadow: none; } 50%, 60% { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 #141413; } }
+.quiz-opts:hover .quiz-mouse, .quiz-opts.is-answered .quiz-mouse { opacity: 0; }
+.quiz-opts:hover .quiz-opt, .quiz-opts.is-answered .quiz-opt { animation: none; }
+@media (prefers-reduced-motion: reduce) { .quiz-mouse, .quiz-opt { animation: none; } .quiz-mouse { left: 46%; top: 60%; } }
+/* Sans compte */
+.auth-gate { position: absolute; inset: 52px 0 0 0; z-index: 30; border-radius: 0 0 10px 10px; display: grid; place-items: center; padding: 16px; background: var(--field); }
+.auth-card { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 420px; padding: 26px; border: 1px solid #141413; border-radius: 10px; background: #fff; box-shadow: 6px 6px 0 #141413; }
+.auth-card h2 { font-size: 30px; font-weight: 500; letter-spacing: -.03em; line-height: 1.1; }
+.auth-card p { margin-bottom: 8px; font-size: 16px; color: #4A4945; }
+.auth-card a { justify-content: center; }
+.is-anon .session-score { visibility: hidden; }
+.is-anon .round-dot { font-size: 0; }
