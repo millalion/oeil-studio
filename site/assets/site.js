@@ -142,3 +142,36 @@
     });
   });
 })();
+
+// Affichage : daltonisme et contraste élevé. Le réglage vaut pour tout le site, sur cet appareil.
+(function () {
+  const KEY = "oeil:vision";
+  const MODES = [
+    ["standard", "Standard", "Les couleurs d'origine."],
+    ["contrast", "Contraste élevé", "Textes plus sombres, contours renforcés."],
+    ["deutan", "Vert et rouge : deutéranopie", "Écarte les verts et les rouges."],
+    ["protan", "Rouge et vert : protanopie", "Écarte les rouges et les verts."],
+    ["tritan", "Bleu et jaune : tritanopie", "Écarte les bleus et les jaunes."],
+  ];
+  const MATRIX = {"protan": "1.000 0.000 0.000 0 0 0.479 0.477 0.044 0 0 0.597 -0.689 1.091 0 0 0 0 0 1 0", "deutan": "1.000 0.000 0.000 0 0 0.163 0.725 0.112 0 0 0.455 -0.645 1.191 0 0 0 0 0 1 0", "tritan": "0.741 -0.407 0.666 0 0 0.075 0.585 0.340 0 0 0.000 0.000 1.000 0 0 0 0 0 1 0"};
+  document.body.insertAdjacentHTML("beforeend", `<svg aria-hidden="true" style="position:absolute;width:0;height:0">${Object.entries(MATRIX).map(([k, m]) => `<filter color-interpolation-filters="sRGB" id="vision-${k}"><feColorMatrix type="matrix" values="${m}"/></filter>`).join("")}</svg>`);
+  const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || "standard"; } catch (e) { return "standard"; } };
+  const apply = (m) => { if (m === "standard") document.documentElement.removeAttribute("data-vision"); else document.documentElement.dataset.vision = m; };
+  apply(read());
+  let dlg = null;
+  function open() {
+    if (!dlg) {
+      dlg = document.createElement("dialog");
+      dlg.className = "vision-dlg";
+      dlg.setAttribute("aria-labelledby", "vision-title");
+      dlg.innerHTML = `<h2 id="vision-title">Affichage</h2><p>Les couleurs des jeux s'adaptent à ta vision. Le score ne change pas.</p><div role="radiogroup" aria-labelledby="vision-title">${MODES.map(([v, t, d]) => `<label><input name="vision" type="radio" value="${v}"/><span><b>${t}</b><small>${d}</small></span></label>`).join("")}</div><button class="btn w-full" type="button">Fermer</button>`;
+      document.body.append(dlg);
+      dlg.querySelector("button").addEventListener("click", () => dlg.close());
+      dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+      dlg.querySelectorAll("input").forEach((r) => r.addEventListener("change", () => { try { localStorage.setItem(KEY, JSON.stringify(r.value)); } catch (e) {} apply(r.value); }));
+    }
+    dlg.querySelectorAll("input").forEach((r) => (r.checked = r.value === read()));
+    dlg.showModal();
+  }
+  document.addEventListener("click", (e) => { if (e.target.closest("[data-vision-open]")) open(); });
+})();

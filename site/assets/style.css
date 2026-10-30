@@ -1742,3 +1742,93 @@ a.who:hover { text-decoration: underline; text-underline-offset: 3px; }
 /* Pleins et Déliés */
 .pd-fill, .pd-model path { stroke: #141413; stroke-linejoin: round; stroke-linecap: round; }
 .pd-ref { fill: #F0447A; stroke: #F0447A; stroke-linejoin: round; stroke-linecap: round; opacity: .4; }
+/* Accueil : démonstrations par discipline. Geste, écart, principe, en boucle au survol. */
+.demo { padding: 12px 14px 10px; border-bottom: 1px solid #E0DFD8; }
+.demo-scene { position: relative; height: 64px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.demo-cap { position: relative; height: 18px; margin-top: 6px; font-size: 12.5px; color: #5E5D59; }
+.demo-cap span { position: absolute; inset: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; }
+.demo-cap span:nth-child(1) { opacity: 1; }
+.demo-obj { display: block; }
+.demo-typo .demo-scene { gap: 0; font-family: Newsreader, Georgia, serif; font-size: 52px; line-height: 1; color: #141413; }
+.demo-typo .demo-obj, .demo-ui .demo-obj, .demo-layout .demo-obj, .demo-motion .demo-obj { transform: var(--t0); }
+.demo-typo .demo-obj { margin-left: -8px; }
+.demo-color .demo-scene { gap: 0; }
+.demo-color .demo-ref, .demo-color .demo-obj { width: 72px; height: 48px; border: 1px solid #141413; }
+.demo-color .demo-ref { background: #D8EF71; border-right: 0; border-radius: 4px 0 0 4px; }
+.demo-color .demo-obj { background: var(--c0); border-radius: 0 4px 4px 0; }
+.demo-cols { position: absolute; inset: 0 22%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.demo-cols i { background: rgba(240,68,122,.12); }
+.demo-layout .demo-obj { position: relative; width: 40px; height: 42px; background: #141413; border-radius: 2px; }
+.demo-btn { display: flex; justify-content: center; width: 128px; padding: 9px 0; background: #141413; color: #fff; border-radius: 4px; font-size: 14px; font-weight: 500; }
+.demo-zone { position: absolute; width: 52px; height: 52px; border: 1.5px dashed #F0447A; border-radius: 999px; }
+.demo-ux .demo-obj { width: 52px; height: 52px; border-radius: 999px; background: #141413; transform: var(--t0); }
+.demo-rail { position: absolute; left: 12%; right: 12%; height: 1px; background: #C9C8C1; }
+.demo-motion .demo-obj { position: relative; width: 20px; height: 20px; border-radius: 999px; background: #141413; }
+.disc-card:hover .demo-obj, .disc-card:focus-within .demo-obj { animation: demo-move 7s infinite; }
+.disc-card:hover .demo-color .demo-obj, .disc-card:focus-within .demo-color .demo-obj { animation-name: demo-tint; }
+.disc-card:hover .demo-cap span:nth-child(1), .disc-card:focus-within .demo-cap span:nth-child(1) { animation: demo-c1 7s infinite; }
+.disc-card:hover .demo-cap span:nth-child(2), .disc-card:focus-within .demo-cap span:nth-child(2) { animation: demo-c2 7s infinite; }
+.disc-card:hover .demo-cap span:nth-child(3), .disc-card:focus-within .demo-cap span:nth-child(3) { animation: demo-c3 7s infinite; }
+@keyframes demo-move { 0%, 6% { transform: var(--t0); } 26%, 40% { transform: var(--t1); } 66%, 100% { transform: var(--t2); } }
+@keyframes demo-tint { 0%, 6% { background: var(--c0); } 26%, 40% { background: var(--c1); } 66%, 100% { background: var(--c2); } }
+@keyframes demo-c1 { 0%, 30% { opacity: 1; } 34%, 100% { opacity: 0; } }
+@keyframes demo-c2 { 0%, 32% { opacity: 0; } 36%, 62% { opacity: 1; } 66%, 100% { opacity: 0; } }
+@keyframes demo-c3 { 0%, 64% { opacity: 0; } 68%, 100% { opacity: 1; } }
+/* Sans survol possible : la boucle tourne seule */
+@media (hover: none) { .demo-obj { animation: demo-move 7s infinite; } .demo-color .demo-obj { animation-name: demo-tint; } .demo-cap span:nth-child(1) { animation: demo-c1 7s infinite; } .demo-cap span:nth-child(2) { animation: demo-c2 7s infinite; } .demo-cap span:nth-child(3) { animation: demo-c3 7s infinite; } }
+@media (prefers-reduced-motion: reduce) {
+  .demo-obj, .disc-card:hover .demo-obj { animation: none !important; transform: var(--t2, none); }
+  .demo-color .demo-obj { background: var(--c2); }
+  .demo-cap span { animation: none !important; opacity: 0; } .demo-cap span:nth-child(3) { opacity: 1; }
+}
+/* Niveau de chaque jeu */
+.lvl { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.lvl > span { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.lvl i { display: block; width: 4px; background: #D6D5CE; border-radius: 1px; }
+.lvl i:nth-child(1) { height: 5px; } .lvl i:nth-child(2) { height: 8px; } .lvl i:nth-child(3) { height: 12px; }
+.lvl-0 > span { display: none; }
+.lvl-1 i:nth-child(1) { background: #2E8B57; }
+.lvl-2 i:nth-child(-n+2) { background: #C77700; }
+.lvl-3 i { background: #C4222B; }
+/* Test éclair : de vrais boutons de réponse */
+.quiz-opt { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 148px; padding: 18px 10px 14px; border: 1.5px solid #141413; border-radius: 10px; background: #fff; cursor: pointer; transition: transform .15s, box-shadow .15s, background-color .15s; }
+.quiz-opt:hover, .quiz-opt:focus-visible { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 #141413; }
+.quiz-letter { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; background: #141413; color: #fff; font-size: 15px; font-weight: 600; }
+.quiz-opt[aria-pressed="true"] { box-shadow: 4px 4px 0 #141413; }
+.quiz-opt.is-answer { background: #fff; }
+.quiz-opt.is-answer .quiz-letter { background: #F0447A; }
+.quiz-opt.is-answer::after { content: "Bonne réponse"; position: absolute; top: 7px; font-size: 12px; font-weight: 500; }
+/* Offres sur l'accueil */
+.plan-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.plan-card { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 24px; border: 1px solid #141413; border-radius: 10px; background: #fff; }
+.plan-card.is-top { background: #FFE08A; box-shadow: 6px 6px 0 #141413; }
+.plan-card h3 { font-size: 20px; font-weight: 500; letter-spacing: -.02em; }
+.plan-flag { position: absolute; top: -13px; left: 20px; padding: 3px 10px; border-radius: 999px; background: #141413; color: #fff; font-size: 12.5px; font-weight: 500; }
+.plan-price { font-size: 48px; font-weight: 500; letter-spacing: -.04em; line-height: 1.1; }
+.plan-price small { font-size: 16px; letter-spacing: 0; }
+.plan-note { font-size: 14px; color: #4A4945; }
+.plan-card ul { display: flex; flex-direction: column; gap: 8px; margin: 16px 0 22px; font-size: 15px; }
+.plan-card li { padding-left: 22px; position: relative; }
+.plan-card li::before { content: "✓"; position: absolute; left: 0; font-weight: 600; }
+.plan-card .btn, .plan-card .btn-line { margin-top: auto; width: 100%; justify-content: center; }
+@media (max-width: 860px) { .plan-grid { grid-template-columns: minmax(0, 1fr); gap: 22px; } }
+/* Affichage : daltonisme et contraste */
+.foot-link[data-vision-open] { background: none; font: inherit; cursor: pointer; }
+.vision-dlg { width: min(440px, calc(100vw - 32px)); padding: 24px; border: 1px solid #141413; border-radius: 12px; background: #fff; color: #141413; margin: auto; }
+.vision-dlg::backdrop { background: rgba(20,20,19,.45); }
+.vision-dlg h2 { font-size: 24px; font-weight: 500; letter-spacing: -.02em; }
+.vision-dlg > p { margin: 6px 0 14px; font-size: 14px; color: #5E5D59; }
+.vision-dlg label { display: flex; align-items: flex-start; gap: 10px; padding: 10px; border-radius: 6px; cursor: pointer; }
+.vision-dlg label:hover { background: #F0EFEA; }
+.vision-dlg input { margin-top: 3px; accent-color: #141413; width: 16px; height: 16px; }
+.vision-dlg b { display: block; font-size: 15px; font-weight: 500; }
+.vision-dlg small { font-size: 13px; color: #5E5D59; }
+.vision-dlg .btn { margin-top: 14px; }
+html[data-vision="deutan"] #board { filter: url(#vision-deutan); }
+html[data-vision="protan"] #board { filter: url(#vision-protan); }
+html[data-vision="tritan"] #board { filter: url(#vision-tritan); }
+html[data-vision="contrast"] #board { filter: contrast(1.3); }
+html[data-vision="contrast"] { --muted-fix: #141413; }
+html[data-vision="contrast"] .text-text-muted, html[data-vision="contrast"] .text-on-surface-variant, html[data-vision="contrast"] small, html[data-vision="contrast"] figcaption, html[data-vision="contrast"] .ctl-hint, html[data-vision="contrast"] .game-sub { color: #141413 !important; }
+html[data-vision="contrast"] .game-row, html[data-vision="contrast"] .chip, html[data-vision="contrast"] .lib-pill { border-color: #141413; }
+html[data-vision="contrast"] a:focus-visible, html[data-vision="contrast"] button:focus-visible { outline: 3px solid #141413; outline-offset: 2px; }

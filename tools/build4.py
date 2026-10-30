@@ -26,14 +26,18 @@ def seg(name, values, checked, label=""):
 
 COLS = "grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]"
 PRO_BADGE = ' <span class="pro-badge">Pro</span>'
+# Le niveau se lit au texte et au nombre de barres, pas seulement à la couleur
+def lvl(g):
+    n = {"Débutant": 1, "Intermédiaire": 2, "Avancé": 3}.get(g["level"], 0)
+    return f' <span class="lvl lvl-{n}"><span aria-hidden="true"><i></i><i></i><i></i></span>{g["level"]}</span>'
 def row(g):
     d = DOMAINS[g["domain"]]
     return f'''<a class="game-row {COLS}" data-domain="{g["domain"]}" data-level="{LEVEL_KEY[g["level"]]}" href="{g["id"]}.html" role="listitem" style="--row:{d["field"]}">
 <span aria-hidden="true" class="w-10 h-10 md:w-14 md:h-14 rounded-lg shrink-0 border border-ink" style="background:{d["field"]}"></span>
-<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">{g["name"]}{PRO_BADGE if g["pro"] else ""}</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">{d["label"]} · {g["min"]} min · {g["level"]}</span></span>
+<span><span class="block text-[22px] md:text-[28px] font-medium tracking-[-0.025em] leading-tight">{g["name"]}{PRO_BADGE if g["pro"] else ""}</span><span class="md:hidden block mt-0.5 text-body-sm text-text-muted">{d["label"]} · {g["min"]} min{lvl(g)}</span></span>
 <span class="hidden md:block text-body-md text-on-surface-variant">{g["desc"]}</span>
 <span class="hidden md:block text-body-sm">{d["label"]}</span>
-<span class="hidden md:block text-body-sm tabular">{g["min"]} min · {g["level"]}</span>
+<span class="hidden md:flex items-center gap-3 text-body-sm tabular">{g["min"]} min{lvl(g)}</span>
 <span aria-hidden="true" class="material-symbols-outlined row-arrow justify-self-end">arrow_forward</span>
 </a>'''
 
@@ -68,6 +72,7 @@ def app_shell(title_html, sub_html, mix=False, current_id=None):
 <div class="flex items-center gap-3 sm:gap-4">
 <div aria-label="Manches" class="round-dots" id="round-dots"></div>
 <p class="session-score">Moyenne<b id="session-score">–</b></p>
+<button aria-label="Affichage et daltonisme" class="icon-btn" data-vision-open="" title="Affichage et daltonisme" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[20px]">visibility</span></button>
 <button class="btn-line btn-sm hidden sm:inline-flex" id="btn-howto" type="button">Comment jouer ?</button>
 <button aria-label="Recommencer la session" class="icon-btn" id="btn-reset-session" title="Recommencer la session" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[20px]">restart_alt</span></button>
 </div>
@@ -382,11 +387,24 @@ JEUX = f'''{page_head("Bibliothèque des jeux — Œil Studio")}
 (site / "jeux.html").write_text(JEUX)
 
 # ---------------------------------------------------------------- Accueil
+
+DEMOS = {
+    "typo": ('<span class="demo-fixed">A</span><span class="demo-obj">V</span>', "--t0:translateX(26px);--t1:translateX(16px);--t2:translateX(0)", ("Geste : tu rapproches le V", "Écart : encore 10 px de trop", "Principe : on égalise les blancs")),
+    "color": ('<span class="demo-ref"></span><span class="demo-obj"></span>', "--c0:#7FB23A;--c1:#A9C94F;--c2:#D8EF71", ("Geste : tu ajustes la teinte", "Écart : 12° de différence", "Principe : la teinte se juge à côté d'une référence")),
+    "layout": ('<span class="demo-cols"><i></i><i></i><i></i><i></i></span><span class="demo-obj"></span>', "--t0:translateX(-34px);--t1:translateX(-14px);--t2:translateX(-24px)", ("Geste : tu déplaces le bloc", "Écart : 10 px hors de la colonne", "Principe : les bords suivent la grille")),
+    "ui": ('<span class="demo-btn"><span class="demo-obj">Valider</span></span>', "--t0:translateX(18px);--t1:translateX(9px);--t2:translateX(0)", ("Geste : tu centres le libellé", "Écart : 9 px à droite", "Principe : marges égales de chaque côté")),
+    "ux": ('<span class="demo-zone"></span><span class="demo-obj"></span>', "--t0:scale(.45);--t1:scale(.7);--t2:scale(1)", ("Geste : tu agrandis la cible", "Écart : 14 px de moins que prévu", "Principe : 44 px minimum pour un doigt")),
+    "motion": ('<span class="demo-rail"></span><span class="demo-obj"></span>', "--t0:translateX(-70px);--t1:translateX(30px);--t2:translateX(70px)", ("Geste : tu règles la vitesse", "Écart : l'arrivée est trop brusque", "Principe : ce qui entre ralentit à la fin")),
+}
+def demo(k):
+    html, vars_, cap = DEMOS[k]
+    return f'''<div aria-hidden="true" class="demo demo-{k}" style="{vars_}"><div class="demo-scene">{html}</div><p class="demo-cap"><span>{cap[0]}</span><span>{cap[1]}</span><span>{cap[2]}</span></p></div>'''
 def disc_card(k, d):
     lst = [g for g in GAMES if g["domain"] == k]
     items = "".join(f'<li><a href="{g["id"]}.html"><span>{g["name"]}</span><span aria-hidden="true" class="material-symbols-outlined">arrow_forward</span></a></li>' for g in lst[:5])
     return f'''<div class="disc-card" style="--field:{d["field"]}">
 <p class="disc-head"><span class="board-dot"></span>{d["label"]}</p>
+{demo(k)}
 <ul>{items}</ul>
 <a class="disc-more" href="jeux.html?d={k}">{"+ " + str(len(lst) - 5) + " autres jeux" if len(lst) > 5 else "Voir la discipline"}<span aria-hidden="true" class="material-symbols-outlined">arrow_forward</span></a>
 </div>'''
@@ -410,13 +428,14 @@ INDEX = f'''{page_head("Œil Studio — Affine ton œil")}
 </div>
 <div class="lg:col-span-5 reveal" style="--d:220ms">
 <div class="quiz-card">
-<p class="text-body-sm text-ink/70">Test éclair, sans inscription</p>
+<p class="text-body-sm text-ink/70">Test éclair · 5 secondes, sans inscription</p>
 <h2 class="mt-1 text-[24px] sm:text-[28px] font-medium tracking-[-0.03em] leading-tight">Lequel est centré à l'œil ?</h2>
 <div class="mt-5 grid grid-cols-2 gap-3">
-<button aria-pressed="false" class="quiz-opt" id="quiz-btn-a" onclick="testEye('A')" type="button"><span class="quiz-fake"><span>Valider</span><span class="material-symbols-outlined text-[16px] pl-2">check</span></span><span class="text-body-sm font-medium">A</span></button>
-<button aria-pressed="false" class="quiz-opt" id="quiz-btn-b" onclick="testEye('B')" type="button"><span class="quiz-fake"><span>Valider</span><span class="material-symbols-outlined text-[16px]">check</span></span><span class="text-body-sm font-medium">B</span></button>
+<button aria-label="Réponse A" aria-pressed="false" class="quiz-opt" id="quiz-btn-a" onclick="testEye('A')" type="button"><span class="quiz-fake"><span>Valider</span><span class="material-symbols-outlined text-[16px] pl-2">check</span></span><span class="quiz-letter">A</span></button>
+<button aria-label="Réponse B" aria-pressed="false" class="quiz-opt" id="quiz-btn-b" onclick="testEye('B')" type="button"><span class="quiz-fake"><span>Valider</span><span class="material-symbols-outlined text-[16px]">check</span></span><span class="quiz-letter">B</span></button>
 </div>
-<div aria-live="polite" class="hidden mt-5" id="quiz-feedback"><p class="font-medium text-[17px]" id="feedback-verdict"></p><p class="mt-1 text-body-sm" id="feedback-expl"></p><a class="btn-quiet inline-block mt-3 text-[14px] font-medium" href="optical-center.html">Jouer à Optical Center</a></div>
+<p class="mt-3 text-body-sm text-ink/70" id="quiz-hint">Clique sur ta réponse, ou appuie sur A ou B.</p>
+<div aria-live="polite" class="hidden mt-5" id="quiz-feedback"><p class="font-medium text-[17px]" id="feedback-verdict"></p><p class="mt-1 text-body-sm" id="feedback-expl"></p><a class="btn btn-sm mt-3" href="optical-center.html">Jouer à Optical Center<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></a></div>
 </div>
 </div>
 </div>
@@ -487,21 +506,14 @@ INDEX = f'''{page_head("Œil Studio — Affine ton œil")}
 </div>
 </section>
 
-<section class="{W} pb-24 lg:pb-32">
-<div class="course-banner reveal">
-<div class="course-copy">
-<p class="feature-kicker"><span class="board-dot"></span>Programme guidé · 14 jours</p>
-<h2 class="feature-title">14 jours pour composer juste.</h2>
-<p class="feature-text">Chaque jour, un principe, un jeu pour le sentir et une fiche pour le retenir. Dix minutes suffisent.</p>
-<ul class="course-list"><li>14 défis commentés, dans l'ordre</li><li>Fiches de synthèse à garder</li><li>Certificat de fin de parcours</li></ul>
+<section class="{W} pb-24 lg:pb-32 scroll-mt-20" id="offres">
+<div class="method-head"><h2 class="text-big reveal">Gratuit pour jouer.</h2><p class="reveal text-body-lg max-w-[30rem]" style="--d:60ms">Sans compte ni carte bancaire pour commencer. Passe à Pro quand tu veux progresser.</p></div>
+<div class="plan-grid reveal" style="--d:100ms">
+<article class="plan-card"><h3>Gratuit</h3><p class="plan-price tabular">0 €</p><p class="plan-note">Pour toujours</p><ul><li>{sum(1 for g in GAMES if not g["pro"])} jeux</li><li>Le défi du jour</li><li>Parties en direct et défis entre amis</li><li>Progression sur cet appareil</li></ul><a class="btn-line" href="jeux.html">Commencer à jouer</a></article>
+<article class="plan-card is-top"><p class="plan-flag">Le plus complet</p><h3>Œil Pro</h3><p class="plan-price tabular">3 €<small> / mois</small></p><p class="plan-note">Ou 24 € par an, soit 2 mois offerts</p><ul><li>Les {len(GAMES)} jeux, sans limite</li><li>Le parcours de 14 jours inclus</li><li>Progression sur tous tes appareils</li><li>Résiliable à tout moment</li></ul><a class="btn" href="abonnement.html?plan=pro-mensuel">Passer à Pro</a></article>
+<article class="plan-card"><h3>Parcours intensif</h3><p class="plan-price tabular">19 €</p><p class="plan-note">Payé une fois, accès à vie</p><ul><li>14 jours, un principe et un jeu par jour</li><li>Fiches de synthèse à garder</li><li>Certificat de fin de parcours</li><li>Sans abonnement</li></ul><a class="btn-line" href="parcours.html">Voir le programme</a></article>
 </div>
-<div class="course-price">
-<p class="text-body-sm text-text-muted">Paiement unique</p>
-<p class="course-amount tabular">19 €</p>
-<p class="text-body-sm">Accès à vie, sans abonnement.</p>
-<div class="course-actions"><a class="btn" href="abonnement.html?plan=parcours">Acheter le parcours</a><a class="btn-line" href="parcours.html">Voir le programme jour par jour</a></div>
-</div>
-</div>
+<p class="mt-5 text-body-sm"><a class="underline" href="tarifs.html">Comparer toutes les offres</a>, dont l'offre Classe pour les écoles.</p>
 </section>
 
 <section class="{W} pb-24 lg:pb-36 grid lg:grid-cols-12 gap-10 lg:gap-8 items-start scroll-mt-16" id="faq">
@@ -523,8 +535,14 @@ INDEX = f'''{page_head("Œil Studio — Affine ton œil")}
     document.getElementById("feedback-expl").textContent = ok
       ? "L'icône à droite alourdit le bouton. B la rapproche du texte pour garder le centre de gravité ressenti au milieu."
       : "Les marges de A sont égales dans le code, mais l'icône éloignée tire le regard vers la droite. L'œil demande une compensation.";
-    document.querySelectorAll(".quiz-opt").forEach((b) => b.setAttribute("aria-pressed", String(b.id === "quiz-btn-" + choice.toLowerCase())));
+    document.querySelectorAll(".quiz-opt").forEach((b) => {{ b.setAttribute("aria-pressed", String(b.id === "quiz-btn-" + choice.toLowerCase())); b.classList.toggle("is-answer", b.id === "quiz-btn-b"); }});
+    document.getElementById("quiz-hint").hidden = true;
   }}
+  document.addEventListener("keydown", (e) => {{
+    if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest("input, textarea, select")) return;
+    const k = e.key.toUpperCase();
+    if ((k === "A" || k === "B") && document.getElementById("quiz-hint") && !document.getElementById("quiz-hint").hidden) testEye(k);
+  }});
   // Démonstration de la méthode : la frise avance seule, la carte change sur place ; un clic reprend la main.
   (function () {{
     const show = document.getElementById("method-show"), line = document.getElementById("method-line"), tabs = [...line.querySelectorAll(".method-tab")];
