@@ -254,7 +254,7 @@ DEFI = f'''{page_head("Défi du jour — Œil Studio", kern=True, daily=True)}
     if (window.OeilAccount && OeilAccount.enabled) OeilAccount.dailyBoard(S.today).then((rows) => {{
       if (!rows.length) return;
       const me = OeilAccount.get();
-      document.getElementById("ticket-board").innerHTML = rows.slice(0, 5).map((r, i) => `<li class="${{me && r.name === me.name ? "is-me" : ""}}"><span>${{i + 1}}</span>${{OeilAvatar({{ name: r.name, pro: r.pro, avatar: {{ color: r.avatar_color, icon: r.avatar_icon }} }}, "avatar-sm")}}<span class="truncate">${{OeilWho(r.name, r.username)}}</span><b>${{r.best}} %</b></li>`).join("");
+      document.getElementById("ticket-board").innerHTML = rows.slice(0, 5).map((r, i) => `<li><span>${{i + 1}}</span>${{OeilAvatar({{ name: r.name, pro: r.pro, avatar: {{ color: r.avatar_color, icon: r.avatar_icon }} }}, "avatar-sm")}}<span class="truncate">${{OeilWho(r.name, r.username)}}${{me && r.name === me.name ? " <small>(moi)</small>" : ""}}</span><b>${{r.best}} %</b></li>`).join("");
     }}).catch(() => {{}});
     document.getElementById("ticket-go").addEventListener("click", () => {{ intro.hidden = true; app.hidden = false; Oeil.start({{ ids, rounds, title }}); window.scrollTo(0, 0); }});
   }})();
@@ -268,7 +268,8 @@ DEFI = f'''{page_head("Défi du jour — Œil Studio", kern=True, daily=True)}
 CHIP = "chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors"
 chips = "".join(
     f'<button aria-pressed="false" class="{CHIP}" data-domain="{k}" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:{v["field"]}"></span>{v["label"]}</button>'
-    for k, v in DOMAINS.items()) + f'<button aria-pressed="false" class="{CHIP}" data-domain="all" type="button">Tous les jeux</button>'
+    for k, v in DOMAINS.items())
+chips = f'<button aria-pressed="false" class="{CHIP}" data-domain="all" type="button">Tous</button>' + chips
 PRO_ATTR, LOCK = ' data-pro=""', '<b aria-hidden="true" class="material-symbols-outlined mix-lock">lock</b>'
 mixchips = "".join(f'<label class="mix-chip"><input checked=""{PRO_ATTR if g["pro"] else ""} type="checkbox" value="{g["id"]}"/><span><i style="background:{DOMAINS[g["domain"]]["field"]}"></i>{g["name"]}{LOCK if g["pro"] else ""}</span></label>' for g in GAMES)
 SOON = ["Bézier Letters", "Type Detective", "Rag Rescue", "Widow Hunter", "Type Scale", "Glyph Memory", "Palette Recall", "Saturation Ladder", "Gradient Repair", "Semantic Colors",
@@ -284,14 +285,17 @@ JEUX = f'''{page_head("Bibliothèque des jeux — Œil Studio")}
 <p class="board-strip"><span class="board-dot"></span>{len(GAMES)} jeux · 6 disciplines · gratuits, sans compte</p>
 <h1 class="text-[clamp(4.25rem,9.6vw,9.5rem)] font-medium leading-[0.88] tracking-[-0.06em] reveal">Bibliothèque</h1>
 <p class="mt-6 lg:mt-10 max-w-[38rem] text-[20px] sm:text-[24px] leading-[1.35] tracking-[-0.015em] reveal" style="--d:80ms">Des jeux de 2 à 5 minutes en typographie, couleur, composition, UI, UX et motion. Joue-les un par un, ou mélange-les : une manche, un jeu.</p>
-<div class="mt-8 flex flex-wrap gap-3 reveal" style="--d:140ms"><button class="btn" id="rand-game" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">casino</span>Jeu au hasard</button><button class="btn-line" id="rand-mix" type="button">Mélange surprise</button><a class="btn-line" href="#melange">Composer un mélange</a><a class="btn-line" href="live.html">Jouer à plusieurs</a><a class="btn-line" href="defi.html">Défi du jour</a></div>
+<div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 reveal" style="--d:140ms"><button class="btn" id="rand-game" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">casino</span>Jeu au hasard</button><a class="lib-link" href="#melange">Composer un mélange</a><a class="lib-link" href="live.html">Jouer à plusieurs</a></div>
 </div>
 </section>
 <section aria-label="Jeux disponibles" class="{W} pt-12 lg:pt-16">
 <div class="lib-bar">
 <div aria-label="Filtrer par discipline" class="lib-chips" role="group">{chips}</div>
-<label class="lib-search"><span aria-hidden="true" class="material-symbols-outlined">search</span><input aria-label="Rechercher un jeu" autocomplete="off" id="game-search" placeholder="Rechercher" type="search"/></label>
-<div class="lib-level">{seg("level", [("all", "Tous"), ("debutant", "Débutant"), ("intermediaire", "Intermédiaire"), ("avance", "Avancé")], "all")}<span aria-live="polite" class="text-body-sm text-text-muted tabular whitespace-nowrap" id="filter-count">{len(GAMES)} jeux</span></div>
+<div class="lib-tools">
+<label class="lib-pill lib-find"><span aria-hidden="true" class="material-symbols-outlined">search</span><input aria-label="Rechercher un jeu" autocomplete="off" id="game-search" placeholder="Rechercher" type="search"/></label>
+<label class="lib-pill"><select aria-label="Filtrer par niveau" id="level-pick"><option value="all">Tous niveaux</option><option value="debutant">Débutant</option><option value="intermediaire">Intermédiaire</option><option value="avance">Avancé</option></select><span aria-hidden="true" class="material-symbols-outlined">expand_more</span></label>
+<span aria-live="polite" class="text-body-sm text-text-muted tabular whitespace-nowrap" id="filter-count">{len(GAMES)} jeux</span>
+</div>
 </div>
 <div id="games-list" role="list">{"".join(row(g) for g in GAMES)}</div>
 <div class="hidden py-14" id="no-results"><p class="text-headline-sm">Aucun jeu ne correspond à ces filtres.</p><button class="btn-quiet mt-2 text-[15px] font-medium" id="reset-filters" type="button">Réinitialiser les filtres</button></div>
@@ -303,7 +307,7 @@ JEUX = f'''{page_head("Bibliothèque des jeux — Œil Studio")}
 <p class="mt-4 text-body-md text-on-surface-variant max-w-[26rem]">Choisis tes jeux : chaque manche en tire un différent. Idéal pour s'échauffer, ou pour défier un ami avec le lien envoyé à la fin.</p>
 </div>
 <form class="lg:col-span-8 flex flex-col gap-5" id="mix-form">
-<fieldset><legend class="text-body-sm text-text-muted mb-2">Jeux inclus <button class="underline ml-2" id="mix-all" type="button">tout cocher</button><button class="underline ml-2" id="mix-none" type="button">tout décocher</button></legend>
+<fieldset><legend class="pick-legend"><span>Jeux inclus</span><button class="btn-line btn-sm" id="mix-rand" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">casino</span>Aléatoire</button><button class="underline" id="mix-all" type="button">tout cocher</button><button class="underline" id="mix-none" type="button">tout décocher</button></legend>
 <div class="flex flex-wrap gap-2">{mixchips}</div><p class="mt-3 text-body-sm text-text-muted" hidden="" id="mix-pro-note">Les jeux avec un cadenas font partie d'<a class="underline" href="tarifs.html#pro">Œil Pro</a>. Les autres sont gratuits.</p></fieldset>
 <div class="flex flex-wrap items-center gap-4">
 {seg("rounds", [("5", "5"), ("8", "8"), ("10", "10"), ("15", "15")], "8", "Manches")}
@@ -323,10 +327,10 @@ JEUX = f'''{page_head("Bibliothèque des jeux — Œil Studio")}
 <script>
   (function () {{
     const wanted = new URLSearchParams(location.search).get("d");
-    const state = {{ domain: wanted && (wanted === "all" || window.OEIL_DOMAINS_KEYS.includes(wanted)) ? wanted : "typo", level: "all" }};
+    const state = {{ domain: wanted && (wanted === "all" || window.OEIL_DOMAINS_KEYS.includes(wanted)) ? wanted : "all", level: "all" }};
     const rows = [...document.querySelectorAll("#games-list .game-row")];
     const chips = [...document.querySelectorAll(".chip")];
-    const levels = [...document.querySelectorAll('input[name="level"]')];
+    const levelPick = document.getElementById("level-pick");
     const count = document.getElementById("filter-count");
     const empty = document.getElementById("no-results");
     const search = document.getElementById("game-search");
@@ -345,8 +349,8 @@ JEUX = f'''{page_head("Bibliothèque des jeux — Œil Studio")}
     }}
     search.addEventListener("input", apply);
     chips.forEach((c) => c.addEventListener("click", () => {{ state.domain = c.dataset.domain; search.value = ""; apply(); }}));
-    levels.forEach((r) => r.addEventListener("change", () => {{ state.level = r.value; apply(); }}));
-    document.getElementById("reset-filters").addEventListener("click", () => {{ state.level = "all"; levels[0].checked = true; search.value = ""; apply(); }});
+    levelPick.addEventListener("change", () => {{ state.level = levelPick.value; apply(); }});
+    document.getElementById("reset-filters").addEventListener("click", () => {{ state.level = "all"; levelPick.value = "all"; search.value = ""; apply(); }});
     apply();
     // Composer un mélange : les jeux Pro sont verrouillés sans l'offre Pro
     const pro = window.OeilAccount && window.OeilAccount.isPro();
@@ -361,7 +365,7 @@ JEUX = f'''{page_head("Bibliothèque des jeux — Œil Studio")}
     const allowed = () => boxes.map((b) => b.value);
     const shuffled = (l) => l.map((x) => [Math.random(), x]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
     document.getElementById("rand-game").onclick = () => {{ location.href = `${{shuffled(allowed())[0]}}.html`; }};
-    document.getElementById("rand-mix").onclick = () => {{ location.href = `defi.html?jeux=${{shuffled(allowed()).slice(0, 6).join(",")}}&manches=6`; }};
+    document.getElementById("mix-rand").onclick = () => {{ const n = +document.querySelector('input[name="rounds"]:checked').value, pick = new Set(shuffled(allowed()).slice(0, Math.max(n, 2))); boxes.forEach((b) => (b.checked = pick.has(b.value))); }};
     document.getElementById("mix-all").onclick = () => boxes.forEach((b) => (b.checked = true));
     document.getElementById("mix-none").onclick = () => boxes.forEach((b) => (b.checked = false));
     document.getElementById("mix-form").addEventListener("submit", (e) => {{

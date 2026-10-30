@@ -92,6 +92,15 @@
 (function () {
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const PRO = ["pro", "parcours", "classe", "ecole", "classe-eleve"];
+  // Série de jours du défi, affichée à côté du compte
+  function streakBadge() {
+    let d = null;
+    try { d = JSON.parse(localStorage.getItem("oeil:daily")); } catch (e) {}
+    if (!d || !d.streak || !d.last) return "";
+    const age = (Date.now() - new Date(d.last + "T00:00:00").getTime()) / 864e5;
+    if (age >= 2) return "";
+    return `<span class="nav-streak" title="${d.streak} jour${d.streak > 1 ? "s" : ""} de série"><span class="material-symbols-outlined" aria-hidden="true">local_fire_department</span>${d.streak}</span>`;
+  }
   function paint() {
     let u = null;
     try { u = JSON.parse(localStorage.getItem("oeil:account")); } catch (e) {}
@@ -103,7 +112,7 @@
       const pro = PRO.includes(u.plan);
       a.href = "compte.html";
       const av = u.avatar || {}, inner = av.icon ? `<span class="material-symbols-outlined" aria-hidden="true">${esc(av.icon)}</span>` : esc((u.name || "?").trim()[0].toUpperCase());
-      if (a.dataset.orig.includes("data-account-name")) { a.classList.add("account-chip"); a.innerHTML = `<span class="avatar${pro ? " is-pro" : ""}" style="--av:${esc(av.color || "#B9D9FF")}">${inner}${pro ? '<span class="crown" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 7.5 7 11.5 12 4l5 7.5 4.5-4L19.5 19h-15z" fill="#141413"/></svg></span>' : ""}</span><span class="hidden sm:inline">${esc(u.name)}</span>${pro ? '<span class="pro-chip">Pro</span>' : ""}`; }
+      if (a.dataset.orig.includes("data-account-name")) { a.classList.add("account-chip"); a.innerHTML = `${streakBadge()}<span class="avatar${pro ? " is-pro" : ""}" style="--av:${esc(av.color || "#B9D9FF")}">${inner}${pro ? '<span class="crown" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 7.5 7 11.5 12 4l5 7.5 4.5-4L19.5 19h-15z" fill="#141413"/></svg></span>' : ""}</span><span class="hidden sm:inline">${esc(u.name)}</span>${pro ? '<span class="pro-chip">Pro</span>' : ""}`; }
       else a.textContent = u.name;
     });
   }

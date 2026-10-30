@@ -1709,3 +1709,36 @@ a.who:hover { text-decoration: underline; text-underline-offset: 3px; }
 /* Auto Layout : un cadre assez grand pour voir l'alignement */
 .al-box { min-width: 220px; min-height: 170px; max-width: 100%; }
 .al-panel { justify-content: flex-start; gap: 12px; }
+/* Bibliothèque : une ligne de disciplines, des outils discrets */
+.lib-link { font-size: 15px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px; color: #141413; }
+.lib-link:hover { color: #F0447A; }
+.lib-bar { row-gap: 12px; }
+.lib-tools { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.lib-pill { display: inline-flex; align-items: center; gap: 4px; height: 36px; padding: 0 12px; border: 1px solid rgba(20,20,19,.25); border-radius: 999px; font-size: 14px; color: #141413; background: transparent; transition: border-color .15s; }
+.lib-pill:hover, .lib-pill:focus-within { border-color: #141413; }
+.lib-pill .material-symbols-outlined { font-size: 18px; flex-shrink: 0; pointer-events: none; }
+.lib-pill select { appearance: none; background: transparent; border: 0; outline: none; font: inherit; color: inherit; cursor: pointer; padding-right: 2px; }
+.lib-pill:has(select) { padding-right: 8px; }
+.lib-find { cursor: text; }
+.lib-find input { width: 84px; background: transparent; border: 0; outline: none; font: inherit; color: inherit; transition: width .2s; }
+.lib-find input:focus, .lib-find input:not(:placeholder-shown) { width: 150px; }
+.lib-find input::placeholder { color: #5E5D59; }
+.lib-find input::-webkit-search-cancel-button { display: none; }
+.lib-tools #filter-count { margin-left: 6px; }
+@media (max-width: 720px) { .lib-tools { margin-left: 0; width: 100%; } .lib-tools #filter-count { margin-left: auto; } }
+/* Sélection des jeux */
+.pick-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 14px; color: #5E5D59; }
+/* Classement du jour : plus de contour, juste (moi) */
+.ticket-rank li.is-me { box-shadow: none; }
+.ticket-rank small { font-size: 13px; color: #5E5D59; }
+/* En-tête */
+.account-chip { gap: 10px; }
+.account-chip .avatar.is-pro { margin-right: 4px; }
+.nav-streak { display: inline-flex; align-items: center; gap: 2px; font-size: 14px; font-weight: 500; color: #141413; font-variant-numeric: tabular-nums; margin-right: 2px; }
+.nav-streak .material-symbols-outlined { font-size: 18px; color: #F0447A; }
+/* Bas des pages de jeu */
+.game-more-same .more-all { margin-left: 0; }
+.game-more { margin-bottom: 120px; }
+/* Pleins et Déliés */
+.pd-fill, .pd-model path { stroke: #141413; stroke-linejoin: round; stroke-linecap: round; }
+.pd-ref { fill: #F0447A; stroke: #F0447A; stroke-linejoin: round; stroke-linecap: round; opacity: .4; }

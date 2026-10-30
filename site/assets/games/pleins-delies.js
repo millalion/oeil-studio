@@ -42,12 +42,18 @@
       return out;
     }));
   }
+  // La lettre est le passage d'une plume plate le long du tracé : chaque pas dessine un quadrilatère.
+  // Le contour (stroke) de la largeur du délié donne le trait le plus fin, partout.
   function outline(pts, p) {
-    return pts.map((st) => {
-      const a = st.map((q) => { const w = width(p, q.t) / 2; return `${(q.x + q.nx * w).toFixed(1)} ${(q.y + q.ny * w).toFixed(1)}`; });
-      const b = st.map((q) => { const w = width(p, q.t) / 2; return `${(q.x - q.nx * w).toFixed(1)} ${(q.y - q.ny * w).toFixed(1)}`; }).reverse();
-      return `M${a.join(" L")} L${b.join(" L")} Z`;
-    }).join(" ");
+    const a = (p.axis * Math.PI) / 180, nx = (Math.cos(a) * (p.stem - p.hair)) / 2, ny = (Math.sin(a) * (p.stem - p.hair)) / 2;
+    return pts.map((st) => st.slice(1).map((q, i) => {
+      const o = st[i];
+      let c = [[o.x - nx, o.y - ny], [o.x + nx, o.y + ny], [q.x + nx, q.y + ny], [q.x - nx, q.y - ny]];
+      // Tous les quadrilatères dans le même sens, pour que leur remplissage s'additionne
+      const area = c.reduce((t, v, k) => { const w = c[(k + 1) % 4]; return t + v[0] * w[1] - w[0] * v[1]; }, 0);
+      if (area < 0) c = c.reverse();
+      return `M${c.map((v) => `${v[0].toFixed(1)} ${v[1].toFixed(1)}`).join(" L")} Z`;
+    }).join(" ")).join(" ");
   }
   // Là où la plume donne son trait le plus épais, ou le plus fin
   function extreme(pts, axis, thick) {
@@ -60,6 +66,7 @@
   function draw(s) {
     const p = s.p;
     s.fill.setAttribute("d", outline(s.pts, p));
+    s.fill.style.strokeWidth = p.hair;
     const st = extreme(s.pts, p.axis, true), ha = extreme(s.pts, p.axis, false);
     s.st = st; s.ha = ha;
     const pos = (el, x, y) => { el.style.left = `${(x / S) * 100}%`; el.style.top = `${(y / S) * 100}%`; };
@@ -87,7 +94,7 @@
     },
     mount(board, s, api) {
       const wrap = api.h("div", "pd-wrap");
-      wrap.innerHTML = `<figure class="pd-model"><figcaption>Modèle</figcaption><svg viewBox="0 0 ${S} ${S}" aria-hidden="true"><path d="${outline(s.pts, s.g)}"/></svg></figure><div class="pd-stage"><svg viewBox="0 0 ${S} ${S}" aria-hidden="true"><path class="pd-fill"/><g class="pd-arms"></g></svg><div class="pd-read"></div></div>`;
+      wrap.innerHTML = `<figure class="pd-model"><figcaption>Modèle</figcaption><svg viewBox="0 0 ${S} ${S}" aria-hidden="true"><path d="${outline(s.pts, s.g)}" style="stroke-width:${s.g.hair}"/></svg></figure><div class="pd-stage"><svg viewBox="0 0 ${S} ${S}" aria-hidden="true"><path class="pd-fill"/><g class="pd-arms"></g></svg><div class="pd-read"></div></div>`;
       const stage = wrap.querySelector(".pd-stage");
       s.stage = stage; s.fill = wrap.querySelector(".pd-fill"); s.arms = wrap.querySelector(".pd-arms"); s.read = wrap.querySelector(".pd-read");
       const handle = (cls, label) => { const el = api.h("span", cls); el.tabIndex = 0; el.setAttribute("aria-label", label); stage.append(el); return el; };
@@ -131,7 +138,7 @@
     },
     reveal(board, s) {
       [s.hS, s.hH, s.hA].forEach((el) => el.classList.add("is-locked"));
-      s.arms.insertAdjacentHTML("beforeend", `<path class="pd-ref" d="${outline(s.pts, s.g)}"/>`);
+      s.arms.insertAdjacentHTML("beforeend", `<path class="pd-ref" d="${outline(s.pts, s.g)}" style="stroke-width:${s.g.hair}"/>`);
     },
   });
 })();

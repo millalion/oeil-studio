@@ -46,7 +46,7 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
 <form class="mt-8 flex flex-col gap-6" id="live-form">
 <fieldset><legend class="text-body-sm text-text-muted mb-2">Type de partie</legend>{seg("live-mode", [("rythme", "Entre amis"), ("quiz", "En classe")], "rythme")}<p class="mt-2 text-body-sm text-text-muted max-w-[36rem]" id="mode-help">Chacun joue sur son ordi ou son téléphone, à son rythme. On découvre le meilleur à la fin.</p></fieldset>
 <label class="grid gap-1 text-body-sm text-text-muted max-w-[28rem]">Nom de la partie<input class="field" id="live-title" placeholder="Ex. : Échauffement typo du mardi" required="" type="text"/></label>
-<fieldset><legend class="text-body-sm text-text-muted mb-2">Jeux de la partie</legend><div class="flex flex-wrap gap-2">{chips}</div><p class="mt-3 text-body-sm text-text-muted" hidden="" id="live-pro-note">Les jeux avec un cadenas font partie d'<a class="underline" href="tarifs.html#pro">Œil Pro</a>.</p></fieldset>
+<fieldset><legend class="pick-legend"><span>Jeux de la partie</span><button class="btn-line btn-sm" id="live-rand" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">casino</span>Aléatoire</button></legend><div class="flex flex-wrap gap-2">{chips}</div><p class="mt-3 text-body-sm text-text-muted" hidden="" id="live-pro-note">Les jeux avec un cadenas font partie d'<a class="underline" href="tarifs.html#pro">Œil Pro</a>.</p></fieldset>
 <div class="flex flex-wrap items-center gap-4">{seg("live-rounds", [("5", "5"), ("6", "6"), ("8", "8"), ("10", "10")], "6", "Manches")}<span hidden="" id="quiz-time">{seg("live-time", [("15", "15 s"), ("20", "20 s"), ("30", "30 s")], "20", "Temps par question")}</span><span class="form-msg" id="live-msg"></span></div>
 </form>
 </div>
@@ -144,6 +144,13 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
     const show = (step) => ["setup", "lobby", "live", "quiz", "podium"].forEach((k) => ($("step-" + k).hidden = k !== step));
     const joinUrl = () => location.href.split("#")[0].split("?")[0].replace(/[^/]*$/, "") + "rejoindre.html";
     const qr = (el, text, size) => { el.innerHTML = ""; if (window.QRCode) new QRCode(el, { text, width: size, height: size, colorDark: "#141413", colorLight: "#ffffff" }); else el.textContent = text; };
+    // Tire autant de jeux que de manches, parmi ceux disponibles dans ce type de partie
+    $("live-rand").addEventListener("click", () => {
+      const boxes = [...document.querySelectorAll("#live-form .mix-chip:not([hidden]) input:not(:disabled)")];
+      const n = +document.querySelector('input[name="live-rounds"]:checked').value;
+      const pick = new Set(boxes.map((b) => [Math.random(), b]).sort((a, b) => a[0] - b[0]).slice(0, n).map((x) => x[1]));
+      boxes.forEach((b) => (b.checked = pick.has(b)));
+    });
     $("live-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const ids = [...document.querySelectorAll("#live-form input[type=checkbox]:checked")].map((b) => b.value);

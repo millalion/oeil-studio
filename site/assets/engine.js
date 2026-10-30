@@ -150,13 +150,13 @@
     const submitBtn = $("#btn-submit"), hintBtn = $("#btn-hint"), coach = $("#coach"), result = $("#result"), summary = $("#summary");
     const ROUNDS = rounds;
     const plan = Array.from({ length: ROUNDS }, (_, i) => ids[i % ids.length]);
-    let round = 0, scores = [], state = null, phase = "play", hintUsed = false, game = null;
+    let round = 0, scores = [], state = null, phase = "play", hintUsed = false, game = null, skipCoach = false;
     const challenge = S.challenge;
     const canLevel = !mix && !challenge && !S.daily;
     const levelSeg = h("div", "seg-line level-seg", `<span>Niveau</span><button data-level="easy" type="button">Facile</button><button data-level="adv" type="button">Avancé</button>`);
     levelSeg.setAttribute("role", "group"); levelSeg.setAttribute("aria-label", "Niveau"); levelSeg.hidden = true;
     stage.append(levelSeg);
-    levelSeg.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { store.set("level:" + game.id, b.dataset.level); startRound(); }));
+    levelSeg.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { store.set("level:" + game.id, b.dataset.level); coachWait = null; showCoach(false); skipCoach = true; startRound(); }));
 
     const api = {
       board, controls, stage, drag, sortable, color, rand, randi, pick, shuffle, clamp, h,
@@ -264,11 +264,12 @@
       state = await game.setup(mix ? occ : round, api);
       S.round(round + 1000);
       renderDots();
-      if (mix || round === 0) {
+      if ((mix || round === 0) && !skipCoach) {
         brief.textContent = "Lis la consigne, puis lance la manche.";
         showCoach(true);
         await new Promise((go) => (coachWait = go));
       }
+      skipCoach = false;
       brief.textContent = typeof game.brief === "function" ? game.brief(state, round) : game.brief;
       game.mount(board, state, api);
       showCue(game.id);
