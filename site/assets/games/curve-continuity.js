@@ -44,12 +44,13 @@
         const el = api.h("span", "handle");
         el.tabIndex = 0; el.setAttribute("aria-label", `Poignée du point ${i}`);
         wrap.append(el);
-        api.drag(el, { start: () => ({ x: s.pts[i][4], y: s.pts[i][5], k: wrap.clientWidth / 600 }), move: (dx, dy, ev, c) => { s.pts[i][4] = c.x + dx / c.k; s.pts[i][5] = c.y + dy / c.k; draw(s); } });
+        api.drag(el, { start: () => ({ x: s.pts[i][4], y: s.pts[i][5], k: wrap.clientWidth / 600 }), move: (dx, dy, ev, c) => { const [x, y] = s.lock.snap(0, 0, c.x + dx / c.k, c.y + dy / c.k, ev); s.pts[i][4] = x; s.pts[i][5] = y; el.classList.toggle("is-snapped", s.lock.active(ev)); draw(s); }, end: () => el.classList.remove("is-snapped") });
         return { el, i };
       });
       board.append(wrap);
       draw(s);
       api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Aligne chaque poignée rose sur la grise</span>`;
+      s.lock = Oeil.angleLock(api.controls);
     },
     evaluate(s) {
       const e = s.broken.map((i) => err(s.pts[i]));

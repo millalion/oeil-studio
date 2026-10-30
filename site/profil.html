@@ -85,7 +85,7 @@
       $("pp-meta").textContent = `@${p.username} · ${ROLES[p.role] || ""}${p.pro ? " · Membre Œil Pro" : ""} · sur Œil Studio depuis ${new Date(p.since).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}`;
       const me = OeilAccount.get();
       const acts = $("pp-actions");
-      if (p.is_me) acts.innerHTML = '<a class="btn-line" href="compte.html">Modifier mon profil</a>';
+      if (p.is_me) acts.innerHTML = '<a class="btn-line" href="compte.html#profil">Modifier mon profil</a>';
       else if (p.is_friend) acts.innerHTML = '<span class="pro-chip" style="height:32px;padding:0 12px;font-size:13px">Vous êtes amis</span>';
       else if (me) { acts.innerHTML = '<button class="btn" id="pp-add" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">person_add</span>Ajouter en ami</button>'; $("pp-add").onclick = async () => { try { await OeilAccount.addFriendByUsername(p.username); load(); } catch (err) { $("pp-msg").textContent = OeilAccount.human(err); $("pp-msg").className = "form-msg is-error"; } }; }
       else acts.innerHTML = `<a class="btn" href="connexion.html?suite=${encodeURIComponent("profil.html?u=" + p.username)}">Se connecter pour l'ajouter</a>`;

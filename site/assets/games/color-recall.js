@@ -34,7 +34,64 @@
     }
     return { h: Math.round(h), s: Math.round(s * 100), l: Math.round(l * 100) };
   }
-  const userRgb = (s) => hsvToRgb(s.uh, s.us, s.uv);
+  const userRgb = (s) => s.urgb || hsvToRgb(s.uh, s.us, s.uv);
+  function rgbToHsv([r, g, b]) {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), d = max - Math.min(r, g, b);
+    let h = 0;
+    if (d) { h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4; h = (h * 60 + 360) % 360; }
+    return { h, s: max ? d / max : 0, v: max };
+  }
+  // CMJN simplifié, sans profil colorimétrique : pour raisonner en quadrichromie à l'écran.
+  function rgbToCmyk([r, g, b]) {
+    const R = r / 255, G = g / 255, B = b / 255, k = 1 - Math.max(R, G, B);
+    if (k >= 1) return [0, 0, 0, 100];
+    return [(1 - R - k) / (1 - k), (1 - G - k) / (1 - k), (1 - B - k) / (1 - k), k].map((x) => Math.round(x * 100));
+  }
+  const cmykToRgb = ([c, m, y, k]) => [c, m, y].map((x) => Math.round(255 * (1 - x / 100) * (1 - k / 100)));
+
+  // Panneau de curseurs, façon nuancier InDesign : chaque piste montre ce que donne le curseur.
+  const CHANNELS = { rgb: [["R", 255], ["V", 255], ["B", 255]], cmyk: [["C", 100], ["M", 100], ["J", 100], ["N", 100]] };
+  const toCss = (mode, v) => { const c = mode === "rgb" ? v : cmykToRgb(v); return `rgb(${c.join(",")})`; };
+  function modelValues(s) { return s.mode === "rgb" ? userRgb(s) : s.ucmyk || rgbToCmyk(userRgb(s)); }
+  function paintSliders(s) {
+    if (s.mode === "hsb") return;
+    const vals = modelValues(s);
+    s.rows.forEach(({ range, num, max }, i) => {
+      range.value = vals[i]; if (document.activeElement !== num) num.value = vals[i];
+      const lo = [...vals], hi = [...vals]; lo[i] = 0; hi[i] = max;
+      range.style.background = `linear-gradient(90deg, ${toCss(s.mode, lo)}, ${toCss(s.mode, hi)})`;
+    });
+  }
+  function setValue(s, i, v) {
+    const vals = [...modelValues(s)]; vals[i] = v;
+    if (s.mode === "rgb") { s.urgb = vals; s.ucmyk = null; } else { s.ucmyk = vals; s.urgb = cmykToRgb(vals); }
+    const hsv = rgbToHsv(s.urgb);
+    s.uh = hsv.h; s.us = hsv.s; s.uv = hsv.v;
+    update(s);
+  }
+  function buildSliders(s) {
+    s.rows = [];
+    s.sliders.innerHTML = "";
+    if (s.mode === "hsb") return;
+    CHANNELS[s.mode].forEach(([label, max], i) => {
+      const row = document.createElement("label");
+      row.className = "cr-ch";
+      row.innerHTML = `<span>${label}</span><input aria-label="${label}" max="${max}" min="0" type="range"/><input aria-label="Valeur ${label}" inputmode="numeric" max="${max}" min="0" type="number"/>`;
+      const [range, num] = row.querySelectorAll("input");
+      const set = (e) => { if (s.phase === "adjust") setValue(s, i, Oeil.clamp(Math.round(+e.target.value || 0), 0, max)); };
+      range.addEventListener("input", set); num.addEventListener("input", set);
+      s.sliders.append(row);
+      s.rows.push({ range, num, max });
+    });
+  }
+  function setMode(s, mode) {
+    s.mode = mode;
+    try { localStorage.setItem("oeil:cr-mode", mode); } catch (e) {}
+    s.tabs.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
+    s.hsbBox.hidden = mode !== "hsb"; s.sliders.hidden = mode === "hsb";
+    buildSliders(s); paintSliders(s);
+  }
 
   function paintSL(canvas, hue) {
     const ctx = canvas.getContext("2d"), w = canvas.width, h = canvas.height;
@@ -52,6 +109,7 @@
     paintSL(s.sl, s.uh);
     s.slHandle.style.left = `${s.us * 100}%`; s.slHandle.style.top = `${(1 - s.uv) * 100}%`;
     s.hueHandle.style.left = `${(s.uh / 360) * 100}%`;
+    paintSliders(s);
   }
 
   function startAdjust(s, api) {
@@ -100,18 +158,24 @@
       const slBox = api.h("div", "cr-sl-box"); slBox.append(s.sl);
       s.slHandle = api.h("span", "handle"); slBox.append(s.slHandle);
       const hueBox = api.h("div", "cr-hue grab"); s.hueHandle = api.h("span", "handle"); hueBox.append(s.hueHandle);
-      s.picker.append(slBox, hueBox);
+      s.hsbBox = api.h("div", "cr-hsb"); s.hsbBox.append(slBox, hueBox);
+      s.sliders = api.h("div", "cr-sliders");
+      s.tabs = api.h("div", "seg-line cr-tabs", [["hsb", "Sélecteur"], ["rgb", "RVB"], ["cmyk", "CMJN"]].map(([m, t]) => `<button aria-pressed="false" data-mode="${m}" type="button">${t}</button>`).join(""));
+      s.picker.append(s.tabs, s.hsbBox, s.sliders);
       wrap.append(s.swatch, s.picker);
       board.append(wrap);
+      s.tabs.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => setMode(s, b.dataset.mode)));
+      let saved = "hsb"; try { saved = localStorage.getItem("oeil:cr-mode") || "hsb"; } catch (e) {}
+      setMode(s, saved);
 
       const fromEvent = (el, ev) => { const r = el.getBoundingClientRect(); return [api.clamp((ev.clientX - r.left) / r.width, 0, 1), api.clamp((ev.clientY - r.top) / r.height, 0, 1)]; };
       api.drag(s.sl, {
-        start: (e) => { if (s.phase !== "adjust") return; const [x, y] = fromEvent(s.sl, e); s.us = x; s.uv = 1 - y; update(s); },
-        move: (dx, dy, ev) => { if (s.phase !== "adjust") return; const [x, y] = fromEvent(s.sl, ev); s.us = x; s.uv = 1 - y; update(s); },
+        start: (e) => { if (s.phase !== "adjust") return; const [x, y] = fromEvent(s.sl, e); s.urgb = s.ucmyk = null; s.us = x; s.uv = 1 - y; update(s); },
+        move: (dx, dy, ev) => { if (s.phase !== "adjust") return; const [x, y] = fromEvent(s.sl, ev); s.urgb = s.ucmyk = null; s.us = x; s.uv = 1 - y; update(s); },
       });
       api.drag(hueBox, {
-        start: (e) => { if (s.phase !== "adjust") return; s.uh = Math.round(fromEvent(hueBox, e)[0] * 359); update(s); },
-        move: (dx, dy, ev) => { if (s.phase !== "adjust") return; s.uh = Math.round(fromEvent(hueBox, ev)[0] * 359); update(s); },
+        start: (e) => { if (s.phase !== "adjust") return; s.urgb = s.ucmyk = null; s.uh = Math.round(fromEvent(hueBox, e)[0] * 359); update(s); },
+        move: (dx, dy, ev) => { if (s.phase !== "adjust") return; s.urgb = s.ucmyk = null; s.uh = Math.round(fromEvent(hueBox, ev)[0] * 359); update(s); },
       });
       api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Glisse dans le carré et sur la barre</span><span class="ctl-hint"><span class="material-symbols-outlined">keyboard</span>Flèches : clarté et saturation</span>`;
       update(s);
@@ -119,7 +183,8 @@
     },
 
     keys(e, s) {
-      if (s.phase !== "adjust") return;
+      if (s.phase !== "adjust" || s.mode !== "hsb" || e.target.closest("input")) return;
+      s.urgb = s.ucmyk = null;
       const st = e.shiftKey ? 0.05 : 0.01;
       const map = { ArrowLeft: ["us", -st], ArrowRight: ["us", st], ArrowUp: ["uv", st], ArrowDown: ["uv", -st] };
       if (!map[e.key]) return;
@@ -143,6 +208,7 @@
           { label: "Teinte", value: Math.abs(dh) <= 4 ? "juste" : `${dh > 0 ? "+" : ""}${dh}°`, good: Math.abs(dh) <= 4 },
           { label: "Saturation", value: Math.abs(ds) <= 4 ? "juste" : ds > 0 ? `trop vive (+${ds})` : `trop terne (${ds})`, good: Math.abs(ds) <= 4 },
           { label: "Clarté", value: Math.abs(dl) <= 4 ? "juste" : dl > 0 ? `trop claire (+${dl})` : `trop sombre (${dl})`, good: Math.abs(dl) <= 4 },
+          ...(s.mode === "rgb" ? [{ label: "Cible en RVB", value: tr.join(" · ") }] : s.mode === "cmyk" ? [{ label: "Cible en CMJN", value: rgbToCmyk(tr).join(" · ") }] : []),
         ],
         principle: s.tip,
       };

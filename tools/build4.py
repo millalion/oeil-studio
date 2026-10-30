@@ -82,7 +82,7 @@ def app_shell(title_html, sub_html, mix=False, current_id=None):
 <p class="coach-kicker" id="coach-kicker">Comment jouer</p>
 <h2 id="coach-title"></h2>
 <p class="coach-goal" id="coach-goal"></p>
-<ol id="coach-steps"></ol>
+<details class="coach-more"><summary>Voir le détail</summary><ol id="coach-steps"></ol></details>
 <button class="btn w-full" id="btn-coach-go" type="button">C'est parti<kbd>Entrée</kbd></button>
 </div>
 </div>

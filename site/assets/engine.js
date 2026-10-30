@@ -64,6 +64,24 @@
     });
   }
 
+  // ---------- Contrainte d'angle façon Illustrator : Maj (ou le bouton) cale une poignée tous les 45° ----------
+  function angleLock(controls) {
+    let on = false;
+    const b = h("button", "btn-line btn-sm ang-btn", `<span class="material-symbols-outlined" aria-hidden="true">architecture</span>Angle 45°`);
+    b.type = "button"; b.setAttribute("aria-pressed", "false");
+    b.title = "Contraint l'angle de la poignée tous les 45°, comme la touche Maj dans Illustrator";
+    b.addEventListener("click", () => { on = !on; b.setAttribute("aria-pressed", String(on)); });
+    controls.append(b, h("span", "ctl-hint", `<kbd>Maj</kbd> pendant le geste : angle contraint`));
+    return {
+      active: (ev) => on || !!(ev && ev.shiftKey),
+      snap(ax, ay, x, y, ev) {
+        if (!this.active(ev)) return [x, y];
+        const r = Math.hypot(x - ax, y - ay), a = Math.round(Math.atan2(y - ay, x - ax) / (Math.PI / 4)) * (Math.PI / 4);
+        return [ax + Math.cos(a) * r, ay + Math.sin(a) * r];
+      },
+    };
+  }
+
   // ---------- Rangée réordonnable (Hue Line, Lightness Ladder…) ----------
   function sortable(container, items, { locked = [], onChange } = {}) {
     let order = items.map((it) => it.id);
@@ -169,6 +187,29 @@
     $("#btn-howto") && $("#btn-howto").addEventListener("click", () => showCoach(true));
     hintBtn.addEventListener("click", () => { if (phase !== "play" || !game.hint) return; hintUsed = true; game.hint.run(state, api); });
 
+    // Montre le geste directement sur le jeu : une main animée sur le premier élément à manipuler.
+    let cueTimer;
+    function showCue(id) {
+      clearTimeout(cueTimer);
+      stage.querySelectorAll(".cue").forEach((n) => n.remove());
+      if (store.get("cue:" + id)) return;
+      let tries = 0;
+      const seek = () => {
+        if (phase !== "play") return;
+        const el = [...board.querySelectorAll(".handle, .grab, .kit-token, .kit-opt, .pickable")].find((n) => !n.closest(".is-locked") && n.getBoundingClientRect().width > 0);
+        if (!el) { if (++tries < 16) cueTimer = setTimeout(seek, 500); return; }
+        const dragging = el.matches(".handle, .grab, .kit-token");
+        const sr = stage.getBoundingClientRect(), r = el.getBoundingClientRect();
+        const cue = h("div", "cue" + (dragging ? " is-drag" : ""), `<i></i><span class="material-symbols-outlined" aria-hidden="true">${dragging ? "pan_tool" : "touch_app"}</span><b>${dragging ? "Glisse-moi" : "Touche ici"}</b>`);
+        cue.style.left = `${clamp(r.left + r.width / 2 - sr.left, 50, sr.width - 50)}px`;
+        cue.style.top = `${clamp(r.top + r.height / 2 - sr.top, 70, sr.height - 40)}px`;
+        stage.append(cue);
+        const off = () => { cue.remove(); store.set("cue:" + id, 1); stage.removeEventListener("pointerdown", off, true); };
+        stage.addEventListener("pointerdown", off, true);
+      };
+      cueTimer = setTimeout(seek, 400);
+    }
+
     function renderDots() {
       dots.innerHTML = "";
       for (let i = 0; i < ROUNDS; i++) {
@@ -206,6 +247,7 @@
       }
       brief.textContent = typeof game.brief === "function" ? game.brief(state, round) : game.brief;
       game.mount(board, state, api);
+      showCue(game.id);
     }
 
     function submit() {
@@ -386,5 +428,5 @@
     start({ ids: [def.id] });
   }
 
-  window.Oeil = { play, start, registry, color, drag, sortable, rand, randi, pick, shuffle, clamp, h, store, info };
+  window.Oeil = { play, start, registry, color, drag, sortable, angleLock, rand, randi, pick, shuffle, clamp, h, store, info };
 })();

@@ -484,7 +484,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
 <p class="board-strip"><span class="board-dot"></span>Mon compte · progression</p>
 <div class="px-5 sm:px-10 pt-16 pb-8">
 <div class="flex flex-wrap items-end justify-between gap-6">
-<div class="flex items-center gap-5 min-w-0"><span id="acc-avatar"></span><div class="min-w-0"><p class="text-body-md text-text-muted" id="acc-role">Sur cet appareil</p><h1 class="text-[clamp(44px,6.4vw,96px)] font-medium leading-[0.92] tracking-[-0.05em] break-words" id="acc-name">Ta progression</h1></div></div>
+<div class="flex items-center gap-5 min-w-0"><span id="acc-avatar"></span><div class="min-w-0"><p class="text-body-md text-text-muted"><span id="acc-role">Sur cet appareil</span></p><h1 class="text-[clamp(44px,6.4vw,96px)] font-medium leading-[0.92] tracking-[-0.05em] break-words" id="acc-name">Ta progression</h1><button class="edit-link mt-2" hidden="" id="acc-pen" type="button"><span aria-hidden="true" class="material-symbols-outlined">edit</span>Modifier mon prénom et mon pseudo</button></div></div>
 <div class="btn-row"><a class="btn" href="defi.html">Défi du jour</a><button class="btn-line" hidden="" id="acc-edit" type="button">Modifier mon profil</button><a class="btn-line" href="connexion.html#inscription" id="acc-signup">Créer un compte</a><a class="btn-line" href="connexion.html" id="acc-login">Se connecter</a></div>
 </div>
 <div class="acc-guest" hidden="" id="acc-guest"><span class="material-symbols-outlined" aria-hidden="true">cloud_upload</span><span>Ta progression est enregistrée sur cet appareil. <a class="underline" href="connexion.html#inscription">Crée un compte gratuit</a> pour la retrouver partout et apparaître dans le classement du jour.</span></div>
@@ -549,7 +549,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
       $("acc-name").textContent = u ? u.name : "Ta progression";
       $("acc-role").innerHTML = u ? `${u.username ? `<a class="underline" href="profil.html?u=${encodeURIComponent(u.username)}">@${esc(u.username)}</a> · ` : ""}${ROLES[u.role] || ""}${OeilAccount.isPro() ? " · Membre Œil Pro" : ""}` : "Sur cet appareil";
       ["acc-login", "acc-signup"].forEach((k) => ($(k).hidden = !!u));
-      ["acc-edit", "acc-logout", "acc-delete"].forEach((k) => ($(k).hidden = !u));
+      ["acc-edit", "acc-pen", "acc-logout", "acc-delete"].forEach((k) => ($(k).hidden = !u));
       $("acc-guest").hidden = !!u;
       $("sync-note").hidden = !OeilAccount.enabled;
       const plan = OeilAccount.plan(), P = PLANS[plan] || [plan, ""];
@@ -618,13 +618,15 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
 
     // Profil
     let pav = null;
-    $("acc-edit").addEventListener("click", () => {
+    const openProfile = () => {
       const u = OeilAccount.get(); if (!u) return;
       $("pf-name").value = u.name; $("pf-user").value = u.username || "";
       document.querySelectorAll('input[name="pf-role"]').forEach((r) => (r.checked = r.value === u.role));
       pav = avatarPicker("pav", $("pf-name"), u.avatar);
-      $("profile-form").hidden = false; $("pf-name").focus();
-    });
+      $("profile-form").hidden = false; $("pf-name").focus(); $("profile-form").scrollIntoView({ block: "center", behavior: "smooth" });
+    };
+    $("acc-edit").addEventListener("click", openProfile);
+    $("acc-pen").addEventListener("click", openProfile);
     $("pf-cancel").addEventListener("click", () => ($("profile-form").hidden = true));
     $("profile-form").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -671,6 +673,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
     OeilAccount.ready.then(async (u) => {
       header();
       if (!u) return;
+      if (location.hash === "#profil") openProfile();
       OeilProgress.merge(await OeilAccount.scores().catch(() => []));
       dashboard(); classes(); social();
       if (OeilAccount.justReferred) say($("friend-msg"), `Bienvenue ! Toi et ${OeilAccount.justReferred} avez 14 jours d'Œil Pro offerts.`, "ok");
@@ -799,7 +802,7 @@ page("profil.html", "Profil — Œil Studio", None, f"""<section class="{W} pt-6
       $("pp-meta").textContent = `@${p.username} · ${ROLES[p.role] || ""}${p.pro ? " · Membre Œil Pro" : ""} · sur Œil Studio depuis ${new Date(p.since).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}`;
       const me = OeilAccount.get();
       const acts = $("pp-actions");
-      if (p.is_me) acts.innerHTML = '<a class="btn-line" href="compte.html">Modifier mon profil</a>';
+      if (p.is_me) acts.innerHTML = '<a class="btn-line" href="compte.html#profil">Modifier mon profil</a>';
       else if (p.is_friend) acts.innerHTML = '<span class="pro-chip" style="height:32px;padding:0 12px;font-size:13px">Vous êtes amis</span>';
       else if (me) { acts.innerHTML = '<button class="btn" id="pp-add" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">person_add</span>Ajouter en ami</button>'; $("pp-add").onclick = async () => { try { await OeilAccount.addFriendByUsername(p.username); load(); } catch (err) { $("pp-msg").textContent = OeilAccount.human(err); $("pp-msg").className = "form-msg is-error"; } }; }
       else acts.innerHTML = `<a class="btn" href="connexion.html?suite=${encodeURIComponent("profil.html?u=" + p.username)}">Se connecter pour l'ajouter</a>`;

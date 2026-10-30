@@ -29,7 +29,7 @@
     howto: [
       { icon: "gesture", text: "Une lettre dessinée en courbes de Bézier a un ou deux segments déformés, avec leurs poignées roses." },
       { icon: "drag_pan", text: "Glisse les poignées roses pour redonner à la lettre une courbe tendue et régulière." },
-      { icon: "lightbulb", text: "Aux points extrêmes d'une courbe (tout en haut, tout à droite…), la poignée est horizontale ou verticale." },
+      { icon: "architecture", text: "Maintiens Maj (ou active « Angle 45° ») pour contraindre la poignée, comme dans Illustrator." },
     ],
     brief: (s) => `Répare la lettre ${s.L.name} en ajustant les poignées roses.`,
     hint: { label: "Aperçu plein", run(s) { s.svg.classList.toggle("is-filled"); } },
@@ -51,12 +51,21 @@
         s.handles.push({ el, i, k });
         api.drag(el, {
           start: () => ({ x: s.cur.segs[i][k * 2], y: s.cur.segs[i][k * 2 + 1], sc: wrap.clientWidth / 300 }),
-          move: (dx, dy, ev, c) => { s.cur.segs[i][k * 2] = api.clamp(c.x + dx / c.sc, -20, 320); s.cur.segs[i][k * 2 + 1] = api.clamp(c.y + dy / c.sc, -20, 320); draw(s); },
+          move: (dx, dy, ev, c) => {
+            // Chaque poignée pivote autour de son point d'ancrage : Maj la cale tous les 45°
+            const seg = s.cur.segs[i], [ax, ay] = k === 0 ? prev(s.cur, i) : [seg[4], seg[5]];
+            const [x, y] = s.lock.snap(ax, ay, c.x + dx / c.sc, c.y + dy / c.sc, ev);
+            seg[k * 2] = api.clamp(x, -20, 320); seg[k * 2 + 1] = api.clamp(y, -20, 320);
+            el.classList.toggle("is-snapped", s.lock.active(ev));
+            draw(s);
+          },
+          end: () => el.classList.remove("is-snapped"),
         });
       }));
       board.append(wrap);
       draw(s);
       api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Glisse les poignées roses</span>`;
+      s.lock = Oeil.angleLock(api.controls);
     },
     evaluate(s) {
       let dist = 0, n = 0;
