@@ -48,7 +48,11 @@
     ],
     brief: "Règle la largeur de la colonne pour obtenir le drapeau le plus régulier.",
     hint: { label: "Voir les creux", run(s) { s.marks.classList.toggle("is-on"); } },
-    setup(round) { return { text: TEXTS[round % TEXTS.length], w: Oeil.randi(MIN, MAX), lh: 27 }; },
+    setup() {
+      // Chaque paragraphe est recomposé à partir de phrases de tous les textes
+      const text = Oeil.shuffle(TEXTS.flatMap((t) => t.match(/[^.]+\./g) || [t])).slice(0, 4).map((x) => x.trim()).join(" ");
+      return { text, w: Oeil.randi(MIN, MAX), lh: 27 };
+    },
     mount(board, s, api) {
       s.max = Math.min(MAX, board.clientWidth - 80); s.min = Math.min(MIN, s.max - 90); s.w = api.clamp(s.w, s.min, s.max);
       const wrap = api.h("div", "rg-wrap");

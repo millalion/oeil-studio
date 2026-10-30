@@ -284,12 +284,13 @@ JEUX = f'''{page_head("Bibliothèque des jeux — Œil Studio")}
 <p class="board-strip"><span class="board-dot"></span>{len(GAMES)} jeux · 6 disciplines · gratuits, sans compte</p>
 <h1 class="text-[clamp(4.25rem,9.6vw,9.5rem)] font-medium leading-[0.88] tracking-[-0.06em] reveal">Bibliothèque</h1>
 <p class="mt-6 lg:mt-10 max-w-[38rem] text-[20px] sm:text-[24px] leading-[1.35] tracking-[-0.015em] reveal" style="--d:80ms">Des jeux de 2 à 5 minutes en typographie, couleur, composition, UI, UX et motion. Joue-les un par un, ou mélange-les : une manche, un jeu.</p>
-<div class="mt-8 flex flex-wrap gap-3 reveal" style="--d:140ms"><a class="btn" href="#melange">Composer un mélange</a><a class="btn-line" href="defi.html">Défi du jour</a></div>
+<div class="mt-8 flex flex-wrap gap-3 reveal" style="--d:140ms"><button class="btn" id="rand-game" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">casino</span>Jeu au hasard</button><button class="btn-line" id="rand-mix" type="button">Mélange surprise</button><a class="btn-line" href="#melange">Composer un mélange</a><a class="btn-line" href="live.html">Jouer à plusieurs</a><a class="btn-line" href="defi.html">Défi du jour</a></div>
 </div>
 </section>
 <section aria-label="Jeux disponibles" class="{W} pt-12 lg:pt-16">
 <div class="lib-bar">
 <div aria-label="Filtrer par discipline" class="lib-chips" role="group">{chips}</div>
+<label class="lib-search"><span aria-hidden="true" class="material-symbols-outlined">search</span><input aria-label="Rechercher un jeu" autocomplete="off" id="game-search" placeholder="Rechercher" type="search"/></label>
 <div class="lib-level">{seg("level", [("all", "Tous"), ("debutant", "Débutant"), ("intermediaire", "Intermédiaire"), ("avance", "Avancé")], "all")}<span aria-live="polite" class="text-body-sm text-text-muted tabular whitespace-nowrap" id="filter-count">{len(GAMES)} jeux</span></div>
 </div>
 <div id="games-list" role="list">{"".join(row(g) for g in GAMES)}</div>
@@ -328,19 +329,24 @@ JEUX = f'''{page_head("Bibliothèque des jeux — Œil Studio")}
     const levels = [...document.querySelectorAll('input[name="level"]')];
     const count = document.getElementById("filter-count");
     const empty = document.getElementById("no-results");
+    const search = document.getElementById("game-search");
+    const norm = (t) => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     function apply() {{
       let n = 0;
+      // Une recherche porte sur tous les jeux, quelle que soit la discipline choisie
+      const q = norm(search.value.trim());
       rows.forEach((r) => {{
-        const ok = (state.domain === "all" || r.dataset.domain === state.domain) && (state.level === "all" || r.dataset.level === "all" || r.dataset.level === state.level);
+        const ok = q ? norm(r.textContent).includes(q) : (state.domain === "all" || r.dataset.domain === state.domain) && (state.level === "all" || r.dataset.level === "all" || r.dataset.level === state.level);
         r.classList.toggle("hidden", !ok); if (ok) n++;
       }});
       chips.forEach((c) => {{ const on = c.dataset.domain === state.domain; c.setAttribute("aria-pressed", String(on)); c.classList.toggle("bg-ink", on); c.classList.toggle("text-white", on); }});
       count.textContent = n + (n > 1 ? " jeux" : " jeu");
       empty.classList.toggle("hidden", n > 0);
     }}
-    chips.forEach((c) => c.addEventListener("click", () => {{ state.domain = c.dataset.domain; apply(); }}));
+    search.addEventListener("input", apply);
+    chips.forEach((c) => c.addEventListener("click", () => {{ state.domain = c.dataset.domain; search.value = ""; apply(); }}));
     levels.forEach((r) => r.addEventListener("change", () => {{ state.level = r.value; apply(); }}));
-    document.getElementById("reset-filters").addEventListener("click", () => {{ state.level = "all"; levels[0].checked = true; apply(); }});
+    document.getElementById("reset-filters").addEventListener("click", () => {{ state.level = "all"; levels[0].checked = true; search.value = ""; apply(); }});
     apply();
     // Composer un mélange : les jeux Pro sont verrouillés sans l'offre Pro
     const pro = window.OeilAccount && window.OeilAccount.isPro();
@@ -351,6 +357,11 @@ JEUX = f'''{page_head("Bibliothèque des jeux — Œil Studio")}
     }});
     if (!pro) document.getElementById("mix-pro-note").hidden = false;
     const boxes = [...document.querySelectorAll("#mix-form input[type=checkbox]:not(:disabled)")];
+    // Au hasard : parmi les jeux auxquels on a accès
+    const allowed = () => boxes.map((b) => b.value);
+    const shuffled = (l) => l.map((x) => [Math.random(), x]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
+    document.getElementById("rand-game").onclick = () => {{ location.href = `${{shuffled(allowed())[0]}}.html`; }};
+    document.getElementById("rand-mix").onclick = () => {{ location.href = `defi.html?jeux=${{shuffled(allowed()).slice(0, 6).join(",")}}&manches=6`; }};
     document.getElementById("mix-all").onclick = () => boxes.forEach((b) => (b.checked = true));
     document.getElementById("mix-none").onclick = () => boxes.forEach((b) => (b.checked = false));
     document.getElementById("mix-form").addEventListener("submit", (e) => {{

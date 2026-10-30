@@ -47,7 +47,7 @@
       { icon: "drag_pan", text: "Glisse les gros points pour les placer, et les petites poignées pour courber le tracé." },
       { icon: "lightbulb", text: "Ramène une poignée sur son point pour retrouver un angle vif." },
     ],
-    brief: (s) => `Reproduis la ${s.sh.name} avec le moins de points possible : retire-en avec le bouton −.`,
+    brief: (s) => `Reproduis la ${s.sh.name} avec le moins de points possible.`,
     setup(round, api) {
       const sh = round % 2 ? polygon() : SHAPES[(round / 2) % SHAPES.length];
       return { sh: { ...sh, best: sh.sol.length }, pts: ring(8), adv: api.level === "adv" };
@@ -84,14 +84,17 @@
       s.build();
       board.append(wrap);
       draw(s);
-      api.controls.innerHTML = `<div class="nb-count" role="group" aria-label="Nombre de points"><span>Points</span><button aria-label="Retirer un point" data-d="-1" type="button">−</button><b>${s.pts.length}</b><button aria-label="Ajouter un point" data-d="1" type="button">+</button></div><span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Gros points : position. Petites poignées : courbure</span>`;
-      api.controls.querySelectorAll("[data-d]").forEach((b) => b.addEventListener("click", () => {
+      s.tools = api.h("div", "nb-tools is-new", `<button data-d="-1" type="button"><span aria-hidden="true">−</span> Retirer un point</button><b>${s.pts.length} points</b><button data-d="1" type="button"><span aria-hidden="true">+</span> Ajouter</button>`);
+      board.append(s.tools);
+      s.tools.querySelectorAll("[data-d]").forEach((b) => b.addEventListener("click", () => {
         if (api.phase !== "play") return;
+        s.tools.classList.remove("is-new");
         const n = Oeil.clamp(s.pts.length + +b.dataset.d, 3, 10);
         if (n > s.pts.length) { const a = s.pts[s.pts.length - 1], c = s.pts[0]; const g = ring(n)[n - 1]; s.pts.push({ ...g, x: (a.x + c.x) / 2, y: (a.y + c.y) / 2 }); } else if (n < s.pts.length) s.pts.pop();
-        api.controls.querySelector(".nb-count b").textContent = s.pts.length;
+        s.tools.querySelector("b").textContent = `${s.pts.length} points`;
         s.build(); draw(s);
       }));
+      api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Gros points : position. Petites poignées : courbure</span>`;
     },
     evaluate(s) {
       const v = iou(s.sh.d, pathD(s.pts)), n = s.pts.length, best = s.sh.best, extra = Math.max(0, n - best);

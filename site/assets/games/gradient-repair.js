@@ -14,6 +14,12 @@
     tokens.push({ id: "d1", html: sw({ ...base, l: base.l + 9 }), slot: null }, { id: "d2", html: sw({ ...base, s: Math.min(100, base.s + 22), h: base.h + 12 }), slot: null });
     return { prompt: `${prompt} : glisse les bonnes nuances dans les trous`, layout: "gradient", slots, tokens, explain };
   }
+  // Un dégradé inventé : deux couleurs tirées au sort, des étapes manquantes au hasard
+  function randomGradient() {
+    const h = Oeil.randi(0, 359), turn = Oeil.pick([0, 20, 40, 60]), n = Oeil.randi(6, 8);
+    const missing = Oeil.shuffle(Array.from({ length: n - 2 }, (_, i) => i + 1)).slice(0, Oeil.randi(2, 3)).sort((a, b) => a - b);
+    return item({ h, s: Oeil.randi(45, 80), l: Oeil.randi(20, 35) }, { h: h + turn, s: Oeil.randi(40, 85), l: Oeil.randi(75, 90) }, n, missing, "Complète le dégradé", "Un dégradé paraît régulier quand chaque marche de clarté est égale. Compare chaque case à ses deux voisines : l'écart doit être le même de chaque côté.");
+  }
   Oeil.kits.assign({
     id: "gradient-repair", name: "Gradient Repair",
     howto: [
@@ -22,6 +28,7 @@
       { icon: "lightbulb", text: "Compare chaque case à ses deux voisines : l'écart doit être le même de chaque côté." },
     ],
     items: [
+      ...Array.from({ length: 12 }, randomGradient),
       item({ h: 210, s: 70, l: 30 }, { h: 190, s: 60, l: 85 }, 7, [2, 4], "Complète le dégradé de bleus", "Un dégradé paraît régulier quand chaque marche de clarté est égale. Les leurres sont presque justes : une marche trop claire ou une teinte qui dérive se voit à côté de ses voisines."),
       item({ h: 10, s: 80, l: 45 }, { h: 45, s: 90, l: 70 }, 7, [1, 3, 5], "Complète le dégradé chaud", "En passant du rouge au jaune, la teinte et la clarté changent ensemble : une étape qui monte en clarté sans tourner en teinte paraît grise."),
       item({ h: 150, s: 40, l: 22 }, { h: 150, s: 30, l: 88 }, 8, [2, 5], "Complète la palette de verts (une seule teinte)", "Une palette monochrome se construit par paliers de clarté réguliers : c'est la base des échelles de couleurs d'un design system (vert 100 à vert 900)."),

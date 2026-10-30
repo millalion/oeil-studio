@@ -6,6 +6,14 @@
     [[40, 150, 0, 0, 60, 90], [200, 230, -70, 0, 70, 0], [330, 100, -50, 60, 50, -60], [470, 160, -50, -40, 50, 40], [580, 230, -40, 0, 0, 0]],
     [[40, 230, 0, 0, 80, -120], [260, 90, -90, 0, 90, 0], [460, 230, -70, -60, 70, 60], [580, 260, -40, 0, 0, 0]],
   ]);
+  // Un tracé inventé : des points répartis en largeur, chacun avec des poignées alignées
+  function makePath() {
+    const n = Oeil.randi(4, 5), gap = 540 / (n - 1);
+    return Array.from({ length: n }, (_, i) => {
+      const hx = gap * 0.36, hy = i === 0 || i === n - 1 ? 0 : Oeil.randi(-45, 45);
+      return [30 + i * gap, Oeil.randi(90, 240), i ? -hx : 0, i ? -hy : 0, i < n - 1 ? hx : 0, i < n - 1 ? hy : 0];
+    });
+  }
   function dPath(pts) {
     let s = `M${pts[0][0]} ${pts[0][1]}`;
     for (let i = 1; i < pts.length; i++) {
@@ -30,7 +38,7 @@
     ],
     brief: (s) => `Lisse le tracé : ${s.broken.length} points sont cassés.`,
     setup(round) {
-      const base = PATHS[round % PATHS.length].map((p) => [...p]);
+      const base = round % 2 ? makePath() : PATHS[(round / 2) % PATHS.length].map((p) => [...p]);
       const inner = base.map((_, i) => i).slice(1, -1);
       const broken = Oeil.shuffle(inner).slice(0, Math.min(inner.length, round < 2 ? 2 : 3)).sort();
       broken.forEach((i) => { const p = base[i], r = Math.hypot(p[4], p[5]), a = Math.atan2(p[5], p[4]) + (Oeil.randi(30, 70) * Math.PI / 180) * (Math.random() < 0.5 ? -1 : 1); p[4] = Math.cos(a) * r; p[5] = Math.sin(a) * r; });

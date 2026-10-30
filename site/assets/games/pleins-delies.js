@@ -80,7 +80,9 @@
     ],
     brief: (s) => `Retrouve le dosage de la ${s.g.name} : ${s.adv ? "plein, délié et axe" : "plein et délié"}.`,
     setup(round, api) {
-      const g = STYLES[round % STYLES.length], adv = api.level === "adv";
+      // Le style reste nommé, mais sa lettre et ses valeurs changent à chaque fois
+      const base = STYLES[round % STYLES.length], adv = api.level === "adv";
+      const g = { ...base, letter: Oeil.pick(Object.keys(LETTERS)), stem: base.stem + Oeil.randi(-4, 4), hair: Math.max(3, base.hair + Oeil.randi(-3, 3)), axis: base.axis + (base.axis ? Oeil.randi(-6, 6) : 0) };
       return { g, adv, pts: samples(LETTERS[g.letter]), p: { stem: 30, hair: 30, axis: adv ? 20 : g.axis } };
     },
     mount(board, s, api) {

@@ -44,7 +44,7 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
 <h1 class="text-big">Lance une partie<br/>en direct.</h1>
 <p class="mt-4 max-w-[38rem] text-body-lg">Choisis les jeux, crée la salle, projette cet écran. Chacun rejoint depuis son téléphone avec le code ou le QR code, et tout le monde joue le même tirage.</p>
 <form class="mt-8 flex flex-col gap-6" id="live-form">
-<fieldset><legend class="text-body-sm text-text-muted mb-2">Type de partie</legend>{seg("live-mode", [("rythme", "Chacun à son rythme"), ("quiz", "Quiz projeté, façon Kahoot")], "rythme")}<p class="mt-2 text-body-sm text-text-muted max-w-[36rem]" id="mode-help">Chacun joue les jeux complets sur son téléphone, le classement s'affiche ici.</p></fieldset>
+<fieldset><legend class="text-body-sm text-text-muted mb-2">Type de partie</legend>{seg("live-mode", [("rythme", "Entre amis"), ("quiz", "En classe")], "rythme")}<p class="mt-2 text-body-sm text-text-muted max-w-[36rem]" id="mode-help">Chacun joue sur son ordi ou son téléphone, à son rythme. On découvre le meilleur à la fin.</p></fieldset>
 <label class="grid gap-1 text-body-sm text-text-muted max-w-[28rem]">Nom de la partie<input class="field" id="live-title" placeholder="Ex. : Échauffement typo du mardi" required="" type="text"/></label>
 <fieldset><legend class="text-body-sm text-text-muted mb-2">Jeux de la partie</legend><div class="flex flex-wrap gap-2">{chips}</div><p class="mt-3 text-body-sm text-text-muted" hidden="" id="live-pro-note">Les jeux avec un cadenas font partie d'<a class="underline" href="tarifs.html#pro">Œil Pro</a>.</p></fieldset>
 <div class="flex flex-wrap items-center gap-4">{seg("live-rounds", [("5", "5"), ("6", "6"), ("8", "8"), ("10", "10")], "6", "Manches")}<span hidden="" id="quiz-time">{seg("live-time", [("15", "15 s"), ("20", "20 s"), ("30", "30 s")], "20", "Temps par question")}</span><span class="form-msg" id="live-msg"></span></div>
@@ -129,7 +129,7 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
     const modeOf = () => (document.querySelector('input[name="live-mode"]:checked') || {}).value;
     function applyMode() {
       const quiz = modeOf() === "quiz";
-      $("mode-help").textContent = quiz ? "Les questions s'affichent sur cet écran, chacun répond A, B, C ou D sur son téléphone. Plus on répond vite et juste, plus on marque de points." : "Chacun joue les jeux complets sur son téléphone, le classement s'affiche ici.";
+      $("mode-help").textContent = quiz ? "Les questions s'affichent sur l'écran du prof ou sur un ordi, chacun répond depuis son téléphone. Plus on répond vite et juste, plus on marque de points." : "Chacun joue sur son ordi ou son téléphone, à son rythme. On découvre le meilleur à la fin.";
       document.querySelectorAll("#live-form .mix-chip").forEach((c) => { const q = c.hasAttribute("data-quiz"); c.hidden = quiz && !q; const b = c.querySelector("input"); if (quiz) b.checked = q && !b.disabled; });
       $("quiz-time").hidden = !quiz;
       document.querySelector('input[name="live-rounds"]').closest(".flex").querySelector(".seg-pick-label").textContent = quiz ? "Questions" : "Manches";

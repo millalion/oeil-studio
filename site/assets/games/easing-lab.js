@@ -41,7 +41,12 @@
     ],
     brief: "Tords la courbe pour que la bille noire bouge comme la rose.",
     hint: { label: "Voir la cible 2 s", run(s) { const p = s.t.p, [a, b] = [toSvg(p[0], p[1]), toSvg(p[2], p[3])]; s.ref.setAttribute("d", `M${toSvg(0, 0)} C${a} ${b} ${toSvg(1, 1)}`); setTimeout(() => { if (Oeil && s.ref && !s.revealed) s.ref.setAttribute("d", ""); }, 2000); } },
-    setup(round) { return { t: TARGETS[round % TARGETS.length], u: [0.3, 0.3, 0.7, 0.7] }; },
+    setup(round) {
+      // Une manche sur deux : une courbe nommée, sinon une courbe inventée
+      const r = (a, b) => Oeil.randi(a, b) / 100;
+      const t = round % 2 ? { name: "courbe sur mesure", p: [r(5, 60), r(0, 100), r(40, 95), r(70, 100)], tip: "Lis une courbe comme une vitesse : plus elle est raide, plus l'élément va vite à cet instant. Une fin presque plate donne un atterrissage en douceur." } : TARGETS[(round / 2) % TARGETS.length];
+      return { t, u: [0.3, 0.3, 0.7, 0.7] };
+    },
     mount(board, s, api) {
       const wrap = api.h("div", "el-wrap");
       const lanes = api.h("div", "el-lanes", `<div class="el-lane"><span class="el-ball el-ball-ref"></span><small>Mouvement cible</small></div><div class="el-lane"><span class="el-ball el-ball-you"></span><small>Ta courbe</small></div>`);

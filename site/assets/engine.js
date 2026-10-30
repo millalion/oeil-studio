@@ -153,10 +153,9 @@
     let round = 0, scores = [], state = null, phase = "play", hintUsed = false, game = null;
     const challenge = S.challenge;
     const canLevel = !mix && !challenge && !S.daily;
-    const levelSeg = h("div", "seg-line level-seg", `<button data-level="easy" type="button">Facile</button><button data-level="adv" type="button">Avancé</button>`);
+    const levelSeg = h("div", "seg-line level-seg", `<span>Niveau</span><button data-level="easy" type="button">Facile</button><button data-level="adv" type="button">Avancé</button>`);
     levelSeg.setAttribute("role", "group"); levelSeg.setAttribute("aria-label", "Niveau"); levelSeg.hidden = true;
-    const howBtn = $("#btn-howto");
-    if (howBtn) howBtn.before(levelSeg);
+    stage.append(levelSeg);
     levelSeg.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { store.set("level:" + game.id, b.dataset.level); startRound(); }));
 
     const api = {
@@ -200,7 +199,7 @@
       if (game.hint) hintBtn.querySelector("span:last-child").textContent = game.hint.label;
     }
 
-    const showCoach = (on) => { coach.hidden = !on; if (on) $("#btn-coach-go").focus({ preventScroll: true }); };
+    const showCoach = (on) => { (on ? $("#btn-coach-go").before.bind($("#btn-coach-go")) : stage.append.bind(stage))(levelSeg); coach.hidden = !on; if (on) $("#btn-coach-go").focus({ preventScroll: true }); };
     // Le jeu (et ses comptes à rebours de mémorisation) ne démarre qu'après « C'est parti ».
     let coachWait = null;
     $("#btn-coach-go").addEventListener("click", () => { showCoach(false); store.set("coach:" + game.id, 1); if (coachWait) { const go = coachWait; coachWait = null; go(); } });

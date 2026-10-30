@@ -36,12 +36,13 @@
 <p class="board-strip"><span class="board-dot"></span>48 jeux · 6 disciplines · gratuits, sans compte</p>
 <h1 class="text-[clamp(4.25rem,9.6vw,9.5rem)] font-medium leading-[0.88] tracking-[-0.06em] reveal">Bibliothèque</h1>
 <p class="mt-6 lg:mt-10 max-w-[38rem] text-[20px] sm:text-[24px] leading-[1.35] tracking-[-0.015em] reveal" style="--d:80ms">Des jeux de 2 à 5 minutes en typographie, couleur, composition, UI, UX et motion. Joue-les un par un, ou mélange-les : une manche, un jeu.</p>
-<div class="mt-8 flex flex-wrap gap-3 reveal" style="--d:140ms"><a class="btn" href="#melange">Composer un mélange</a><a class="btn-line" href="defi.html">Défi du jour</a></div>
+<div class="mt-8 flex flex-wrap gap-3 reveal" style="--d:140ms"><button class="btn" id="rand-game" type="button"><span aria-hidden="true" class="material-symbols-outlined text-[18px]">casino</span>Jeu au hasard</button><button class="btn-line" id="rand-mix" type="button">Mélange surprise</button><a class="btn-line" href="#melange">Composer un mélange</a><a class="btn-line" href="live.html">Jouer à plusieurs</a><a class="btn-line" href="defi.html">Défi du jour</a></div>
 </div>
 </section>
 <section aria-label="Jeux disponibles" class="max-w-[1440px] mx-auto px-4 sm:px-8 pt-12 lg:pt-16">
 <div class="lib-bar">
 <div aria-label="Filtrer par discipline" class="lib-chips" role="group"><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="typo" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#F7B4CC"></span>Typographie</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="color" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#D8EF71"></span>Couleur</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="layout" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#B9D9FF"></span>Composition</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="ui" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#FFC08F"></span>UI</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="ux" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#FFE08A"></span>UX et accessibilité</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="motion" type="button"><span aria-hidden="true" class="inline-block w-2.5 h-2.5 rounded-full border border-ink mr-1.5 align-[1px]" style="background:#9FE3D0"></span>Motion et vectoriel</button><button aria-pressed="false" class="chip h-9 px-4 rounded-full text-[14px] font-medium border border-ink transition-colors" data-domain="all" type="button">Tous les jeux</button></div>
+<label class="lib-search"><span aria-hidden="true" class="material-symbols-outlined">search</span><input aria-label="Rechercher un jeu" autocomplete="off" id="game-search" placeholder="Rechercher" type="search"/></label>
 <div class="lib-level"><span class="flex flex-wrap items-center gap-2"><span class="seg-pick" role="radiogroup"><label><input checked="" name="level" type="radio" value="all"/><span>Tous</span></label><label><input name="level" type="radio" value="debutant"/><span>Débutant</span></label><label><input name="level" type="radio" value="intermediaire"/><span>Intermédiaire</span></label><label><input name="level" type="radio" value="avance"/><span>Avancé</span></label></span></span><span aria-live="polite" class="text-body-sm text-text-muted tabular whitespace-nowrap" id="filter-count">48 jeux</span></div>
 </div>
 <div id="games-list" role="list"><a class="game-row grid-cols-[auto_1fr_auto] md:grid-cols-[3.5rem_minmax(0,1.1fr)_minmax(0,1.7fr)_9rem_8rem_1.5rem]" data-domain="typo" data-level="all" href="kern-clinic.html" role="listitem" style="--row:#F7B4CC">
@@ -426,19 +427,24 @@
     const levels = [...document.querySelectorAll('input[name="level"]')];
     const count = document.getElementById("filter-count");
     const empty = document.getElementById("no-results");
+    const search = document.getElementById("game-search");
+    const norm = (t) => t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
     function apply() {
       let n = 0;
+      // Une recherche porte sur tous les jeux, quelle que soit la discipline choisie
+      const q = norm(search.value.trim());
       rows.forEach((r) => {
-        const ok = (state.domain === "all" || r.dataset.domain === state.domain) && (state.level === "all" || r.dataset.level === "all" || r.dataset.level === state.level);
+        const ok = q ? norm(r.textContent).includes(q) : (state.domain === "all" || r.dataset.domain === state.domain) && (state.level === "all" || r.dataset.level === "all" || r.dataset.level === state.level);
         r.classList.toggle("hidden", !ok); if (ok) n++;
       });
       chips.forEach((c) => { const on = c.dataset.domain === state.domain; c.setAttribute("aria-pressed", String(on)); c.classList.toggle("bg-ink", on); c.classList.toggle("text-white", on); });
       count.textContent = n + (n > 1 ? " jeux" : " jeu");
       empty.classList.toggle("hidden", n > 0);
     }
-    chips.forEach((c) => c.addEventListener("click", () => { state.domain = c.dataset.domain; apply(); }));
+    search.addEventListener("input", apply);
+    chips.forEach((c) => c.addEventListener("click", () => { state.domain = c.dataset.domain; search.value = ""; apply(); }));
     levels.forEach((r) => r.addEventListener("change", () => { state.level = r.value; apply(); }));
-    document.getElementById("reset-filters").addEventListener("click", () => { state.level = "all"; levels[0].checked = true; apply(); });
+    document.getElementById("reset-filters").addEventListener("click", () => { state.level = "all"; levels[0].checked = true; search.value = ""; apply(); });
     apply();
     // Composer un mélange : les jeux Pro sont verrouillés sans l'offre Pro
     const pro = window.OeilAccount && window.OeilAccount.isPro();
@@ -449,6 +455,11 @@
     });
     if (!pro) document.getElementById("mix-pro-note").hidden = false;
     const boxes = [...document.querySelectorAll("#mix-form input[type=checkbox]:not(:disabled)")];
+    // Au hasard : parmi les jeux auxquels on a accès
+    const allowed = () => boxes.map((b) => b.value);
+    const shuffled = (l) => l.map((x) => [Math.random(), x]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
+    document.getElementById("rand-game").onclick = () => { location.href = `${shuffled(allowed())[0]}.html`; };
+    document.getElementById("rand-mix").onclick = () => { location.href = `defi.html?jeux=${shuffled(allowed()).slice(0, 6).join(",")}&manches=6`; };
     document.getElementById("mix-all").onclick = () => boxes.forEach((b) => (b.checked = true));
     document.getElementById("mix-none").onclick = () => boxes.forEach((b) => (b.checked = false));
     document.getElementById("mix-form").addEventListener("submit", (e) => {

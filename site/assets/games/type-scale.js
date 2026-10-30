@@ -6,6 +6,13 @@
     slots: Object.keys(TEXT).map((role, i) => ({ id: role, label: role, render: (t) => `<span class="ts-sample" style="font-size:${t ? parseInt(t.html, 10) : 15}px;${t ? "" : "color:#8A8983"}">${TEXT[role]}</span>` })),
     tokens: sizes.map((s, i) => ({ id: `s${s}`, html: `${s} px`, slot: Object.keys(TEXT)[i] || null })),
   });
+  // Une échelle inventée : une base, un rapport, parfois une taille en trop
+  function randomScale() {
+    const base = Oeil.randi(12, 14), r = Oeil.pick([1.25, 1.333, 1.414, 1.5]);
+    const sizes = [4, 3, 2, 1, 0].map((n) => Math.round(base * Math.pow(r, n)));
+    const extra = Math.random() < 0.4 ? [sizes[3] + 1] : [];
+    return scale([...sizes, ...extra], `Cette échelle multiplie chaque taille par ${String(r).replace(".", ",")} à partir de ${base} px. ${extra.length ? `${extra[0]} px est l'intrus : trop proche de ${sizes[3]} px, il brouille la hiérarchie.` : "Chaque marche est franche : la hiérarchie se lit d'un coup d'œil."}`, extra.length ? "Attribue les tailles aux niveaux. Attention, une taille est en trop" : "Attribue les tailles de l'échelle aux cinq niveaux de texte");
+  }
   Oeil.kits.assign({
     id: "type-scale", name: "Type Scale",
     howto: [
@@ -39,6 +46,7 @@
       };
     },
     items: [
+      ...Array.from({ length: 12 }, randomScale),
       scale([48, 30, 20, 16, 13], "Une échelle modulaire multiplie chaque taille par le même rapport (ici environ 1,5 puis 1,25). La hiérarchie se lit d'un coup d'œil, et les tailles intermédiaires inventées disparaissent.", "Attribue les tailles de l'échelle aux cinq niveaux de texte"),
       scale([40, 28, 20, 16, 12, 18], "Une taille de trop (18 px) se glisse souvent entre le corps et le chapô : trop proche des deux, elle brouille la hiérarchie. Une bonne échelle garde des marches franches.", "Attribue les tailles aux niveaux. Attention, une taille est en trop"),
       scale([64, 32, 22, 17, 13], "Un titre très grand (64 px) supporte un saut important vers le sous-titre : le contraste de taille crée l'entrée de page, le reste de l'échelle reste serré.", "Attribue les tailles de cette échelle contrastée"),

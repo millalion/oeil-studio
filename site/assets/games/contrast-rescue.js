@@ -36,7 +36,7 @@
     ],
     brief: (s) => `Le texte se confond avec le fond : éclaircis-le ou fonce-le, juste assez pour atteindre ${s.large ? "3:1" : "4,5:1"}.`,
     setup(round) {
-      const c = CASES[round % CASES.length];
+      const c = { ...CASES[round % CASES.length], bg: { h: Oeil.randi(0, 359), s: Oeil.randi(35, 80), l: Oeil.randi(38, 66) } };
       const ratio = c.large ? 3 : 4.5;
       const bgRgb = C.hslToRgb(c.bg.h, c.bg.s, c.bg.l);
       const canUp = C.contrast(C.hslToRgb(c.bg.h, 18, 100), bgRgb) >= ratio;

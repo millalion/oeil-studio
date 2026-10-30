@@ -1671,3 +1671,41 @@ a.who:hover { text-decoration: underline; text-underline-offset: 3px; }
   .al-wrap { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; }
   .al-panel { border-left: 0; border-top: 1px solid #141413; gap: 8px; padding: 10px; }
 }
+/* Classement du jour : ta ligne reste lisible */
+.ticket-rank li.is-me { background: #fff; color: #141413; box-shadow: inset 0 0 0 2px #F0447A; }
+.ticket-rank li.is-me .who-at, .ticket-rank li.is-me a { color: #141413; }
+/* Niveau bien visible */
+.stage > .level-seg { position: absolute; z-index: 3; top: 8px; right: 10px; align-items: center; background: #fff; }
+.level-seg > span { padding: 0 10px; font-size: 13px; font-weight: 500; border-right: 1px solid #141413; }
+.level-seg button:first-of-type { border-left: 0; }
+.level-seg button { height: 34px; }
+.coach-card > .level-seg { display: flex; width: 100%; margin: 12px 0; }
+.coach-card > .level-seg > span { display: flex; align-items: center; }
+.coach-card > .level-seg button { flex: 1; height: 40px; font-size: 14px; }
+.stage:has(> .level-seg:not([hidden])) .stage-brief { padding-right: 250px; }
+@media (max-width: 767px) {
+  .stage > .level-seg { top: 5px; right: 6px; }
+  .stage > .level-seg > span { display: none; }
+  .stage > .level-seg button { height: 32px; padding: 0 8px; font-size: 12px; }
+  .stage:has(> .level-seg:not([hidden])) .stage-brief { padding-right: 130px; }
+}
+/* Recherche discrète */
+.lib-search { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 10px; border-bottom: 1px solid #C9C8C1; color: #5E5D59; }
+.lib-search:focus-within { border-bottom-color: #141413; color: #141413; }
+.lib-search .material-symbols-outlined { font-size: 18px; }
+.lib-search input { width: 130px; background: transparent; border: 0; outline: none; font-size: 14px; color: #141413; }
+.lib-search input::-webkit-search-cancel-button { display: none; }
+/* Node Budget : les boutons au-dessus de la forme */
+.nb-tools { position: absolute; z-index: 4; top: 14px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.nb-tools button { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border: 1px solid #141413; border-radius: 4px; background: #fff; font-size: 14px; font-weight: 500; color: #141413; }
+.nb-tools button:first-child { background: #141413; color: #fff; }
+.nb-tools button:hover { background: #F0447A; color: #fff; border-color: #F0447A; }
+.nb-tools button span { font-size: 18px; line-height: 1; }
+.nb-tools b { min-width: 74px; text-align: center; font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.nb-tools.is-new button:first-child { animation: nb-pulse 1.4s ease-in-out infinite; }
+@keyframes nb-pulse { 50% { box-shadow: 0 0 0 7px rgba(240,68,122,.35); } }
+@media (prefers-reduced-motion: reduce) { .nb-tools.is-new button:first-child { animation: none; } }
+.nb-wrap { top: calc(50% + 28px); max-height: calc(100% - 96px); }
+/* Auto Layout : un cadre assez grand pour voir l'alignement */
+.al-box { min-width: 220px; min-height: 170px; max-width: 100%; }
+.al-panel { justify-content: flex-start; gap: 12px; }
