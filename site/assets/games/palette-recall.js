@@ -22,7 +22,7 @@
       { icon: "touch_app", text: "Pour chaque position, choisis la bonne nuance parmi cinq très proches." },
       { icon: "lightbulb", text: "Les leurres sont un peu plus clairs, plus sombres, plus vifs ou décalés en teinte." },
     ],
-    brief: (s) => (s.phase === "memo" ? "Mémorise cette palette : elle disparaît dans 4 secondes." : "Retrouve chaque couleur de la palette."),
+    brief: (s) => (s.phase === "memo" ? "Mémorise cette palette." : "Retrouve chaque couleur de la palette."),
     setup(round) {
       const p = PALETTES[round % PALETTES.length];
       return { p, cols: p.colors.map(near), picks: [null, null, null, null], phase: "memo" };
@@ -31,7 +31,9 @@
       const wrap = api.h("div", "pr-wrap");
       board.append(wrap);
       api.setSubmit(false);
-      wrap.innerHTML = `<div class="pr-memo">${s.p.colors.map((c) => `<span style="background:${C.hsl(c)}"></span>`).join("")}</div><p class="kit-count"><span>4</span> s</p>`;
+const run = () => {
+      wrap.innerHTML = `<div class="pr-memo">${s.p.colors.map((c) => `<span style="background:${C.hsl(c)}"></span>`).join("")}</div><p class="kit-count"><span>4</span></p>`;
+      api.memoBar(4);
       let left = 4;
       clearInterval(s.iv);
       s.iv = setInterval(() => {
@@ -49,6 +51,8 @@
           api.setSubmit(s.picks.every((x) => x != null));
         }));
       }, 1000);
+      };
+      api.memoGate(4, "cette palette", run);
       api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">touch_app</span>Une nuance par colonne</span>`;
     },
     evaluate(s) {

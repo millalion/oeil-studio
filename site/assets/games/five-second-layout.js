@@ -16,6 +16,7 @@
   const swap = (b, i, j) => { const c = b.map((x) => [...x]); [c[i][4], c[j][4]] = [c[j][4], c[i][4]]; return c; };
   const shift = (b, i, dx, dy) => b.map((x, k) => (k === i ? [x[0] + dx, x[1] + dy, x[2], x[3], x[4]] : [...x]));
   Oeil.kits.choice({
+    memoWhat: "cette mise en page",
     id: "five-second-layout", name: "Five-Second Layout", memoBrief: "Observe cette mise en page : elle disparaît dans 5 secondes.",
     howto: [
       { icon: "timer", text: "Une mise en page s'affiche cinq secondes, en blocs : navigation, titre, image, bouton, cartes." },

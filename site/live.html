@@ -86,8 +86,9 @@
 <div class="quiz-top"><span id="qz-count">Question 1 sur 10</span><span class="quiz-game" id="qz-game"></span><span class="quiz-code">Code <b id="qz-code"></b></span></div>
 <div class="quiz-timer"><i id="qz-bar"></i></div>
 <p class="quiz-prompt" id="qz-prompt"></p>
+<p class="quiz-goal" id="qz-goal"></p>
 <div class="quiz-board" id="board"></div>
-<div class="quiz-foot"><p><b class="tabular" id="qz-answers">0</b> réponse<span id="qz-answers-s">s</span> sur <span id="qz-players">0</span></p><p class="quiz-left tabular" id="qz-left"></p><div class="btn-row"><button class="btn-line" id="qz-skip" type="button">Afficher la réponse</button><button class="btn" hidden="" id="qz-next" type="button">Classement<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></button></div></div>
+<div class="quiz-foot"><p><b class="tabular" id="qz-answers">0</b> réponse<span id="qz-answers-s">s</span> sur <span id="qz-players">0</span></p><p class="quiz-left tabular" id="qz-left"></p><div class="btn-row"><button class="btn-line" id="qz-skip" type="button">Afficher la réponse</button><button class="btn-line" hidden="" id="qz-show-rank" type="button">Classement</button><button class="btn" hidden="" id="qz-next" type="button">Question suivante<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></button></div></div>
 <div class="quiz-rank" hidden="" id="qz-rank"><h2 class="text-big">Classement</h2><ol class="live-board" id="qz-rank-list"></ol><div class="flex justify-center mt-6"><button class="btn btn-lg" id="qz-continue" type="button">Question suivante</button></div></div>
 </div>
 
@@ -211,9 +212,12 @@
     }
     function ask() {
       const item = Q.list[Q.i], game = Oeil.registry[item.id], board = $("board");
-      board.innerHTML = ""; $("qz-rank").hidden = true; $("qz-skip").hidden = false; $("qz-next").hidden = true;
+      board.innerHTML = ""; $("qz-rank").hidden = true; $("qz-skip").hidden = false; $("qz-next").hidden = true; $("qz-show-rank").hidden = true;
+      window.scrollTo(0, 0);
       $("qz-count").textContent = `Question ${Q.i + 1} sur ${Q.list.length}`;
-      $("qz-game").textContent = (window.OEIL_GAMES.find((g) => g.id === item.id) || {}).name || "";
+      const info = window.OEIL_GAMES.find((g) => g.id === item.id) || {};
+      $("qz-game").textContent = info.name || "";
+      $("qz-goal").textContent = "Réponds sur ton téléphone : A, B, C ou D.";
       const api = fakeApi(board);
       Q.state = game.setup(item.n, api); Q.api = api; Q.game = game;
       $("qz-prompt").textContent = Q.state.memo ? "Observe bien…" : Q.state.it.prompt;
@@ -252,9 +256,13 @@
       Q.state.picked = -1;
       Q.game.reveal && Q.game.reveal($("board"), Q.state, {}, Q.api);
       document.querySelectorAll("#board .kit-opt").forEach((b, k) => b.insertAdjacentHTML("beforeend", `<span class="quiz-votes">${counts[k] || 0}</span>`));
-      if (Q.state.it.explain) $("qz-prompt").textContent = Q.state.it.explain;
+      // Une phrase d'explication, pas plus
+      const ex = String(Q.state.it.explain || ""), m = ex.match(/^.*?[.!?](?=\s|$)/);
+      $("qz-goal").textContent = m ? m[0] : ex;
       $("qz-skip").hidden = true; $("qz-next").hidden = false;
-      $("qz-next").firstChild.textContent = Q.i < Q.list.length - 1 ? "Classement" : "Voir le podium";
+      const last = Q.i >= Q.list.length - 1;
+      $("qz-show-rank").hidden = last;
+      $("qz-next").firstChild.textContent = last ? "Voir le podium" : "Question suivante";
       $("qz-left").textContent = "";
     }
     function quizTick(r) {
@@ -265,8 +273,8 @@
       if (!Q) { Q = { list: buildList(), i: 0, T: +((document.querySelector('input[name="live-time"]:checked') || {}).value || 20) }; ask(); }
     }
     $("qz-skip").addEventListener("click", revealQ);
-    $("qz-next").addEventListener("click", () => {
-      if (Q.i >= Q.list.length - 1) { H.finish(); return; }
+    $("qz-next").addEventListener("click", () => { if (Q.i >= Q.list.length - 1) { H.finish(); return; } Q.i++; ask(); });
+    $("qz-show-rank").addEventListener("click", () => {
       const rk = OeilLive.ranking(room).slice(0, 5);
       $("qz-rank-list").innerHTML = rk.map((p, i) => `<li class="live-row"><span class="live-rank">${i + 1}</span><span class="live-name">${OeilAvatar(p, "avatar-sm")}${esc(p.name)}</span><span class="text-body-sm text-text-muted">+${p.scores[Q.i] || 0}</span><b class="live-total">${p.total} pts</b></li>`).join("");
       $("qz-rank").hidden = false;

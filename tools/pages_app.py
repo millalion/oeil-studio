@@ -91,8 +91,9 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
 <div class="quiz-top"><span id="qz-count">Question 1 sur 10</span><span class="quiz-game" id="qz-game"></span><span class="quiz-code">Code <b id="qz-code"></b></span></div>
 <div class="quiz-timer"><i id="qz-bar"></i></div>
 <p class="quiz-prompt" id="qz-prompt"></p>
+<p class="quiz-goal" id="qz-goal"></p>
 <div class="quiz-board" id="board"></div>
-<div class="quiz-foot"><p><b class="tabular" id="qz-answers">0</b> réponse<span id="qz-answers-s">s</span> sur <span id="qz-players">0</span></p><p class="quiz-left tabular" id="qz-left"></p><div class="btn-row"><button class="btn-line" id="qz-skip" type="button">Afficher la réponse</button><button class="btn" hidden="" id="qz-next" type="button">Classement<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></button></div></div>
+<div class="quiz-foot"><p><b class="tabular" id="qz-answers">0</b> réponse<span id="qz-answers-s">s</span> sur <span id="qz-players">0</span></p><p class="quiz-left tabular" id="qz-left"></p><div class="btn-row"><button class="btn-line" id="qz-skip" type="button">Afficher la réponse</button><button class="btn-line" hidden="" id="qz-show-rank" type="button">Classement</button><button class="btn" hidden="" id="qz-next" type="button">Question suivante<span aria-hidden="true" class="material-symbols-outlined text-[18px]">arrow_forward</span></button></div></div>
 <div class="quiz-rank" hidden="" id="qz-rank"><h2 class="text-big">Classement</h2><ol class="live-board" id="qz-rank-list"></ol><div class="flex justify-center mt-6"><button class="btn btn-lg" id="qz-continue" type="button">Question suivante</button></div></div>
 </div>
 
@@ -201,9 +202,12 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
     }
     function ask() {
       const item = Q.list[Q.i], game = Oeil.registry[item.id], board = $("board");
-      board.innerHTML = ""; $("qz-rank").hidden = true; $("qz-skip").hidden = false; $("qz-next").hidden = true;
+      board.innerHTML = ""; $("qz-rank").hidden = true; $("qz-skip").hidden = false; $("qz-next").hidden = true; $("qz-show-rank").hidden = true;
+      window.scrollTo(0, 0);
       $("qz-count").textContent = `Question ${Q.i + 1} sur ${Q.list.length}`;
-      $("qz-game").textContent = (window.OEIL_GAMES.find((g) => g.id === item.id) || {}).name || "";
+      const info = window.OEIL_GAMES.find((g) => g.id === item.id) || {};
+      $("qz-game").textContent = info.name || "";
+      $("qz-goal").textContent = "Réponds sur ton téléphone : A, B, C ou D.";
       const api = fakeApi(board);
       Q.state = game.setup(item.n, api); Q.api = api; Q.game = game;
       $("qz-prompt").textContent = Q.state.memo ? "Observe bien…" : Q.state.it.prompt;
@@ -242,9 +246,13 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
       Q.state.picked = -1;
       Q.game.reveal && Q.game.reveal($("board"), Q.state, {}, Q.api);
       document.querySelectorAll("#board .kit-opt").forEach((b, k) => b.insertAdjacentHTML("beforeend", `<span class="quiz-votes">${counts[k] || 0}</span>`));
-      if (Q.state.it.explain) $("qz-prompt").textContent = Q.state.it.explain;
+      // Une phrase d'explication, pas plus
+      const ex = String(Q.state.it.explain || ""), m = ex.match(/^.*?[.!?](?=\\s|$)/);
+      $("qz-goal").textContent = m ? m[0] : ex;
       $("qz-skip").hidden = true; $("qz-next").hidden = false;
-      $("qz-next").firstChild.textContent = Q.i < Q.list.length - 1 ? "Classement" : "Voir le podium";
+      const last = Q.i >= Q.list.length - 1;
+      $("qz-show-rank").hidden = last;
+      $("qz-next").firstChild.textContent = last ? "Voir le podium" : "Question suivante";
       $("qz-left").textContent = "";
     }
     function quizTick(r) {
@@ -255,8 +263,8 @@ page("live.html", "Partie en direct — Œil Studio", "live", f'''<section class
       if (!Q) { Q = { list: buildList(), i: 0, T: +((document.querySelector('input[name="live-time"]:checked') || {}).value || 20) }; ask(); }
     }
     $("qz-skip").addEventListener("click", revealQ);
-    $("qz-next").addEventListener("click", () => {
-      if (Q.i >= Q.list.length - 1) { H.finish(); return; }
+    $("qz-next").addEventListener("click", () => { if (Q.i >= Q.list.length - 1) { H.finish(); return; } Q.i++; ask(); });
+    $("qz-show-rank").addEventListener("click", () => {
       const rk = OeilLive.ranking(room).slice(0, 5);
       $("qz-rank-list").innerHTML = rk.map((p, i) => `<li class="live-row"><span class="live-rank">${i + 1}</span><span class="live-name">${OeilAvatar(p, "avatar-sm")}${esc(p.name)}</span><span class="text-body-sm text-text-muted">+${p.scores[Q.i] || 0}</span><b class="live-total">${p.total} pts</b></li>`).join("");
       $("qz-rank").hidden = false;
@@ -386,7 +394,7 @@ page("connexion.html", "Connexion — Œil Studio", None, f'''<section class="{W
 <p class="or-line">ou avec ton adresse e-mail</p>
 <div aria-label="Type de formulaire" class="seg-line w-max" role="group"><button aria-pressed="true" data-tab="login" type="button">Se connecter</button><button aria-pressed="false" data-tab="signup" type="button">Créer un compte</button></div>
 <form class="flex flex-col gap-4 mt-2" id="auth-form">
-<div class="grid sm:grid-cols-2 gap-4" data-only="signup" hidden=""><label class="grid gap-1 text-body-sm text-text-muted">Prénom<input autocomplete="given-name" class="field" id="auth-name" maxlength="40" type="text"/></label><label class="grid gap-1 text-body-sm text-text-muted">Pseudo unique<span class="pseudo-field"><input autocapitalize="none" autocomplete="username" class="field" id="auth-user" maxlength="20" pattern="[a-zA-Z0-9_.]{3,20}" placeholder="ton.pseudo" type="text"/></span><span class="text-[12px]" id="auth-user-msg">Visible dans les classements.</span></label></div>
+<div class="grid sm:grid-cols-2 gap-4" data-only="signup" hidden=""><label class="grid gap-1 text-body-sm text-text-muted">Prénom<input autocomplete="given-name" class="field" id="auth-name" maxlength="40" type="text"/></label><label class="grid gap-1 text-body-sm text-text-muted">Pseudo unique<span class="pseudo-field"><input autocapitalize="none" autocomplete="username" class="field" id="auth-user" maxlength="20" pattern="[a-zA-Z0-9_.]{{3,20}}" placeholder="ton.pseudo" type="text"/></span><span class="text-[12px]" id="auth-user-msg">Visible dans les classements.</span></label></div>
 <label class="grid gap-1 text-body-sm text-text-muted">Adresse e-mail<input autocomplete="email" class="field" id="auth-email" required="" type="email"/></label>
 <label class="grid gap-1 text-body-sm text-text-muted" data-hide="forgot">Mot de passe<input autocomplete="current-password" class="field" id="auth-pass" minlength="10" required="" type="password"/><span class="text-[12px]" data-only="signup" hidden="">10 caractères minimum. Une phrase fonctionne très bien.</span></label>
 <fieldset data-only="signup" hidden=""><legend class="text-body-sm text-text-muted mb-2">Tu es</legend>{seg("role", [("etudiant", "Étudiant·e"), ("enseignant", "Enseignant·e"), ("pro", "Designer en poste")], "etudiant")}</fieldset>
@@ -484,13 +492,13 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
 <p class="board-strip"><span class="board-dot"></span>Mon compte · progression</p>
 <div class="px-5 sm:px-10 pt-16 pb-8">
 <div class="flex flex-wrap items-end justify-between gap-6">
-<div class="flex items-center gap-5 min-w-0"><span id="acc-avatar"></span><div class="min-w-0"><p class="text-body-md text-text-muted"><span id="acc-role">Sur cet appareil</span></p><h1 class="text-[clamp(44px,6.4vw,96px)] font-medium leading-[0.92] tracking-[-0.05em] break-words" id="acc-name">Ta progression</h1><button class="edit-link mt-2" hidden="" id="acc-pen" type="button"><span aria-hidden="true" class="material-symbols-outlined">edit</span>Modifier mon prénom et mon pseudo</button></div></div>
+<div class="flex items-center gap-5 min-w-0"><span id="acc-avatar"></span><div class="min-w-0"><p class="text-body-md text-text-muted"><span id="acc-role">Sur cet appareil</span></p><h1 class="text-[clamp(44px,6.4vw,96px)] font-medium leading-[0.92] tracking-[-0.05em] break-words" id="acc-name">Ta progression</h1></div></div>
 <div class="btn-row"><a class="btn" href="defi.html">Défi du jour</a><button class="btn-line" hidden="" id="acc-edit" type="button">Modifier mon profil</button><a class="btn-line" href="connexion.html#inscription" id="acc-signup">Créer un compte</a><a class="btn-line" href="connexion.html" id="acc-login">Se connecter</a></div>
 </div>
 <div class="acc-guest" hidden="" id="acc-guest"><span class="material-symbols-outlined" aria-hidden="true">cloud_upload</span><span>Ta progression est enregistrée sur cet appareil. <a class="underline" href="connexion.html#inscription">Crée un compte gratuit</a> pour la retrouver partout et apparaître dans le classement du jour.</span></div>
 <form class="join-card mt-8 max-w-[40rem]" hidden="" id="profile-form">
 <p class="text-headline-md">Mon profil</p>
-<div class="grid sm:grid-cols-2 gap-4"><label class="grid gap-1 text-body-sm text-text-muted">Prénom<input class="field" id="pf-name" maxlength="40" required="" type="text"/></label><label class="grid gap-1 text-body-sm text-text-muted">Pseudo unique<span class="pseudo-field"><input autocapitalize="none" class="field" id="pf-user" maxlength="20" pattern="[a-zA-Z0-9_.]{3,20}" required="" type="text"/></span></label></div>
+<div class="grid sm:grid-cols-2 gap-4"><label class="grid gap-1 text-body-sm text-text-muted">Prénom<input class="field" id="pf-name" maxlength="40" required="" type="text"/></label><label class="grid gap-1 text-body-sm text-text-muted">Pseudo unique<span class="pseudo-field"><input autocapitalize="none" class="field" id="pf-user" maxlength="20" pattern="[a-zA-Z0-9_.]{{3,20}}" required="" type="text"/></span></label></div>
 <fieldset><legend class="text-body-sm text-text-muted mb-2">Tu es</legend>{seg("pf-role", [("etudiant", "Étudiant·e"), ("enseignant", "Enseignant·e"), ("pro", "Designer en poste")], "etudiant")}</fieldset>
 {av_picker("pav")}
 <div class="btn-row"><button class="btn" type="submit">Enregistrer</button><button class="btn-line" id="pf-cancel" type="button">Annuler</button></div>
@@ -549,7 +557,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
       $("acc-name").textContent = u ? u.name : "Ta progression";
       $("acc-role").innerHTML = u ? `${u.username ? `<a class="underline" href="profil.html?u=${encodeURIComponent(u.username)}">@${esc(u.username)}</a> · ` : ""}${ROLES[u.role] || ""}${OeilAccount.isPro() ? " · Membre Œil Pro" : ""}` : "Sur cet appareil";
       ["acc-login", "acc-signup"].forEach((k) => ($(k).hidden = !!u));
-      ["acc-edit", "acc-pen", "acc-logout", "acc-delete"].forEach((k) => ($(k).hidden = !u));
+      ["acc-edit", "acc-logout", "acc-delete"].forEach((k) => ($(k).hidden = !u));
       $("acc-guest").hidden = !!u;
       $("sync-note").hidden = !OeilAccount.enabled;
       const plan = OeilAccount.plan(), P = PLANS[plan] || [plan, ""];
@@ -626,7 +634,6 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
       $("profile-form").hidden = false; $("pf-name").focus(); $("profile-form").scrollIntoView({ block: "center", behavior: "smooth" });
     };
     $("acc-edit").addEventListener("click", openProfile);
-    $("acc-pen").addEventListener("click", openProfile);
     $("pf-cancel").addEventListener("click", () => ($("profile-form").hidden = true));
     $("profile-form").addEventListener("submit", async (e) => {
       e.preventDefault();

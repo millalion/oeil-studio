@@ -129,6 +129,8 @@
     return { order: () => [...order], layout };
   }
 
+  // Sens du geste montré par l'animation, quand il n'est pas libre
+  const CUE_AXIS = { "leading-lab": "y", "spacing-repair": "y", "kern-clinic": "x", "grid-snap": "x", "pixel-guess": "x", "rag-rescue": "x", "weight-match": "x", "whitespace-budget": "x", "contrast-rescue": "x" };
   const VERDICTS = [[97, "Impeccable"], [90, "Très juste"], [75, "Pas loin"], [50, "À reprendre"], [0, "Raté, rejoue-la"]];
   const verdictFor = (s) => VERDICTS.find(([min]) => s >= min)[1];
   const gradeFor = (p) => (p >= 97 ? "A+" : p >= 92 ? "A" : p >= 85 ? "B" : p >= 75 ? "C" : "D");
@@ -154,6 +156,16 @@
     const api = {
       board, controls, stage, drag, sortable, color, rand, randi, pick, shuffle, clamp, h,
       setSubmit(enabled) { submitBtn.disabled = !enabled; },
+      // Mémorisation : on annonce la durée, le chrono ne part qu'au clic.
+      memoGate(seconds, what, go) {
+        submitBtn.disabled = true;
+        const g = h("div", "memo-gate", `<div class="memo-card"><p class="memo-sec"><b>${seconds}</b> secondes</p><p class="memo-what">pour mémoriser ${esc(what)}.</p><button class="btn btn-lg" type="button">C'est parti</button></div>`);
+        board.append(g);
+        const b = g.querySelector("button");
+        b.addEventListener("click", () => { g.remove(); go(); });
+        b.focus({ preventScroll: true });
+      },
+      memoBar(seconds) { const bar = h("div", "memo-bar", `<i style="animation-duration:${seconds}s"></i>`); board.append(bar); setTimeout(() => bar.remove(), seconds * 1000); },
       setBrief(text) { brief.textContent = text; },
       submit: () => submit(),
       get phase() { return phase; },
@@ -196,11 +208,14 @@
       let tries = 0;
       const seek = () => {
         if (phase !== "play") return;
+        if (board.querySelector(".memo-gate, .memo-bar")) { cueTimer = setTimeout(seek, 600); return; }
         const el = [...board.querySelectorAll(".handle, .grab, .kit-token, .kit-opt, .pickable")].find((n) => !n.closest(".is-locked") && n.getBoundingClientRect().width > 0);
         if (!el) { if (++tries < 16) cueTimer = setTimeout(seek, 500); return; }
         const dragging = el.matches(".handle, .grab, .kit-token");
         const sr = stage.getBoundingClientRect(), r = el.getBoundingClientRect();
-        const cue = h("div", "cue" + (dragging ? " is-drag" : ""), `<i></i><span class="material-symbols-outlined" aria-hidden="true">${dragging ? "pan_tool" : "touch_app"}</span><b>${dragging ? "Glisse-moi" : "Touche ici"}</b>`);
+        const axis = dragging ? CUE_AXIS[id] || (el.closest(".sortable") ? "x" : "xy") : "tap";
+        const icon = { x: "swap_horiz", y: "swap_vert", xy: "open_with", tap: "touch_app" }[axis];
+        const cue = h("div", `cue is-${axis}`, `<i><span class="material-symbols-outlined" aria-hidden="true">${icon}</span></i><b>${dragging ? "Glisse" : "Touche"}</b>`);
         cue.style.left = `${clamp(r.left + r.width / 2 - sr.left, 50, sr.width - 50)}px`;
         cue.style.top = `${clamp(r.top + r.height / 2 - sr.top, 70, sr.height - 40)}px`;
         stage.append(cue);
@@ -389,7 +404,7 @@
 
     window.addEventListener("keydown", (e) => {
       if (!coach.hidden) { if (e.key === "Enter" || e.key === "Escape") { e.preventDefault(); $("#btn-coach-go").click(); } return; }
-      if (e.target.closest && e.target.closest("input, select, textarea")) return;
+      if (e.target.closest && e.target.closest("input, select, textarea, .memo-gate")) return;
       if (e.key === "Enter") {
         if (e.target.closest && e.target.closest("button, a") && !e.target.closest("#board")) return;
         e.preventDefault();

@@ -45,11 +45,15 @@
         if (s.it.memo) {
           api.setSubmit(false);
           const sec = s.it.memo.seconds || 4;
-          wrap.innerHTML = `<div class="kit-memo">${s.it.memo.html}</div><p class="kit-count"><span>${sec}</span> s</p>`;
-          if (s.it.memo.draw) s.it.memo.draw(wrap.querySelector(".kit-memo"));
-          let left = sec;
-          clearInterval(s.iv);
-          s.iv = setInterval(() => { left--; if (left <= 0) { clearInterval(s.iv); if (api.phase === "play") showOptions(); } else wrap.querySelector(".kit-count span").textContent = left; }, 1000);
+          const run = () => {
+            wrap.innerHTML = `<div class="kit-memo">${s.it.memo.html}</div><p class="kit-count"><span>${sec}</span></p>`;
+            if (s.it.memo.draw) s.it.memo.draw(wrap.querySelector(".kit-memo"));
+            if (api.memoBar) api.memoBar(sec);
+            let left = sec;
+            clearInterval(s.iv);
+            s.iv = setInterval(() => { left--; if (left <= 0) { clearInterval(s.iv); if (api.phase === "play") showOptions(); } else wrap.querySelector(".kit-count span").textContent = left; }, 1000);
+          };
+          if (api.memoGate) api.memoGate(sec, def.memoWhat || "ce qui va s'afficher", run); else run();
         } else showOptions();
         api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">touch_app</span>Clique sur une proposition, puis valide</span><span class="ctl-hint"><span class="material-symbols-outlined">keyboard</span>Touches A, B, C, D</span>`;
       },
@@ -221,12 +225,13 @@
           el.addEventListener("click", () => { if (el._dragged) { el._dragged = false; return; } if (api.phase !== "play") return; s.sel = s.sel === t.id ? null : t.id; Object.values(s.tokEls).forEach((x) => x.classList.toggle("is-picked", x.dataset.id === s.sel)); });
           api.drag(el, {
             start: (e) => { const r = el.getBoundingClientRect(); return { ox: e.clientX - r.left, oy: e.clientY - r.top, moved: false }; },
-            move: (dx, dy, ev, c) => { if (Math.hypot(dx, dy) > 4) c.moved = true; el.style.transform = `translate(${dx}px, ${dy}px)`; el.style.zIndex = 10; el.style.pointerEvents = "none"; },
+            move: (dx, dy, ev, c) => { if (Math.hypot(dx, dy) > 4) c.moved = true; el.style.transform = `translate(${dx}px, ${dy}px)`; el.style.zIndex = 10; },
             end: (ev, c) => {
-              el.style.transform = ""; el.style.zIndex = ""; el.style.pointerEvents = "";
+              el.style.transform = ""; el.style.zIndex = "";
               if (!c.moved) return;
               el._dragged = true;
-              const target = document.elementFromPoint(ev.clientX, ev.clientY);
+              // L'étiquette tenue est sous le doigt : on cherche ce qu'il y a en dessous d'elle
+              const target = document.elementsFromPoint(ev.clientX, ev.clientY).find((n) => n !== el && !el.contains(n));
               const slot = target && target.closest("[data-slot]");
               if (slot) place(s, api, t.id, slot.dataset.slot);
               else if (target && target.closest(".kit-bank")) place(s, api, t.id, null);

@@ -16,6 +16,7 @@
     };
   };
   Oeil.kits.choice({
+    memoWhat: "cette lettre",
     id: "glyph-memory", name: "Glyph Memory", memoBrief: "Observe cette lettre : elle va disparaître.",
     howto: [
       { icon: "visibility", text: "Une lettre s'affiche trois secondes. Retiens sa forme précise : ses terminaisons, son contraste, son ouverture." },
