@@ -28,7 +28,7 @@
         explain: "Dans une liste, l'œil compare chaque ligne à la précédente : une icône plus grande, un retrait ou un format de date différent se voient immédiatement, même si chacun paraît « correct » seul." },
       { prompt: "Trouve les éléments incohérents de cette carte d'offre", html: `<div class="uix-screen uix-card">
         <p class="uix-tag" data-h="ok">Populaire</p>
-        <p class="uix-price" data-h="ok">9 €<small>/mois</small></p>
+        <p class="uix-price" data-h="ok">9 € <small>/ mois</small></p>
         <ul class="uix-list"><li data-h="ok">Sessions illimitées</li><li data-h="bad" data-why="point final : les autres lignes n'en ont pas">Classement automatique.</li><li data-h="ok">Comptes étudiants</li></ul>
         <div class="uix-actions">${btn("Choisir cette offre", BASE)}</div>
         <p class="uix-foot" data-h="bad" data-why="couleur hors palette (#3D7BFF)" style="color:#3D7BFF">Voir les conditions</p></div>`,

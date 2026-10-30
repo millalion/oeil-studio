@@ -12,7 +12,7 @@
     { word: "PLATEAU", tip: "P et L ont chacun un côté très ouvert : L–A et T–E sont les paires à surveiller." },
     { word: "CRÉNAGE", tip: "Le crénage corrige l'approche par défaut de certaines paires : ici N–A et A–G demandent un rapprochement net." },
   ];
-  const words = Oeil.shuffle(WORDS);
+  const words = Oeil.fresh("kern-clinic", WORDS);
   const units = (em) => Math.round(em * 1000);
 
   async function measure(word) {

@@ -8,7 +8,7 @@
     { kind: "gap", dim: "width", q: "Quel est l'écart entre ces deux blocs ?", range: [8, 120] },
     { kind: "radius", dim: "radius", q: "Quel est le rayon d'arrondi de cette carte ?", range: [4, 40] },
   ];
-  const order = Oeil.shuffle(KINDS);
+  const order = Oeil.fresh("pixel-guess", KINDS);
 
   function shape(s) {
     const v = s.truth;

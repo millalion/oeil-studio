@@ -2,7 +2,7 @@
 (function () {
   const states = {
     normal: { label: "Normal", btn: "background:#141413;color:#fff", input: "border:1px solid #8A8983" },
-    hover: { label: "Survol", btn: "background:#000;color:#fff;box-shadow:0 0 0 0 #000;transform:translateY(-1px)", input: "border:1px solid #141413" },
+    hover: { label: "Survol", btn: "background:#4A4945;color:#fff;box-shadow:0 3px 0 #141413;transform:translateY(-2px)", input: "border:1px solid #141413;background:#F0EFEA" },
     focus: { label: "Focus clavier", btn: "background:#141413;color:#fff;outline:2px solid #F0447A;outline-offset:3px", input: "border:1px solid #141413;outline:2px solid #F0447A;outline-offset:2px" },
     disabled: { label: "Désactivé", btn: "background:#D8D7CF;color:#8A8983", input: "border:1px dashed #CFCEC6;color:#B5B4AE;background:#F0EFEA" },
     error: { label: "Erreur", btn: "background:#C4222B;color:#fff", input: "border:2px solid #C4222B" },

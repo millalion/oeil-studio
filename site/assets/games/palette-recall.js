@@ -1,7 +1,7 @@
 // Palette Recall — mémorise une palette de quatre couleurs, puis retrouve chacune parmi des nuances voisines.
 (function () {
   const C = Oeil.color;
-  const PALETTES = Oeil.shuffle([
+  const PALETTES = Oeil.fresh("palette-recall", [
     { name: "Atelier", colors: [{ h: 14, s: 58, l: 52 }, { h: 45, s: 78, l: 55 }, { h: 160, s: 30, l: 38 }, { h: 220, s: 25, l: 88 }] },
     { name: "Bord de mer", colors: [{ h: 200, s: 70, l: 40 }, { h: 190, s: 45, l: 70 }, { h: 40, s: 55, l: 82 }, { h: 15, s: 70, l: 60 }] },
     { name: "Herbier", colors: [{ h: 95, s: 30, l: 40 }, { h: 70, s: 45, l: 62 }, { h: 340, s: 35, l: 72 }, { h: 30, s: 20, l: 25 }] },

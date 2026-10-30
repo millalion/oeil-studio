@@ -1,7 +1,7 @@
 // Leading Lab — plusieurs interlignages sont justes : on vise une plage adaptée à l'usage.
 (function () {
   const LONG = "Le regard s'entraîne comme un muscle. À force de comparer, on finit par sentir l'écart avant de le mesurer, et la correction devient un réflexe plutôt qu'une hésitation devant l'écran.";
-  const CONTEXTS = Oeil.shuffle([
+  const CONTEXTS = Oeil.fresh("leading-lab", [
     { name: "Texte courant", size: 17, width: "34em", min: 1.4, max: 1.65, text: LONG, weight: 400,
       hint: "Un long texte : l'œil doit retrouver facilement la ligne suivante.", tip: "Un texte long se lit mieux avec un interlignage autour de 1,5 : l'œil retrouve facilement le début de la ligne suivante. Les WCAG recommandent au moins 1,5 pour le texte courant." },
     { name: "Titre d'affiche", size: 60, width: "9em", min: 0.92, max: 1.1, text: "Le regard s'entraîne comme un muscle", weight: 500,

@@ -1,6 +1,6 @@
 // Rag Rescue — règle la largeur d'une colonne alignée à gauche pour que son drapeau (le bord droit) soit le plus régulier.
 (function () {
-  const TEXTS = Oeil.shuffle([
+  const TEXTS = Oeil.fresh("rag-rescue", [
     "La grille modulaire naît en Suisse dans les années cinquante. Elle organise la page en champs égaux séparés par des gouttières constantes, et donne au texte comme à l'image une place prévisible, ce qui permet de décider vite et juste.",
     "Un drapeau réussi ressemble à une côte douce : les lignes longues et courtes alternent sans former d'escalier, de trou ni de pointe. Le lecteur ne le remarque pas, mais il sent tout de suite quand le bord droit se met à danser.",
     "Le crénage corrige les paires de lettres une à une ; l'approche règle l'espace de toute une police. Ensemble, ils déterminent la texture d'un paragraphe, ce gris régulier que l'on cherche à obtenir avant même de lire le moindre mot.",

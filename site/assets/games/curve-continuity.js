@@ -1,7 +1,7 @@
 // Curve Continuity — un tracé a des cassures : aligne les poignées de part et d'autre de chaque point pour le lisser.
 (function () {
   // Tracé : points d'ancrage avec poignée entrante et sortante.
-  const PATHS = Oeil.shuffle([
+  const PATHS = Oeil.fresh("curve-continuity", [
     [[40, 200, 0, 0, 70, -90], [220, 120, -70, 0, 70, 0], [400, 200, -60, -80, 60, 80], [560, 140, -60, 0, 0, 0]],
     [[40, 150, 0, 0, 60, 90], [200, 230, -70, 0, 70, 0], [330, 100, -50, 60, 50, -60], [470, 160, -50, -40, 50, 40], [580, 230, -40, 0, 0, 0]],
     [[40, 230, 0, 0, 80, -120], [260, 90, -90, 0, 90, 0], [460, 230, -70, -60, 70, 60], [580, 260, -40, 0, 0, 0]],
@@ -50,7 +50,11 @@
       board.append(wrap);
       draw(s);
       api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Aligne chaque poignée rose sur la grise</span>`;
-      s.lock = Oeil.angleLock(api.controls);
+      s.lock = Oeil.angleLock(api.controls, (on) => {
+        if (!on) return;
+        s.broken.forEach((i) => { [s.pts[i][4], s.pts[i][5]] = s.lock.snap(0, 0, s.pts[i][4], s.pts[i][5], { shiftKey: true }); });
+        draw(s);
+      });
     },
     evaluate(s) {
       const e = s.broken.map((i) => err(s.pts[i]));

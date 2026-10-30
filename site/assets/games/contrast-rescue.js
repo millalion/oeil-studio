@@ -1,7 +1,7 @@
 // Contrast Rescue — trouve à l'œil la couleur de texte la plus proche du fond qui passe encore les WCAG.
 (function () {
   const C = Oeil.color;
-  const CASES = Oeil.shuffle([
+  const CASES = Oeil.fresh("contrast-rescue", [
     { bg: { h: 222, s: 70, l: 52 }, label: "Réserver ma place", large: false, ui: "button" },
     { bg: { h: 14, s: 75, l: 58 }, label: "Promo de printemps", large: true, ui: "banner" },
     { bg: { h: 160, s: 45, l: 42 }, label: "Paiement accepté", large: false, ui: "toast" },
@@ -95,15 +95,21 @@
     reveal(board, s, r, api) {
       const strip = board.querySelector(".cx-strip");
       strip.classList.remove("grab");
-      strip.insertAdjacentHTML("beforeend", `<span class="cx-limit" style="top:${100 - s.limit}%"></span><span class="tag-ref" style="top:calc(${100 - s.limit}% - 11px);left:calc(100% + 10px)">limite</span>`);
-      const ghost = s.sample.cloneNode(true);
-      ghost.style.color = C.hsl({ h: s.bg.h, s: 18, l: s.limit });
-      const ui = s.sample.parentElement.cloneNode(false);
-      ui.classList.add("cx-ref");
-      ui.append(ghost);
-      ui.insertAdjacentHTML("afterbegin", `<span class="cx-caption">À la limite</span>`);
-      s.sample.parentElement.insertAdjacentHTML("afterbegin", `<span class="cx-caption">Ta version</span>`);
-      s.sample.parentElement.after(ui);
+      strip.querySelectorAll(".cx-end").forEach((n) => n.remove());
+      [s.limits.up, s.limits.down].forEach((l) => { if (l != null) strip.insertAdjacentHTML("beforeend", `<span class="cx-limit" style="top:${100 - l}%"></span><span class="tag-ref" style="top:calc(${100 - l}% - 11px);left:calc(100% + 10px)">limite</span>`); });
+      const mine = s.sample.parentElement;
+      mine.insertAdjacentHTML("afterbegin", `<span class="cx-caption">Ta version</span>`);
+      // La correction, dans les deux sens possibles
+      [[s.limits.down, "Limite en foncé"], [s.limits.up, "Limite en clair"]].forEach(([l, label]) => {
+        if (l == null) return;
+        const ui = mine.cloneNode(false);
+        ui.classList.add("cx-ref");
+        const ghost = s.sample.cloneNode(true);
+        ghost.style.color = C.hsl({ h: s.bg.h, s: 18, l });
+        ui.append(ghost);
+        ui.insertAdjacentHTML("afterbegin", `<span class="cx-caption">${label}</span>`);
+        mine.parentElement.insertBefore(ui, strip);
+      });
     },
   });
 })();

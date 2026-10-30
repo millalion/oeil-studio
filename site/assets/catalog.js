@@ -14,6 +14,7 @@ window.OEIL_GAMES = [
   { id: "optical-center", name: "Optical Center", domain: "typo", level: "Débutant", min: 3, desc: "Place un signe au centre perçu de son cadre, pas au centre calculé." },
   { id: "leading-lab", name: "Leading Lab", domain: "typo", level: "Intermédiaire", min: 3, desc: "Règle l'interlignage d'un texte selon son usage." },
   { id: "weight-match", name: "Weight Match", domain: "typo", level: "Intermédiaire", min: 3, desc: "Retrouve la graisse d'un mot de référence, à une autre taille." },
+  { id: "pleins-delies", name: "Pleins et Déliés", domain: "typo", level: "Intermédiaire", min: 3, desc: "Dose le plein, le délié et l'axe de la plume d'une lettre." },
   { id: "bezier-letters", name: "Bézier Letters", domain: "typo", level: "Avancé", min: 4, desc: "Répare une lettre en ajustant les poignées de ses courbes.", pro: true },
   { id: "type-detective", name: "Type Detective", domain: "typo", level: "Intermédiaire", min: 3, desc: "Repère les lettres d'une autre police, graisse ou fausse italique.", pro: true },
   { id: "rag-rescue", name: "Rag Rescue", domain: "typo", level: "Intermédiaire", min: 3, desc: "Règle la largeur d'une colonne pour adoucir son bord droit." },
@@ -51,7 +52,7 @@ window.OEIL_GAMES = [
   { id: "easing-lab", name: "Easing Lab", domain: "motion", level: "Avancé", min: 4, desc: "Tords une courbe de Bézier pour reproduire un mouvement." },
   { id: "motion-order", name: "Motion Order", domain: "motion", level: "Débutant", min: 2, desc: "Range les éléments d'un écran dans leur ordre d'apparition." },
   { id: "curve-continuity", name: "Curve Continuity", domain: "motion", level: "Intermédiaire", min: 3, desc: "Aligne les poignées d'un tracé pour supprimer ses cassures.", pro: true },
-  { id: "node-budget", name: "Node Budget", domain: "motion", level: "Intermédiaire", min: 3, desc: "Reproduis une forme avec un nombre limité de points.", pro: true },
+  { id: "node-budget", name: "Node Budget", domain: "motion", level: "Intermédiaire", min: 3, desc: "Reproduis une forme avec le moins de points possible.", pro: true },
   { id: "boolean-builder", name: "Boolean Builder", domain: "motion", level: "Débutant", min: 2, desc: "Trouve l'opération booléenne qui donne la silhouette cible." },
   { id: "negative-space", name: "Negative Space", domain: "motion", level: "Intermédiaire", min: 2, desc: "Reconnais une lettre à ses seules contre-formes.", pro: true },
 ];

@@ -1,6 +1,6 @@
 // Weight Match — la graisse perçue change avec la taille : retrouve celle de la référence.
 (function () {
-  const WORDS = Oeil.shuffle(["Rythme", "Atelier", "Contraste", "Œil", "Graisse", "Signal", "Échelle"]);
+  const WORDS = Oeil.fresh("weight-match", ["Rythme", "Atelier", "Contraste", "Œil", "Graisse", "Signal", "Échelle"]);
   const MIN = 100, MAX = 900;
 
   function apply(s) {

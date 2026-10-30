@@ -35,11 +35,13 @@
 
   function place(s) {
     s.movEl.style.left = `${s.pos.x - s.mov.w / 2}px`; s.movEl.style.top = `${s.pos.y - s.mov.h / 2}px`;
+    // Le cadre est posé sur une pointe : il penche du côté où il y a trop de poids
     const c = centroid(s, s.pos);
-    s.cross.style.left = `${c.x}px`; s.cross.style.top = `${c.y}px`;
+    s.tilt = Oeil.clamp((c.x - TX) * 0.22, -9, 9);
+    s.frame.style.transform = `translate(-50%, -50%) scale(${s.k}) rotate(${s.tilt}deg)`;
   }
   function fit(board, s) {
-    const k = Math.min((board.clientWidth - 48) / FW, (board.clientHeight - 56) / FH, 1.4);
+    const k = Math.min((board.clientWidth - 90) / FW, (board.clientHeight - 110) / FH, 1.2);
     s.k = k;
     s.frame.style.transform = `translate(-50%, -50%) scale(${k})`;
   }
@@ -47,14 +49,14 @@
   Oeil.play({
     id: "balance-lab", name: "Balance Lab",
     howto: [
-      { icon: "drag_pan", text: "Les formes noires sont fixes. Seul le disque pointillé bouge." },
-      { icon: "balance", text: "La croix noire montre le centre de gravité de ta composition : amène-la dans le rond rose." },
-      { icon: "check", text: "Quand la croix est dans le rond, la composition est équilibrée." },
+      { icon: "balance", text: "Ta composition est posée sur une pointe : elle penche du côté le plus lourd." },
+      { icon: "drag_pan", text: "Déplace le disque pointillé pour la remettre à plat." },
+      { icon: "lightbulb", text: "Comme sur une balance : un petit poids loin du centre compense un gros poids proche." },
     ],
-    brief: "Déplace le disque pointillé pour amener la croix noire dans le rond rose.",
+    brief: "La composition penche : déplace le disque pointillé pour la remettre à plat.",
     setup() { return makeRound(); },
     mount(board, s, api) {
-      s.frame = api.h("div", "bl-frame bl-show-target");
+      s.frame = api.h("div", "bl-frame");
       s.frame.style.cssText = `width:${FW}px;height:${FH}px`;
       s.fixed.forEach((o) => {
         const el = api.h("span", "bl-shape");
@@ -66,9 +68,7 @@
       s.movEl.style.cssText = `width:${s.mov.w}px;height:${s.mov.h}px;border-radius:999px`;
       s.movEl.tabIndex = 0; s.movEl.setAttribute("aria-label", "Disque à déplacer");
       s.frame.append(s.movEl);
-      s.cross = api.h("span", "bl-centroid");
-      s.frame.append(s.cross);
-      board.append(s.frame);
+      board.append(s.frame, api.h("span", "bl-pivot"));
       fit(board, s);
       place(s);
       api.drag(s.movEl, {
@@ -90,13 +90,13 @@
       s.pos.y = Oeil.clamp(s.pos.y + m[1], s.mov.h / 2, FH - s.mov.h / 2);
       place(s);
     },
-    resize(board, s) { fit(board, s); },
+    resize(board, s) { fit(board, s); place(s); },
     evaluate(s) {
       const c = centroid(s, s.pos);
       const diag = Math.hypot(FW, FH);
-      const d = (Math.hypot(c.x - TX, c.y - TY) / diag) * 100;
+      const d = (Math.abs(c.x - TX) / diag) * 100;
       s.c = c;
-      const side = Math.abs(c.x - TX) > Math.abs(c.y - TY) ? (c.x > TX ? "à droite" : "à gauche") : c.y > TY ? "vers le bas" : "vers le haut";
+      const side = c.x > TX ? "à droite" : "à gauche";
       return {
         score: d <= TOL ? 100 : Math.max(0, 100 - (d - TOL) * 9),
         metrics: [
@@ -108,8 +108,9 @@
     },
     reveal(board, s, r, api) {
       s.movEl.classList.remove("grab");
-      s.frame.classList.add("bl-show-target");
-      s.frame.insertAdjacentHTML("beforeend", `<span class="bl-ghost" style="left:${s.target.x - s.mov.w / 2}px;top:${s.target.y - s.mov.h / 2}px;width:${s.mov.w}px;height:${s.mov.h}px"></span>`);
+      // Ton disque reste marqué en pointillé, le disque revient à la position qui équilibre
+      s.frame.insertAdjacentHTML("beforeend", `<span class="bl-ghost" style="left:${s.pos.x - s.mov.w / 2}px;top:${s.pos.y - s.mov.h / 2}px;width:${s.mov.w}px;height:${s.mov.h}px"></span>`);
+      s.pos = { ...s.target }; place(s);
     },
   });
 })();

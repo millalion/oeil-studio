@@ -169,7 +169,7 @@
     },
   ];
 
-  const order = Oeil.shuffle(TEMPLATES);
+  const order = Oeil.fresh("spacing-repair", TEMPLATES);
 
   function apply(s, spacing) {
     s.t.gaps.forEach((g) => {
@@ -342,7 +342,7 @@
       };
       api.controls.innerHTML = `<div class="seg-line" role="group" aria-label="Version affichée"><button data-view="user" type="button">Ta version</button><button data-view="target" type="button">Correction</button></div>`;
       api.controls.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => setView(b.dataset.view)));
-      setView("user");
+      setView("target");
     },
   });
 })();

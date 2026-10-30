@@ -17,7 +17,7 @@
     "À luminosité égale, les jaunes paraissent plus clairs que les bleus : HSL n'est pas une échelle perceptuelle.",
     "Le score dépend aussi de ton écran et de sa luminosité : vise surtout la régularité d'une session à l'autre.",
   ];
-  const targets = Oeil.shuffle(PALETTE);
+  const targets = Oeil.fresh("color-recall", PALETTE);
 
   function hsvToRgb(h, s, v) {
     const f = (n) => { const k = (n + h / 60) % 6; return v - v * s * Math.max(0, Math.min(k, 4 - k, 1)); };

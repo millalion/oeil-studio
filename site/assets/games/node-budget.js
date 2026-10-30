@@ -1,11 +1,11 @@
-// Node Budget — reproduis une forme avec un nombre limité de points : chaque point doit compter.
+// Node Budget — reproduis une forme avec le moins de points possible : chaque point doit compter.
 (function () {
   const S = 300;
-  const SHAPES = Oeil.shuffle([
-    { name: "feuille", n: 5, d: "M150 30 C 230 70 250 170 150 270 C 50 170 70 70 150 30 Z", tip: "Avec peu de points, on les place sur les extrémités et les changements de direction : la pointe, la base, les points les plus larges." },
-    { name: "maison", n: 5, d: "M60 140 L150 50 L240 140 L240 260 L60 260 Z", tip: "Une forme à angles se reproduit parfaitement avec un point par angle : ajouter des points sur les droites n'apporte rien." },
-    { name: "goutte", n: 6, d: "M150 30 C 150 30 240 150 240 195 C 240 245 200 275 150 275 C 100 275 60 245 60 195 C 60 150 150 30 150 30 Z", tip: "Pour une forme ronde, répartis les points régulièrement sur la partie courbe et garde-en un pour la pointe." },
-    { name: "flèche", n: 7, d: "M40 120 L170 120 L170 60 L265 150 L170 240 L170 180 L40 180 Z", tip: "Sept angles, sept points : la contrainte oblige à repérer d'abord la structure de la forme avant de tracer." },
+  const SHAPES = Oeil.fresh("node-budget", [
+    { name: "feuille", best: 4, d: "M150 30 C 230 70 250 170 150 270 C 50 170 70 70 150 30 Z", tip: "Avec peu de points, on les place sur les extrémités et les changements de direction : la pointe, la base, les points les plus larges." },
+    { name: "maison", best: 5, d: "M60 140 L150 50 L240 140 L240 260 L60 260 Z", tip: "Une forme à angles se reproduit parfaitement avec un point par angle : ajouter des points sur les droites n'apporte rien." },
+    { name: "goutte", best: 4, d: "M150 30 C 150 30 240 150 240 195 C 240 245 200 275 150 275 C 100 275 60 245 60 195 C 60 150 150 30 150 30 Z", tip: "Pour une forme ronde, répartis les points régulièrement sur la partie courbe et garde-en un pour la pointe." },
+    { name: "flèche", best: 7, d: "M40 120 L170 120 L170 60 L265 150 L170 240 L170 180 L40 180 Z", tip: "Sept angles, sept points : la contrainte oblige à repérer d'abord la structure de la forme avant de tracer." },
   ]);
   // Tracé fermé : chaque point a une poignée symétrique ; sans poignée, c'est un angle vif.
   function pathD(pts) {
@@ -13,6 +13,7 @@
     pts.forEach((a, i) => { const b = pts[(i + 1) % pts.length]; d += ` C${a.x + a.hx} ${a.y + a.hy} ${b.x - b.hx} ${b.y - b.hy} ${b.x} ${b.y}`; });
     return d + " Z";
   }
+  const ring = (n) => Array.from({ length: n }, (_, i) => { const a = (i / n) * Math.PI * 2 - Math.PI / 2; return { x: 150 + Math.cos(a) * 70, y: 150 + Math.sin(a) * 70, hx: 0, hy: 0, tx: -Math.sin(a) * 22, ty: Math.cos(a) * 22 }; });
   function iou(target, poly) {
     const c = document.createElement("canvas"); c.width = c.height = 120;
     const ctx = c.getContext("2d"), k = 120 / S;
@@ -35,20 +36,22 @@
   Oeil.play({
     id: "node-budget", name: "Node Budget",
     howto: [
-      { icon: "polyline", text: "La forme rose pâle est la cible. Ton tracé n'a droit qu'à quelques points." },
+      { icon: "polyline", text: "La forme rose pâle est la cible. Choisis ton nombre de points avec + et −." },
       { icon: "drag_pan", text: "Glisse les gros points pour les placer, et les petites poignées pour courber le tracé." },
       { icon: "lightbulb", text: "Ramène une poignée sur son point pour retrouver un angle vif." },
     ],
-    brief: (s) => `Reproduis la ${s.sh.name} avec ${s.sh.n} points : place-les, puis tire les petites poignées pour courber.`,
+    brief: (s) => `Reproduis la ${s.sh.name} avec le moins de points possible.`,
     setup(round) {
       const sh = SHAPES[round % SHAPES.length];
-      const pts = Array.from({ length: sh.n }, (_, i) => { const a = (i / sh.n) * Math.PI * 2 - Math.PI / 2; return { x: 150 + Math.cos(a) * 70, y: 150 + Math.sin(a) * 70, hx: 0, hy: 0, tx: -Math.sin(a) * 22, ty: Math.cos(a) * 22 }; });
-      return { sh, pts };
+      return { sh, pts: ring(8) };
     },
     mount(board, s, api) {
       const wrap = api.h("div", "nb-wrap");
       wrap.innerHTML = `<svg viewBox="0 0 ${S} ${S}" class="nb-svg" aria-hidden="true"><path d="${s.sh.d}" class="nb-target"/><path class="nb-poly"/><g class="nb-arms"></g></svg>`;
       s.poly = wrap.querySelector(".nb-poly"); s.arms = wrap.querySelector(".nb-arms");
+      s.wrap = wrap;
+      s.build = () => {
+        wrap.querySelectorAll(".handle").forEach((n) => n.remove());
       s.handles = s.pts.map((p, i) => {
         const el = api.h("span", "handle");
         el.tabIndex = 0; el.setAttribute("aria-label", `Point ${i + 1}`);
@@ -70,15 +73,28 @@
         });
         return el;
       });
+      };
+      s.build();
       board.append(wrap);
       draw(s);
-      api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Gros points : position. Petites poignées : courbure</span>`;
+      api.controls.innerHTML = `<div class="nb-count" role="group" aria-label="Nombre de points"><button aria-label="Retirer un point" data-d="-1" type="button">−</button><b>${s.pts.length} points</b><button aria-label="Ajouter un point" data-d="1" type="button">+</button></div><span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Gros points : position. Petites poignées : courbure</span>`;
+      api.controls.querySelectorAll("[data-d]").forEach((b) => b.addEventListener("click", () => {
+        if (api.phase !== "play") return;
+        const n = Oeil.clamp(s.pts.length + +b.dataset.d, 3, 10);
+        if (n > s.pts.length) { const a = s.pts[s.pts.length - 1], c = s.pts[0]; const g = ring(n)[n - 1]; s.pts.push({ ...g, x: (a.x + c.x) / 2, y: (a.y + c.y) / 2 }); } else if (n < s.pts.length) s.pts.pop();
+        api.controls.querySelector(".nb-count b").textContent = `${s.pts.length} points`;
+        s.build(); draw(s);
+      }));
     },
     evaluate(s) {
-      const v = iou(s.sh.d, pathD(s.pts));
+      const v = iou(s.sh.d, pathD(s.pts)), n = s.pts.length, best = s.sh.best, extra = Math.max(0, n - best);
       return {
-        score: Math.round(Oeil.clamp((v - 0.55) / 0.38, 0, 1) * 100),
-        metrics: [{ label: "Recouvrement de la cible", value: `${Math.round(v * 100)} %`, good: v > 0.88 }],
+        score: Math.max(0, Math.round(Oeil.clamp((v - 0.55) / 0.38, 0, 1) * 100) - extra * 8),
+        metrics: [
+          { label: "Recouvrement de la cible", value: `${Math.round(v * 100)} %`, good: v > 0.88 },
+          { label: "Tes points", value: `${n}`, good: extra === 0 },
+          { label: "Le minimum", value: extra ? `tu aurais pu n'en utiliser que ${best}` : `${best} : parfait` , good: extra === 0 },
+        ],
         principle: s.sh.tip,
       };
     },

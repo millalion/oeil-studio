@@ -3,7 +3,7 @@
   const K = 0.5;          // part de la correction masse ↔ boîte
   const LIFT = 0.02;      // le centre optique d'un cadre est un peu au-dessus du centre géométrique
   const TOL = 1.5;        // % du cadre considéré comme parfait
-  const SHAPES = Oeil.shuffle([
+  const SHAPES = Oeil.fresh("optical-center", [
     { kind: "path", d: "M22 10 L92 50 L22 90 Z", name: "Lecture", tip: "Un triangle « lecture » posé au centre de sa boîte paraît décalé à gauche : sa masse est du côté de la base. On le pousse vers la pointe." },
     { kind: "path", d: "M50 10 L94 90 L6 90 Z", name: "Alerte", tip: "Un triangle pointe en haut a toute sa masse en bas : centré au calcul, il paraît tomber. On le remonte légèrement." },
     { kind: "glyph", text: "T", name: "T", tip: "La barre du T concentre la masse en haut : centré au calcul, il paraît flotter. On le descend un peu." },

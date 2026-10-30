@@ -5,11 +5,11 @@
 //  - assign : déposer des étiquettes sur des emplacements
 (function () {
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const pickItems = (items) => Oeil.shuffle(items);
+  const pickItems = (items, id) => Oeil.fresh(id, items);
 
   // ---------------------------------------------------------------- Choix
   function choice(def) {
-    const items = pickItems(def.items);
+    const items = pickItems(def.items, def.id);
     Oeil.play({
       id: def.id, name: def.name, rounds: def.rounds || Math.min(5, items.length), howto: def.howto,
       brief: (s) => (s.memo ? def.memoBrief || "Observe bien…" : s.it.prompt),
@@ -92,7 +92,7 @@
   // ---------------------------------------------------------------- Chasse aux erreurs
   // Le contenu contient des éléments [data-h="bad"] (fautifs, avec data-why) et [data-h="ok"].
   function hunt(def) {
-    const items = pickItems(def.items);
+    const items = pickItems(def.items, def.id);
     Oeil.play({
       id: def.id, name: def.name, rounds: def.rounds || Math.min(5, items.length), howto: def.howto,
       brief: (s) => `${s.it.prompt} (${s.bad} à trouver)`,
@@ -158,7 +158,7 @@
 
   // ---------------------------------------------------------------- Remettre dans l'ordre
   function order(def) {
-    const items = pickItems(def.items);
+    const items = pickItems(def.items, def.id);
     Oeil.play({
       id: def.id, name: def.name, rounds: def.rounds || Math.min(5, items.length), howto: def.howto,
       brief: (s) => s.it.prompt,
@@ -205,7 +205,7 @@
   // ---------------------------------------------------------------- Associer
   // slots : [{ id, html | render(token) }], tokens : [{ id, html, slot }] (slot null = leurre)
   function assign(def) {
-    const items = pickItems(def.items);
+    const items = pickItems(def.items, def.id);
     Oeil.play({
       id: def.id, name: def.name, rounds: def.rounds || Math.min(5, items.length), howto: def.howto,
       brief: (s) => s.it.prompt,

@@ -65,12 +65,12 @@
   }
 
   // ---------- Contrainte d'angle façon Illustrator : Maj (ou le bouton) cale une poignée tous les 45° ----------
-  function angleLock(controls) {
+  function angleLock(controls, onToggle) {
     let on = false;
     const b = h("button", "btn-line btn-sm ang-btn", `<span class="material-symbols-outlined" aria-hidden="true">architecture</span>Angle 45°`);
     b.type = "button"; b.setAttribute("aria-pressed", "false");
     b.title = "Contraint l'angle de la poignée tous les 45°, comme la touche Maj dans Illustrator";
-    b.addEventListener("click", () => { on = !on; b.setAttribute("aria-pressed", String(on)); });
+    b.addEventListener("click", () => { on = !on; b.setAttribute("aria-pressed", String(on)); if (onToggle) onToggle(on); });
     controls.append(b, h("span", "ctl-hint", `<kbd>Maj</kbd> pendant le geste : angle contraint`));
     return {
       active: (ev) => on || !!(ev && ev.shiftKey),
@@ -130,7 +130,7 @@
   }
 
   // Sens du geste montré par l'animation, quand il n'est pas libre
-  const CUE_AXIS = { "leading-lab": "y", "spacing-repair": "y", "kern-clinic": "x", "grid-snap": "x", "pixel-guess": "x", "rag-rescue": "x", "weight-match": "x", "whitespace-budget": "x", "contrast-rescue": "x" };
+  const CUE_AXIS = { "leading-lab": "y", "spacing-repair": "y", "contrast-rescue": "y", "kern-clinic": "x", "grid-snap": "x", "pixel-guess": "x", "rag-rescue": "x", "weight-match": "x", "whitespace-budget": "x" };
   const VERDICTS = [[97, "Impeccable"], [90, "Très juste"], [75, "Pas loin"], [50, "À reprendre"], [0, "Raté, rejoue-la"]];
   const verdictFor = (s) => VERDICTS.find(([min]) => s >= min)[1];
   const gradeFor = (p) => (p >= 97 ? "A+" : p >= 92 ? "A" : p >= 85 ? "B" : p >= 75 ? "C" : "D");
@@ -159,7 +159,7 @@
       // Mémorisation : on annonce la durée, le chrono ne part qu'au clic.
       memoGate(seconds, what, go) {
         submitBtn.disabled = true;
-        const g = h("div", "memo-gate", `<div class="memo-card"><p class="memo-sec"><b>${seconds}</b> secondes</p><p class="memo-what">pour mémoriser ${esc(what)}.</p><button class="btn btn-lg" type="button">C'est parti</button></div>`);
+        const g = h("div", "memo-gate", `<div class="memo-card"><p class="memo-what">Tu as <b>${seconds} secondes</b> pour mémoriser ${esc(what)}.</p><button class="btn btn-lg" type="button">C'est parti</button></div>`);
         board.append(g);
         const b = g.querySelector("button");
         b.addEventListener("click", () => { g.remove(); go(); });
@@ -437,11 +437,28 @@
     startRound();
   }
 
+  // Exercices jamais répétés tant qu'il en reste : un ordre propre à chaque joueur, et on reprend où on s'est arrêté.
+  // Les défis partagés gardent leur tirage, pour rester identiques entre joueurs.
+  function fresh(id, list) {
+    const S = window.OEIL_SEED;
+    if (!S || S.challenge || S.daily) return shuffle(list);
+    let me = store.get("uid");
+    if (!me) { me = String(Date.now()) + Math.floor(Math.random() * 1e6); store.set("uid", me); }
+    let h = S.hash(me + id) || 1;
+    const rnd = () => { h = Math.imul(h ^ (h >>> 13), 1597334677) >>> 0; return h / 4294967296; };
+    const a = [...list];
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    const key = "seen:" + id, n = store.get(key) || 0;
+    store.set(key, n + (document.body.dataset.mode === "mix" ? 1 : ROUNDS_DEFAULT));
+    const k = n % a.length;
+    return [...a.slice(k), ...a.slice(0, k)];
+  }
+
   function play(def) {
     registry[def.id] = def;
     if (document.body.dataset.mode === "mix") return;
     start({ ids: [def.id] });
   }
 
-  window.Oeil = { play, start, registry, color, drag, sortable, angleLock, rand, randi, pick, shuffle, clamp, h, store, info };
+  window.Oeil = { play, start, registry, fresh, color, drag, sortable, angleLock, rand, randi, pick, shuffle, clamp, h, store, info };
 })();

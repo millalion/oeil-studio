@@ -1,11 +1,11 @@
 // Crop It — recadre une image selon un objectif : règle des tiers, ligne d'horizon, espace devant le regard.
 (function () {
   const IW = 600, IH = 400;
-  const GOALS = Oeil.shuffle([
-    { ratio: 1, label: "carré", text: "Format carré : amène la tête (point rose) sur le rond rose", target: (sc) => ({ x: 1 / 3, y: 1 / 3 }), point: "head", tip: "La règle des tiers place le sujet sur une intersection des lignes qui divisent l'image en trois : l'image respire et l'œil circule." },
-    { ratio: 4 / 5, label: "portrait 4:5", text: "Format portrait : amène l'horizon (ligne rose) sur la ligne pointillée", target: () => ({ y: 2 / 3 }), point: "horizon", tip: "Un horizon au tiers bas donne la place au ciel ; au tiers haut, il donne la place au sol. Au milieu, l'image se coupe en deux et devient statique." },
-    { ratio: 16 / 9, label: "16:9", text: "Format 16:9 : amène la tête sur le rond rose, le personnage a de l'espace devant lui", target: () => ({ x: 1 / 3, y: 1 / 2 }), point: "head", tip: "On laisse de l'espace du côté où regarde le sujet : coupé devant son regard, il paraît buter contre le bord du cadre." },
-    { ratio: 3 / 2, label: "3:2", text: "Format 3:2 : amène le soleil sur le rond rose", target: () => ({ x: 2 / 3, y: 1 / 3 }), point: "sun", tip: "Un sujet fort se place sur une intersection des lignes de tiers plutôt qu'au centre : l'image respire et le regard circule." },
+  const GOALS = Oeil.fresh("crop-it", [
+    { ratio: 1, label: "carré", text: "Recadre en carré : le personnage sur un point fort, à gauche", target: (sc) => ({ x: 1 / 3, y: 1 / 3 }), point: "head", tip: "La règle des tiers place le sujet sur une intersection des lignes qui divisent l'image en trois : l'image respire et l'œil circule." },
+    { ratio: 4 / 5, label: "portrait 4:5", text: "Recadre en 4:5 : l'horizon sur le tiers bas, le ciel domine", target: () => ({ y: 2 / 3 }), point: "horizon", tip: "Un horizon au tiers bas donne la place au ciel ; au tiers haut, il donne la place au sol. Au milieu, l'image se coupe en deux et devient statique." },
+    { ratio: 16 / 9, label: "16:9", text: "Recadre en 16:9 : laisse de l'espace devant le regard du personnage", target: () => ({ x: 1 / 3, y: 1 / 2 }), point: "head", tip: "On laisse de l'espace du côté où regarde le sujet : coupé devant son regard, il paraît buter contre le bord du cadre." },
+    { ratio: 3 / 2, label: "3:2", text: "Recadre en 3:2 : le soleil sur un point fort, en haut à droite", target: () => ({ x: 2 / 3, y: 1 / 3 }), point: "sun", tip: "Un sujet fort se place sur une intersection des lignes de tiers plutôt qu'au centre : l'image respire et le regard circule." },
   ]);
   const THEMES = {
     mer: { sky: "#B9D9FF", far: "#7FA6C9", near: "#D8EF71", sun: "#FFC08F" },
@@ -41,9 +41,9 @@
   Oeil.play({
     id: "crop-it", name: "Crop It",
     howto: [
-      { icon: "crop", text: "Le cadre rose est ton recadrage. Son format est imposé par la consigne." },
+      { icon: "crop", text: "L'outil Recadrage de Photoshop : le format est imposé, à toi de choisir ce que tu gardes." },
       { icon: "drag_pan", text: "Glisse le cadre pour le déplacer, et sa poignée en bas à droite pour l'agrandir ou le réduire." },
-      { icon: "grid_on", text: "Les lignes des tiers s'affichent dans le cadre pour t'aider à placer le sujet." },
+      { icon: "grid_on", text: "Sers-toi des lignes des tiers : le sujet se place sur leurs croisements." },
     ],
     brief: (s) => s.g.text + ".",
     setup(round) {
@@ -61,13 +61,7 @@
       hd.setAttribute("aria-label", "Taille du recadrage");
         hd.addEventListener("pointerdown", (e) => e.stopPropagation());
       s.box.append(hd);
-      // Repères : le sujet sur l'image, sa place dans le cadre
-      const t = s.g.target(s.sc), sub = subject(s);
-      if (t.x != null && s.g.point !== "horizon") s.box.insertAdjacentHTML("beforeend", `<span class="ci-goal" style="left:${t.x * 100}%;top:${t.y * 100}%"></span>`);
-      if (s.g.point === "horizon") {
-        s.box.insertAdjacentHTML("beforeend", `<span class="ci-goal-line" style="top:${t.y * 100}%"></span>`);
-        s.frame.insertAdjacentHTML("beforeend", `<span class="ci-line" style="top:${s.sc.hy}px"></span>`);
-      } else s.frame.insertAdjacentHTML("beforeend", `<span class="ci-dot" style="left:${sub.x}px;top:${sub.y}px"></span>`);
+      s.box.insertAdjacentHTML("beforeend", `<span class="ci-format">${s.g.label}</span>`);
       s.frame.append(s.box);
       board.append(s.frame);
       fit(board, s); apply(s);

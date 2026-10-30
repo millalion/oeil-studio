@@ -1,6 +1,6 @@
 // Whitespace Budget — un budget fixe d'espace à répartir entre trois écarts pour créer une hiérarchie.
 (function () {
-  const CARDS = Oeil.shuffle([
+  const CARDS = Oeil.fresh("whitespace-budget", [
     { budget: 56, target: [8, 16, 32], parts: ["Étiquette", "Titre", "Description", "Bouton"], tip: "Avec un budget fixe, la hiérarchie vient du contraste entre les écarts : petit entre ce qui va ensemble, grand avant l'action. Répartir à parts égales ne dit rien." },
     { budget: 48, target: [24, 8, 16], parts: ["Photo", "Nom", "Fonction", "Statistiques"], tip: "Le nom et la fonction forment une seule information : ils se collent. La photo et les statistiques s'en détachent plus franchement." },
     { budget: 64, target: [8, 40, 16], parts: ["Titre", "Sous-titre", "Paragraphe", "Signature"], tip: "Le plus grand écart marque la rupture principale du composant : ici entre l'en-tête (titre + sous-titre) et le corps du texte." },

@@ -1,6 +1,6 @@
 // Easing Lab — regarde un mouvement, puis tords la courbe de Bézier pour le reproduire.
 (function () {
-  const TARGETS = Oeil.shuffle([
+  const TARGETS = Oeil.fresh("easing-lab", [
     { name: "ease-out", p: [0, 0, 0.58, 1], tip: "Ease-out démarre vite et freine : c'est la courbe des éléments qui entrent à l'écran, ils arrivent avec élan puis se posent." },
     { name: "ease-in", p: [0.42, 0, 1, 1], tip: "Ease-in démarre lentement et accélère : réservé aux sorties, un élément qui part prend de la vitesse." },
     { name: "ease-in-out", p: [0.42, 0, 0.58, 1], tip: "Ease-in-out accélère puis freine : idéal pour un élément qui se déplace d'un point à un autre sans quitter l'écran." },

@@ -99,7 +99,7 @@ page("abonnement.html", "Abonnement — Œil Studio", "tarifs", f"""<section cla
 </section>""", """<script>
   (function () {
     const $ = (id) => document.getElementById(id);
-    const PRO = ["Les 44 jeux, sans limite", "Le parcours intensif inclus", "Progression sur tous tes appareils"];
+    const PRO = ["Les 45 jeux, sans limite", "Le parcours intensif inclus", "Progression sur tous tes appareils"];
     const PLANS = {
       "pro-mensuel": { name: "Œil Pro", price: "3 €", detail: "par mois, résiliable à tout moment", plan: "pro", list: PRO },
       "pro-annuel": { name: "Œil Pro", price: "24 €", detail: "par an, soit 2 mois offerts", plan: "pro", list: PRO },

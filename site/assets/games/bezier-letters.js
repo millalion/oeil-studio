@@ -5,7 +5,7 @@
   const ell = (cx, cy, rx, ry) => ({ start: [cx, cy - ry], segs: [
     [cx + rx * K, cy - ry, cx + rx, cy - ry * K, cx + rx, cy], [cx + rx, cy + ry * K, cx + rx * K, cy + ry, cx, cy + ry],
     [cx - rx * K, cy + ry, cx - rx, cy + ry * K, cx - rx, cy], [cx - rx, cy - ry * K, cx - rx * K, cy - ry, cx, cy - ry]] });
-  const LETTERS = Oeil.shuffle([
+  const LETTERS = Oeil.fresh("bezier-letters", [
     { name: "O", shape: ell(150, 150, 95, 115), fix: [1], tip: "Sur un O, les poignées sont horizontales en haut et en bas, verticales sur les côtés, et longues d'environ 55 % du rayon. C'est ce qui donne une courbe tendue, sans bosse." },
     { name: "D", shape: { start: [70, 40], segs: [[180, 40], [250, 40, 260, 90, 260, 150], [260, 210, 250, 260, 180, 260], [70, 260], [70, 40]] }, fix: [1], tip: "La panse du D quitte la hampe horizontalement et rejoint son point le plus à droite verticalement : des poignées parallèles aux axes évitent les angles cachés." },
     { name: "C", shape: { start: [240, 80], segs: [[215, 50, 185, 35, 150, 35], [85, 35, 50, 90, 50, 150], [50, 210, 85, 265, 150, 265], [185, 265, 215, 250, 240, 220]] }, fix: [1, 2], tip: "Le C se construit comme un O ouvert : les extrémités du contour, plus serrées que les flancs, demandent des poignées plus courtes." },
@@ -65,7 +65,15 @@
       board.append(wrap);
       draw(s);
       api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Glisse les poignées roses</span>`;
-      s.lock = Oeil.angleLock(api.controls);
+      s.lock = Oeil.angleLock(api.controls, (on) => {
+        if (!on) return;
+        // Cale aussitôt toutes les poignées sur le pas de 45°
+        s.fix.forEach((i) => [0, 1].forEach((k) => {
+          const seg = s.cur.segs[i], [ax, ay] = k === 0 ? prev(s.cur, i) : [seg[4], seg[5]];
+          [seg[k * 2], seg[k * 2 + 1]] = s.lock.snap(ax, ay, seg[k * 2], seg[k * 2 + 1], { shiftKey: true });
+        }));
+        draw(s);
+      });
     },
     evaluate(s) {
       let dist = 0, n = 0;

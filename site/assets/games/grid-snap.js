@@ -3,11 +3,13 @@
   const W = 720, COLS = 12, GUT = 16, COL = (W - GUT * (COLS - 1)) / COLS;
   const edgeL = (i) => i * (COL + GUT);          // bord gauche de la colonne i
   const edgeR = (i) => i * (COL + GUT) + COL;    // bord droit de la colonne i
-  const LAYOUTS = Oeil.shuffle([
-    [{ label: "Titre", span: [0, 8], h: 56 }, { label: "Image", span: [0, 6], h: 120 }, { label: "Texte", span: [6, 12], h: 120 }, { label: "Bouton", span: [0, 3], h: 40 }],
-    [{ label: "Navigation", span: [0, 12], h: 40 }, { label: "Barre latérale", span: [0, 3], h: 180 }, { label: "Contenu", span: [3, 12], h: 180 }],
-    [{ label: "Carte", span: [0, 4], h: 140 }, { label: "Carte", span: [4, 8], h: 140 }, { label: "Carte", span: [8, 12], h: 140 }, { label: "Légende", span: [0, 6], h: 40 }],
-    [{ label: "Chapô", span: [2, 10], h: 70 }, { label: "Citation", span: [1, 7], h: 90 }, { label: "Photo", span: [7, 12], h: 140 }],
+  // La consigne décrit la maquette, comme un brief : à toi de la traduire en colonnes.
+  const LAYOUTS = Oeil.fresh("grid-snap", [
+    { brief: "Trois cartes de même largeur, sur toute la grille", blocks: [{ label: "Carte", span: [0, 4], h: 150 }, { label: "Carte", span: [4, 8], h: 150 }, { label: "Carte", span: [8, 12], h: 150 }], tip: "12 ÷ 3 = 4 : trois cartes font 4 colonnes chacune. C'est pour ça que 12 est si pratique : il se divise par 2, 3, 4 et 6." },
+    { brief: "Une barre latérale d'un quart, le contenu prend tout le reste", blocks: [{ label: "Barre latérale", span: [0, 3], h: 240 }, { label: "Contenu", span: [3, 12], h: 240 }], tip: "Un quart de 12 colonnes, c'est 3 colonnes. Le contenu garde les 9 autres : la proportion reste juste à toutes les tailles d'écran." },
+    { brief: "Un texte centré sur les deux tiers de la grille", blocks: [{ label: "Texte", span: [2, 10], h: 170 }], tip: "Deux tiers de 12 font 8 colonnes. Pour centrer, on laisse le même nombre de colonnes vides de chaque côté : 2 à gauche, 2 à droite." },
+    { brief: "Un bandeau pleine largeur, puis deux colonnes égales", blocks: [{ label: "Bandeau", span: [0, 12], h: 70 }, { label: "Colonne", span: [0, 6], h: 150 }, { label: "Colonne", span: [6, 12], h: 150 }], tip: "Deux colonnes égales font 6 colonnes de grille chacune. Le bandeau, lui, reprend les 12 : les bords s'alignent parfaitement." },
+    { brief: "Une image sur deux tiers, sa légende sur le tiers restant", blocks: [{ label: "Image", span: [0, 8], h: 220 }, { label: "Légende", span: [8, 12], h: 220 }], tip: "8 + 4 = 12 : deux tiers, un tiers. La gouttière entre les deux reste celle de la grille, sans réglage à la main." },
   ]);
   // Toute position calée sur la grille est juste : on cherche les bords de colonne les plus proches.
   const nearL = (x) => { let i = Oeil.clamp(Math.round(x / (COL + GUT)), 0, COLS - 1); return { i, x: edgeL(i) }; };
@@ -17,36 +19,34 @@
     b.el.style.left = `${b.x}px`; b.el.style.width = `${b.w}px`;
     const n = snapOf(b);
     const tag = b.el.querySelector(".gs-span");
-    tag.textContent = `tu es sur ${n.l.i + 1} à ${n.r.i + 1}`;
-    tag.hidden = b.w < 280 || b.h < 50;
+    tag.textContent = `${n.r.i - n.l.i + 1} col.`;
   }
   function fit(board, s) { const pad = board.clientWidth < 600 ? 16 : 60; const k = Math.min(1.2, (board.clientWidth - pad) / W, (board.clientHeight - pad) / s.H); s.k = k; s.frame.style.transform = `translate(-50%, -50%) scale(${k})`; }
   Oeil.play({
     id: "grid-snap", name: "Grid Snap",
     howto: [
-      { icon: "view_column", text: "Les 12 colonnes roses sont numérotées. Chaque bloc indique où il doit aller." },
-      { icon: "drag_pan", text: "Glisse le bloc pour le déplacer, tire sa poignée de droite pour changer sa largeur." },
-      { icon: "lightbulb", text: "Les bords s'aimantent aux colonnes quand tu lâches, comme dans Figma." },
+      { icon: "view_column", text: "Une grille de 12 colonnes, comme dans Figma. La consigne décrit une mise en page." },
+      { icon: "drag_pan", text: "Déplace les blocs, tire leur poignée droite pour régler leur largeur. Ils s'aimantent aux colonnes." },
     ],
-    brief: "Place chaque bloc sur les colonnes écrites dessus.",
+    brief: (s) => `${s.L.brief}.`,
     setup(round) {
       const L = LAYOUTS[round % LAYOUTS.length];
       let y = 0;
-      const blocks = L.map((b) => {
+      const blocks = L.blocks.map((b) => {
         const tx = edgeL(b.span[0]), tw = edgeR(b.span[1] - 1) - tx;
-        const row = { ...b, y, tx, tw, x: Oeil.clamp(tx + Oeil.randi(-40, 40), 0, W - 60), w: Oeil.clamp(tw + Oeil.randi(-36, 36), 50, W) };
-        if (row.x + row.w > W) row.w = W - row.x;
+        // Les blocs partent tous à gauche, empilés, avec une largeur de départ quelconque
+        const it = { ...b, y, tx, tw, x: Oeil.randi(0, 3) * (COL + GUT), w: edgeR(Oeil.randi(1, 4)) };
         y += b.h + 16;
-        return row;
+        return it;
       });
-      return { blocks, H: y - 16 };
+      return { L, blocks, H: y - 16 };
     },
     mount(board, s, api) {
       s.frame = api.h("div", "gs-frame");
       s.frame.style.cssText = `width:${W}px;height:${s.H}px`;
       s.frame.innerHTML = Array.from({ length: COLS }, (_, i) => `<span class="gs-col" style="left:${edgeL(i)}px;width:${COL}px"><i>${i + 1}</i></span>`).join("");
       s.blocks.forEach((b) => {
-        b.el = api.h("div", "gs-block grab", `<span>${b.label} · colonnes ${b.span[0] + 1} à ${b.span[1]}</span><span class="gs-span"></span>`);
+        b.el = api.h("div", "gs-block grab", `<span>${b.label}</span><span class="gs-span"></span>`);
         b.el.style.cssText = `top:${b.y}px;height:${b.h}px`;
         const hd = api.h("span", "gs-resize");
         hd.setAttribute("aria-label", `Largeur de ${b.label}`);
@@ -70,8 +70,8 @@
       const ok = d.filter((x) => x <= 4).length;
       return {
         score,
-        metrics: [{ label: "Blocs calés sur la grille", value: `${ok} sur ${d.length}`, good: ok === d.length }, { label: "Écart moyen des bords", value: `${(d.reduce((a, x) => a + x, 0) / d.length / 2).toFixed(1).replace(".", ",")} px` }],
-        principle: "Une grille ne sert que si on la respecte : un bloc qui s'arrête entre deux colonnes casse l'alignement de toute la page.",
+        metrics: [{ label: "Blocs bien placés", value: `${ok} sur ${d.length}`, good: ok === d.length }, { label: "Écart moyen des bords", value: `${(d.reduce((a, x) => a + x, 0) / d.length / 2).toFixed(1).replace(".", ",")} px` }],
+        principle: s.L.tip,
       };
     },
     reveal(board, s, r, api) {

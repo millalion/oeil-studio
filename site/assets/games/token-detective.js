@@ -30,7 +30,7 @@
       ["radius", "Arrondi de l'avatar", "radius", 8], ["fg", "Couleur du nom", "color", "#141413"], ["sub", "Couleur de la fonction", "color", "#5E5D58"]],
       render: (p) => `<div style="width:320px;display:flex;align-items:center;gap:${p.gap}px;padding:${p.pad}px 0;border-bottom:1px solid #E0DFD8"><span style="width:40px;height:40px;border-radius:${p.radius}px;background:#F7B4CC"></span><span><span style="display:block;font-size:${p.name}px;font-weight:500;color:${p.fg}">Léa Martin</span><span style="display:block;font-size:${p.meta}px;color:${p.sub}">Directrice artistique</span></span></div>` },
   ];
-  const order = Oeil.shuffle(COMPONENTS);
+  const order = Oeil.fresh("token-detective", COMPONENTS);
   const fmt = (type, v) => (type === "color" ? v : `${v} px`);
 
   Oeil.play({
