@@ -1574,3 +1574,40 @@ a.who:hover { text-decoration: underline; text-underline-offset: 3px; }
 .handle.pd-angle { width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 2px; rotate: 45deg; }
 .handle.pd-angle::after { inset: 3px; border-radius: 1px; }
 @media (max-width: 640px) { .pd-wrap { flex-direction: column; gap: 8px; } .pd-model { width: 84px; } .pd-stage { height: auto; flex: 1; min-height: 0; max-width: 100%; } }
+/* Inspecteur, façon Figma */
+.insp-wrap { position: absolute; inset: 0; display: grid; grid-template-columns: 248px minmax(0, 1fr); }
+.insp { display: flex; flex-direction: column; gap: 8px; padding: 14px; background: #fff; border-right: 1px solid #141413; overflow: auto; }
+.insp.is-locked { pointer-events: none; opacity: .6; }
+.insp-title { font-size: 13px; font-weight: 500; color: #141413; margin-top: 4px; }
+.insp-field { display: grid; grid-template-columns: 1fr 66px 16px; align-items: center; gap: 6px; font-size: 13px; color: #5E5D59; }
+.insp-field span { cursor: ew-resize; touch-action: none; user-select: none; }
+.insp-field input { width: 100%; min-height: 34px; padding: 0 6px; border: 1px solid #C9C8C1; border-radius: 4px; background: #F7F6F2; color: #141413; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums; }
+.insp-field input:focus { outline: 2px solid #F0447A; outline-offset: -1px; }
+.insp-field i { font-style: normal; font-size: 12px; }
+.insp-row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: #5E5D59; }
+.insp-row b { color: #141413; font-weight: 500; font-variant-numeric: tabular-nums; }
+.insp-list { display: flex; flex-direction: column; gap: 2px; }
+.insp-list button { display: flex; justify-content: space-between; padding: 6px 8px; min-height: 32px; border-radius: 4px; font-size: 13px; color: #141413; }
+.insp-list button:hover { background: #F0EFEA; }
+.insp-list button[aria-pressed="true"] { background: #141413; color: #fff; }
+.insp-list b { font-weight: 500; font-variant-numeric: tabular-nums; }
+.insp-code { margin-top: 4px; padding: 8px; border-radius: 4px; background: #F0EFEA; color: #141413; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.insp-canvas { position: relative; min-width: 0; }
+.ts-canvas, .wm-canvas { display: grid; grid-template-columns: 1fr 1fr; }
+.ts-canvas figure, .wm-canvas figure { margin: 0; min-width: 0; display: flex; flex-direction: column; padding: 14px 16px; overflow: hidden; }
+.ts-canvas figure + figure, .wm-canvas figure + figure { border-left: 1px solid #E0DFD8; }
+.ts-canvas figcaption, .wm-canvas figcaption { font-size: 13px; color: #5E5D59; }
+.ts-page { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: .5em; margin-top: 8px; line-height: 1.15; color: #141413; letter-spacing: -.01em; }
+.ts-page > span { display: block; white-space: nowrap; }
+.ts-ghost { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: .5em; color: #F0447A; opacity: .55; pointer-events: none; }
+.ts-ghost span { display: block; white-space: nowrap; }
+.wm-canvas figure { align-items: center; justify-content: center; gap: 14px; }
+.wm-canvas .wm-word { font-family: "Roboto Flex", "Inter Tight", sans-serif; letter-spacing: 0; line-height: 1.1; white-space: nowrap; }
+.kc-read { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 14px; padding: 6px 12px; border: 1px solid #141413; border-radius: 4px; background: #fff; font-size: 13px; color: #5E5D59; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.kc-read i { font-style: normal; color: #141413; font-weight: 500; }
+.kc-read b { color: #141413; font-weight: 500; }
+@media (max-width: 720px) {
+  .insp-wrap { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+  .insp { order: 2; border-right: 0; border-top: 1px solid #141413; }
+  .ts-page > span, .ts-ghost span { white-space: normal; }
+}

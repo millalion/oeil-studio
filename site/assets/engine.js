@@ -130,7 +130,7 @@
   }
 
   // Sens du geste montré par l'animation, quand il n'est pas libre
-  const CUE_AXIS = { "leading-lab": "y", "spacing-repair": "y", "contrast-rescue": "y", "kern-clinic": "x", "grid-snap": "x", "pixel-guess": "x", "rag-rescue": "x", "weight-match": "x", "whitespace-budget": "x" };
+  const CUE_AXIS = { "leading-lab": "y", "spacing-repair": "y", "contrast-rescue": "y", "kern-clinic": "x", "type-scale": "x", "weight-match": "x", "grid-snap": "x", "pixel-guess": "x", "rag-rescue": "x", "weight-match": "x", "whitespace-budget": "x" };
   const VERDICTS = [[97, "Impeccable"], [90, "Très juste"], [75, "Pas loin"], [50, "À reprendre"], [0, "Raté, rejoue-la"]];
   const verdictFor = (s) => VERDICTS.find(([min]) => s >= min)[1];
   const gradeFor = (p) => (p >= 97 ? "A+" : p >= 92 ? "A" : p >= 85 ? "B" : p >= 75 ? "C" : "D");
@@ -460,5 +460,22 @@
     start({ ids: [def.id] });
   }
 
-  window.Oeil = { play, start, registry, fresh, color, drag, sortable, angleLock, rand, randi, pick, shuffle, clamp, h, store, info };
+  // Champ d'inspecteur, comme dans Figma : glisser sur le libellé, taper la valeur, ou flèches haut et bas.
+  function field({ label, unit = "", min, max, step = 1, value, onChange }) {
+    const el = h("label", "insp-field", `<span class="grab">${label}</span><input inputmode="decimal" type="text" aria-label="${label}"/><i>${unit}</i>`);
+    const input = el.querySelector("input"), grip = el.querySelector("span");
+    const dec = String(step).split(".")[1]?.length || 0;
+    const show = (v) => { input.value = v.toFixed(dec).replace(".", ","); };
+    const set = (v, silent) => { value = clamp(Math.round(v / step) * step, min, max); show(value); if (!silent) onChange(value); };
+    drag(grip, { start: () => ({ v: value }), move: (dx, dy, ev, c) => set(c.v + (dx / 4) * step) });
+    input.addEventListener("change", () => { const v = parseFloat(input.value.replace(",", ".")); set(Number.isNaN(v) ? value : v); });
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") { e.preventDefault(); e.stopPropagation(); set(value + (e.key === "ArrowUp" ? 1 : -1) * (e.shiftKey ? 10 : 1) * step); }
+      else if (e.key === "ArrowLeft" || e.key === "ArrowRight") e.stopPropagation();
+    });
+    show(value);
+    return { el, set, get: () => value };
+  }
+
+  window.Oeil = { play, start, registry, fresh, color, drag, sortable, angleLock, field, rand, randi, pick, shuffle, clamp, h, store, info };
 })();

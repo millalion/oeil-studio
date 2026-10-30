@@ -1,6 +1,7 @@
 // Kern Clinic — la référence est le crénage dessiné dans Newsreader, mesuré dans le navigateur.
 (function () {
   const FONT = "Newsreader";
+  const EXTRA = ["TAPIS", "VALISE", "AUTOUR", "PAYSAGE", "LAVANDE", "TOITURE", "ROYAUME", "WAGNER", "AVOCAT", "FAVORI", "TYPOGRAPHE", "ATLAS", "VOILE", "VOYELLE", "PATATE", "LATTE", "AFFICHE", "KAYAK", "YAOURT", "OCTAVE", "VAPEUR", "TAVERNE"];
   const TOL = 5; // unités (1/1000 em) considérées comme parfaites
   const WORDS = [
     { word: "AVANT", tip: "Les diagonales de A et V laissent un grand vide triangulaire : on les rapproche fortement pour que leur blanc paraisse égal à celui de N et T." },
@@ -12,7 +13,14 @@
     { word: "PLATEAU", tip: "P et L ont chacun un côté très ouvert : L–A et T–E sont les paires à surveiller." },
     { word: "CRÉNAGE", tip: "Le crénage corrige l'approche par défaut de certaines paires : ici N–A et A–G demandent un rapprochement net." },
   ];
-  const words = Oeil.fresh("kern-clinic", WORDS);
+  // Pour les autres mots, le conseil vient de la paire la plus délicate.
+  const RULES = [
+    [/AV|VA|AW|WA|AY|YA/, "Deux diagonales opposées laissent un grand vide : c'est la paire qu'on rapproche le plus."],
+    [/T[AOEY]|TT|LT|LY|LV|FA|PA/, "Sous une barre ou derrière un pied ouvert se cache un vide : la lettre suivante vient s'y loger."],
+    [/[VYTW][OE]|O[VYTW]/, "Une ronde à côté d'une diagonale ou d'une barre : le blanc paraît grand, on les rapproche."],
+  ];
+  const tipOf = (word) => (RULES.find(([re]) => re.test(word)) || [0, "Juge la surface de blanc entre les lettres : deux droites demandent plus d'écart que deux rondes."])[1];
+  const words = Oeil.fresh("kern-clinic", [...WORDS, ...EXTRA.map((word) => ({ word, tip: tipOf(word) }))]);
   const units = (em) => Math.round(em * 1000);
 
   async function measure(word) {
@@ -27,8 +35,13 @@
     let off = 0;
     letters.forEach((ch) => { range.setStart(node, off); range.setEnd(node, off + ch.length); xs.push((range.getBoundingClientRect().left - base) / size); off += ch.length; });
     const width = probe.getBoundingClientRect().width / size;
+    // Mêmes mesures sans crénage : c'est le zéro du champ Crénage d'InDesign
+    probe.style.fontKerning = "none";
+    const flat = [];
+    off = 0;
+    letters.forEach((ch) => { range.setStart(node, off); range.setEnd(node, off + ch.length); flat.push((range.getBoundingClientRect().left - base) / size); off += ch.length; });
     probe.remove();
-    return { letters, xs, width };
+    return { letters, xs, flat, width };
   }
 
   function geometry(board, s) {
@@ -40,11 +53,20 @@
 
   function place(s) {
     s.els.forEach((el, i) => { el.style.left = `${s.x0 + s.pos[i] * s.fs}px`; el.style.top = `${s.y0}px`; el.style.fontSize = `${s.fs}px`; });
+    readout(s);
+  }
+
+  // Valeur de crénage des deux paires de la lettre active, en millièmes de cadratin
+  function readout(s) {
+    if (!s.read) return;
+    const v = (i) => { const n = units((s.pos[i] - s.pos[i - 1]) - (s.flat[i] - s.flat[i - 1])); return `<span>${s.letters[i - 1]}|${s.letters[i]} <b>${n > 0 ? "+" : ""}${n}</b></span>`; };
+    s.read.innerHTML = `<i>Crénage</i>${v(s.sel)}${v(s.sel + 1)}`;
   }
 
   function select(s, i) {
     s.sel = i;
     s.els.forEach((el, j) => el.classList.toggle("kc-selected", j === i));
+    readout(s);
   }
 
   const movable = (s, i) => i > 0 && i < s.letters.length - 1;
@@ -54,6 +76,7 @@
     howto: [
       { icon: "drag_pan", text: "Attrape une lettre et glisse-la à gauche ou à droite. La première et la dernière lettre restent fixes." },
       { icon: "visibility", text: "Juge la surface de blanc entre les lettres, pas leur distance. Plisse les yeux ou retourne le mot." },
+      { icon: "tune", text: "Le champ Crénage affiche la valeur en millièmes de cadratin, comme dans InDesign : une valeur négative rapproche les lettres." },
       { icon: "keyboard", text: "Tab pour changer de lettre, ← → pour l'ajuster (Maj pour aller plus vite), Entrée pour valider." },
     ],
     brief: "Glisse les lettres pour que les blancs entre elles paraissent égaux.",
@@ -91,6 +114,8 @@
         return el;
       });
       board.appendChild(wrap);
+      s.read = api.h("div", "kc-read");
+      board.appendChild(s.read);
       place(s);
       select(s, 1);
       api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Glisse les lettres</span><span class="ctl-hint"><span class="material-symbols-outlined">keyboard</span>← → ajuste la lettre rose</span>`;
@@ -127,7 +152,7 @@
     },
 
     reveal(board, s, r, api) {
-      s.flip = false; s.wrap.style.transform = "";
+      s.flip = false; s.wrap.style.transform = ""; s.read.remove();
       s.els.forEach((el) => { el.classList.remove("kc-selected", "grab"); el.classList.add("kc-over"); });
       s.ghosts = s.letters.map((ch, i) => {
         const g = api.h("span", "kc-letter kc-ghost", ch);
