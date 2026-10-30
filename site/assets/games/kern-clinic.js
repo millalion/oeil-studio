@@ -72,11 +72,11 @@
   const movable = (s, i) => i > 0 && i < s.letters.length - 1;
 
   Oeil.play({
-    id: "kern-clinic", name: "Kern Clinic",
+    id: "kern-clinic", name: "Kern Clinic", levels: true,
     howto: [
       { icon: "drag_pan", text: "Attrape une lettre et glisse-la à gauche ou à droite. La première et la dernière lettre restent fixes." },
       { icon: "visibility", text: "Juge la surface de blanc entre les lettres, pas leur distance. Plisse les yeux ou retourne le mot." },
-      { icon: "tune", text: "Le champ Crénage affiche la valeur en millièmes de cadratin, comme dans InDesign : une valeur négative rapproche les lettres." },
+      { icon: "tune", text: "En mode Avancé, le champ Crénage affiche la valeur en millièmes de cadratin, comme dans InDesign : une valeur négative rapproche les lettres." },
       { icon: "keyboard", text: "Tab pour changer de lettre, ← → pour l'ajuster (Maj pour aller plus vite), Entrée pour valider." },
     ],
     brief: "Glisse les lettres pour que les blancs entre elles paraissent égaux.",
@@ -114,8 +114,7 @@
         return el;
       });
       board.appendChild(wrap);
-      s.read = api.h("div", "kc-read");
-      board.appendChild(s.read);
+      if (api.level === "adv") { s.read = api.h("div", "kc-read"); board.appendChild(s.read); }
       place(s);
       select(s, 1);
       api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Glisse les lettres</span><span class="ctl-hint"><span class="material-symbols-outlined">keyboard</span>← → ajuste la lettre rose</span>`;
@@ -152,7 +151,7 @@
     },
 
     reveal(board, s, r, api) {
-      s.flip = false; s.wrap.style.transform = ""; s.read.remove();
+      s.flip = false; s.wrap.style.transform = ""; if (s.read) s.read.remove();
       s.els.forEach((el) => { el.classList.remove("kc-selected", "grab"); el.classList.add("kc-over"); });
       s.ghosts = s.letters.map((ch, i) => {
         const g = api.h("span", "kc-letter kc-ghost", ch);

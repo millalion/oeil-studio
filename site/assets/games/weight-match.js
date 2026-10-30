@@ -1,8 +1,8 @@
-// Weight Match — une fonte variable se règle par axes : retrouve graisse, largeur et inclinaison d'un mot de référence.
+// Weight Match — la graisse perçue change avec la taille : retrouve la référence. En Avancé, on règle les axes d'une fonte variable.
 (function () {
   const WORDS = Oeil.fresh("weight-match", ["Rythme", "Atelier", "Contraste", "Œil", "Graisse", "Signal", "Échelle", "Lumière", "Trame", "Gabarit", "Papier", "Nuance", "Encre", "Maquette"]);
   const AXES = [
-    { key: "wght", label: "Graisse", min: 100, max: 1000, step: 10, tol: 30, span: 400 },
+    { key: "wght", label: "Graisse", min: 100, max: 900, step: 10, tol: 30, span: 400 },
     { key: "wdth", label: "Largeur", min: 50, max: 151, step: 1, tol: 5, span: 45 },
     { key: "slnt", label: "Inclinaison", min: -10, max: 0, step: 1, tol: 1, span: 8 },
   ];
@@ -13,57 +13,75 @@
   };
   function apply(s) {
     s.mine.style.fontVariationSettings = code(s.v);
-    s.css.textContent = `font-variation-settings: ${AXES.filter((a) => s.used.includes(a)).map((a) => `"${a.key}" ${s.v[a.key]}`).join(", ")};`;
+    if (s.css) s.css.textContent = `font-variation-settings: ${s.used.map((a) => `"${a.key}" ${s.v[a.key]}`).join(", ")};`;
+    if (s.handle) s.handle.style.left = `${((s.v.wght - 100) / 800) * 100}%`;
   }
   Oeil.play({
-    id: "weight-match", name: "Weight Match",
+    id: "weight-match", name: "Weight Match", levels: true,
     howto: [
-      { icon: "tune", text: "Une fonte variable contient toutes ses graisses et largeurs : on la règle par axes, comme dans le panneau Texte de Figma." },
-      { icon: "compare", text: "Règle les axes pour que ton mot ait le même dessin que la référence, affichée à une autre taille." },
-      { icon: "lightbulb", text: "Les axes s'ajoutent au fil des manches : graisse, puis largeur, puis inclinaison." },
+      { icon: "compare", text: "À gauche, la référence. À droite, le même mot à une autre taille." },
+      { icon: "swipe", text: "Glisse la poignée de la jauge jusqu'à ce que les deux mots paraissent de même graisse." },
+      { icon: "tune", text: "En mode Avancé, tu règles une vraie fonte variable : graisse, puis largeur et inclinaison." },
     ],
-    brief: (s) => `Règle ${s.used.length > 1 ? "les axes" : "l'axe de graisse"} pour retrouver la référence.`,
-    async setup(round) {
+    brief: (s) => (s.adv ? "Règle les axes de la fonte pour retrouver la référence." : "Donne au mot de droite la même graisse que la référence."),
+    async setup(round, api) {
       await font();
-      const used = AXES.slice(0, round < 2 ? 1 : round < 4 ? 2 : 3);
-      const pickIn = (a, lo, hi) => Math.round(Oeil.randi(lo, hi) / a.step) * a.step;
-      const ref = { wght: pickIn(AXES[0], 200, 900), wdth: used.includes(AXES[1]) ? pickIn(AXES[1], 62, 140) : 100, slnt: used.includes(AXES[2]) ? pickIn(AXES[2], -10, -4) : 0 };
-      const v = { wght: ref.wght > 500 ? 300 : 700, wdth: 100, slnt: 0 };
+      const adv = api.level === "adv";
+      const used = adv ? AXES.slice(0, round < 1 ? 1 : round < 3 ? 2 : 3) : AXES.slice(0, 1);
+      const on = (i) => used.includes(AXES[i]);
+      const ref = { wght: Oeil.randi(20, 85) * 10, wdth: on(1) ? Oeil.randi(62, 140) : 100, slnt: on(2) ? Oeil.randi(-10, -4) : 0 };
       const bigRef = round % 2 === 0;
-      return { word: WORDS[round % WORDS.length], used, ref, v, refSize: bigRef ? 96 : 40, mineSize: bigRef ? 40 : 96 };
+      return { adv, word: WORDS[round % WORDS.length], used, ref, v: { wght: ref.wght > 500 ? 300 : 700, wdth: 100, slnt: 0 }, refSize: bigRef ? 96 : 40, mineSize: bigRef ? 40 : 96 };
     },
     mount(board, s, api) {
-      const shell = api.h("div", "insp-wrap"), panel = api.h("div", "insp", `<p class="insp-title">Axes de la fonte variable</p>`);
+      const shell = api.h("div", "insp-wrap" + (s.adv ? "" : " is-plain")), panel = api.h("div", "insp", `<p class="insp-title">Fonte variable</p>`);
       s.panel = panel;
       s.used.forEach((a) => panel.append(Oeil.field({ label: a.label, min: a.min, max: a.max, step: a.step, value: s.v[a.key], onChange: (x) => { s.v[a.key] = x; apply(s); } }).el));
-      s.css = api.h("code", "insp-code");
-      panel.append(s.css);
+      if (s.adv) { s.css = api.h("code", "insp-code"); panel.append(s.css); }
       const canvas = api.h("div", "insp-canvas wm-canvas");
-      // Le grand mot doit tenir dans sa moitié de canevas, même en pleine largeur
-      const cell = (board.clientWidth < 720 ? board.clientWidth : board.clientWidth - 248) / 2 - 32;
+      const cell = (board.clientWidth < 720 || !s.adv ? board.clientWidth : board.clientWidth - 248) / 2 - 32;
       const k = Math.min(1, cell / (s.word.length * 0.72 * Math.max(s.refSize, s.mineSize)));
       canvas.innerHTML = `<figure class="wm-cell"><span class="wm-word" style="font-size:${Math.round(s.refSize * k)}px;font-variation-settings:${code(s.ref)}">${s.word}</span><figcaption>Référence</figcaption></figure><figure class="wm-cell"><span class="wm-word" data-mine style="font-size:${Math.round(s.mineSize * k)}px">${s.word}</span><figcaption>Ta version</figcaption></figure>`;
       s.mine = canvas.querySelector("[data-mine]");
       shell.append(panel, canvas);
       board.append(shell);
+      if (!s.adv) {
+        const track = api.h("div", "wm-track wm-gauge grab", `<span class="wm-end">Fin</span><span class="wm-end wm-end-r">Gras</span>`);
+        s.handle = api.h("span", "handle");
+        s.handle.tabIndex = 0; s.handle.setAttribute("role", "slider"); s.handle.setAttribute("aria-label", "Graisse");
+        track.append(s.handle);
+        board.append(track);
+        const from = (ev) => { const r = track.getBoundingClientRect(); s.v.wght = Math.round((100 + api.clamp((ev.clientX - r.left) / r.width, 0, 1) * 800) / 10) * 10; apply(s); };
+        api.drag(track, { start: from, move: (dx, dy, ev) => from(ev) });
+      }
       apply(s);
-      api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">tune</span>Glisse sur le nom d'un axe ou tape la valeur</span>`;
+      api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">swipe</span>${s.adv ? "Glisse les curseurs ou tape une valeur" : "Glisse sur la jauge"}</span>`;
+    },
+    keys(e, s) {
+      if (s.adv || (e.key !== "ArrowLeft" && e.key !== "ArrowRight")) return;
+      e.preventDefault();
+      s.v.wght = Oeil.clamp(s.v.wght + (e.key === "ArrowRight" ? 1 : -1) * (e.shiftKey ? 50 : 10), 100, 900);
+      apply(s);
     },
     evaluate(s) {
       const parts = s.used.map((a) => ({ a, d: s.v[a.key] - s.ref[a.key] }));
       const score = parts.reduce((t, { a, d }) => t + Math.max(0, 100 - (Math.max(0, Math.abs(d) - a.tol) / a.span) * 100), 0) / parts.length;
-      const bigMine = s.mineSize > s.refSize;
       return {
         score,
         metrics: parts.map(({ a, d }) => ({ label: a.label, value: `${s.v[a.key]} (référence ${s.ref[a.key]})`, good: Math.abs(d) <= a.tol * 1.5 })),
-        principle: bigMine
+        principle: s.mineSize > s.refSize
           ? "En grand, les traits sont plus épais en valeur absolue : à réglage égal, le grand mot paraît plus noir. On choisit souvent trop léger pour compenser."
           : "En petit, les traits fondent et le mot paraît plus clair : à réglage égal, on a tendance à choisir trop gras pour compenser.",
       };
     },
     reveal(board, s) {
-      s.panel.classList.add("is-locked");
-      s.css.textContent = `Référence : ${s.used.map((a) => `"${a.key}" ${s.ref[a.key]}`).join(", ")}`;
+      if (s.panel) s.panel.classList.add("is-locked");
+      // Correction : le mot de droite, redessiné avec les bons réglages, sous ta version
+      const fix = s.mine.cloneNode(true);
+      fix.removeAttribute("data-mine"); fix.classList.add("wm-fix"); fix.style.fontVariationSettings = code(s.ref);
+      s.mine.after(fix);
+      s.mine.parentElement.querySelector("figcaption").textContent = "En noir : ta version. En rose : la bonne graisse";
+      if (s.css) s.css.textContent = `Référence : ${s.used.map((a) => `"${a.key}" ${s.ref[a.key]}`).join(", ")}`;
     },
   });
 })();

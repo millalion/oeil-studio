@@ -1,81 +1,48 @@
-// Type Scale — une échelle typographique se résume à une taille de base et un rapport : retrouve-les à l'œil.
+// Type Scale — attribue les tailles d'une échelle typographique aux bons niveaux de texte.
 (function () {
-  const RATIOS = [
-    { r: 1.125, name: "Seconde majeure", use: "très resserré, pour les interfaces denses" },
-    { r: 1.2, name: "Tierce mineure", use: "discret, pour les applications et tableaux de bord" },
-    { r: 1.25, name: "Tierce majeure", use: "polyvalent, pour la plupart des sites" },
-    { r: 1.333, name: "Quarte juste", use: "affirmé, pour les sites éditoriaux" },
-    { r: 1.5, name: "Quinte juste", use: "très contrasté, pour les pages d'accueil et les affiches" },
-    { r: 1.618, name: "Nombre d'or", use: "spectaculaire, à réserver aux pages très courtes" },
-  ];
-  const LEVELS = [
-    { name: "Titre", token: "text-3xl", step: 3, text: "Regard", weight: 600 },
-    { name: "Sous-titre", token: "text-2xl", step: 2, text: "Cinq minutes", weight: 600 },
-    { name: "Intertitre", token: "text-xl", step: 1, text: "Chaque jour", weight: 500 },
-    { name: "Corps", token: "text-base", step: 0, text: "La correction se pose sur ta version.", weight: 400 },
-    { name: "Légende", token: "text-sm", step: -1, text: "Atelier de typographie", weight: 400 },
-  ];
-  const ZOOM = 0.72;
-  const px = (b, r, l) => b * Math.pow(r, l.step);
-  const page = (b, r) => LEVELS.map((l) => `<span data-step="${l.step}" style="font-size:${px(b, r, l) * ZOOM}px;font-weight:${l.weight}">${l.text}</span>`).join("");
-  function draw(s) {
-    s.mine.innerHTML = page(s.base, s.ratio);
-    s.table.innerHTML = LEVELS.map((l) => `<p class="insp-row"><span>${l.token}</span><b>${Math.round(px(s.base, s.ratio, l))} px</b></p>`).join("");
-    s.btns.forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.r === s.ratio)));
-  }
-  Oeil.play({
+  const TEXT = { "Titre": "Le regard s'entraîne", "Sous-titre": "Cinq minutes par jour", "Chapô": "Des exercices courts pour sentir l'écart avant de le mesurer.", "Corps": "La correction se pose sur ta version : en pixels, en degrés ou en unités de crénage.", "Légende": "Photo : atelier de typographie, 2025" };
+  const scale = (sizes, explain, prompt) => ({
+    prompt, layout: "stack", explain,
+    slots: Object.keys(TEXT).map((role, i) => ({ id: role, label: role, render: (t) => `<span class="ts-sample" style="font-size:${t ? parseInt(t.html, 10) : 15}px;${t ? "" : "color:#8A8983"}">${TEXT[role]}</span>` })),
+    tokens: sizes.map((s, i) => ({ id: `s${s}`, html: `${s} px`, slot: Object.keys(TEXT)[i] || null })),
+  });
+  Oeil.kits.assign({
     id: "type-scale", name: "Type Scale",
     howto: [
-      { icon: "format_size", text: "Une échelle typographique se construit avec une taille de base et un rapport : chaque niveau multiplie le précédent." },
-      { icon: "tune", text: "Dans le panneau, règle la taille de base et choisis un rapport. Tes variables de texte se recalculent." },
-      { icon: "compare", text: "Compare ta page au modèle : regarde surtout l'écart entre le titre et le corps." },
+      { icon: "format_size", text: "Un texte a plusieurs niveaux : titre, sous-titre, chapô, corps, légende." },
+      { icon: "drag_pan", text: "Glisse chaque taille sur un niveau (ou touche une taille, puis un niveau). L'aperçu se met à jour." },
+      { icon: "check", text: "Plusieurs réponses sont justes : les tailles doivent descendre du titre à la légende, avec un vrai écart entre deux niveaux." },
+      { icon: "lightbulb", text: "Une échelle se construit par un rapport constant (par exemple ×1,25) : les écarts grandissent avec la taille." },
     ],
-    brief: "Retrouve la taille de base et le rapport de l'échelle du modèle.",
-    setup() {
-      const t = Oeil.pick(RATIOS), base = Oeil.randi(14, 18);
-      const start = Oeil.pick(RATIOS.filter((x) => Math.abs(x.r - t.r) > 0.1));
-      return { t, tBase: base, ratio: start.r, base: base >= 16 ? base - 2 : base + 2 };
-    },
-    mount(board, s, api) {
-      const shell = api.h("div", "insp-wrap"), panel = api.h("div", "insp", `<p class="insp-title">Échelle</p>`);
-      s.panel = panel;
-      s.fBase = Oeil.field({ label: "Taille de base", unit: "px", min: 12, max: 22, value: s.base, onChange: (v) => { s.base = v; draw(s); } });
-      panel.append(s.fBase.el);
-      const list = api.h("div", "insp-list");
-      s.btns = RATIOS.map((x) => {
-        const b = api.h("button", "", `<span>${x.name}</span><b>${String(x.r).replace(".", ",")}</b>`);
-        b.type = "button"; b.dataset.r = x.r;
-        b.addEventListener("click", () => { if (api.phase !== "play") return; s.ratio = x.r; draw(s); });
-        list.append(b);
-        return b;
-      });
-      s.table = api.h("div", "insp-table");
-      panel.append(list, api.h("p", "insp-title", "Variables de texte"), s.table);
-      const canvas = api.h("div", "insp-canvas ts-canvas");
-      canvas.innerHTML = `<figure><figcaption>Modèle</figcaption><div class="ts-page">${page(s.tBase, s.t.r)}</div></figure><figure><figcaption>Ta version</figcaption><div class="ts-page" data-mine></div></figure>`;
-      s.mine = canvas.querySelector("[data-mine]");
-      shell.append(panel, canvas);
-      board.append(shell);
-      draw(s);
-      api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">tune</span>Glisse sur « Taille de base » ou tape la valeur</span>`;
-    },
+    // Plusieurs réponses sont justes : il suffit que les tailles descendent du titre à la légende,
+    // avec des marches franches (au moins 10 % d'écart entre deux niveaux voisins).
     evaluate(s) {
-      const err = LEVELS.reduce((a, l) => a + Math.abs(Math.log(px(s.base, s.ratio, l) / px(s.tBase, s.t.r, l))), 0) / LEVELS.length;
-      const mine = RATIOS.find((x) => x.r === s.ratio);
-      const same = mine === s.t;
+      const roles = Object.keys(TEXT);
+      const size = (role) => { const id = Object.keys(s.map).find((k) => s.map[k] === role); return id ? parseInt(s.it.tokens.find((t) => t.id === id).html, 10) : null; };
+      const sizes = roles.map(size);
+      const filled = sizes.filter((x) => x != null).length;
+      let good = 0, flat = 0, wrong = 0;
+      for (let i = 0; i < roles.length - 1; i++) {
+        const a = sizes[i], b = sizes[i + 1];
+        if (a == null || b == null) continue;
+        if (a <= b) wrong++; else if (a / b < 1.1) flat++; else good++;
+      }
+      const score = (good + flat * 0.5) / (roles.length - 1) * 100 * (filled / roles.length);
       return {
-        score: Math.max(0, 100 - Math.max(0, err - 0.01) * 450),
+        score,
         metrics: [
-          { label: "Taille de base", value: `${s.base} px (modèle ${s.tBase} px)`, good: s.base === s.tBase },
-          { label: "Rapport", value: `${String(s.ratio).replace(".", ",")} (modèle ${String(s.t.r).replace(".", ",")})`, good: same },
+          { label: "Niveaux remplis", value: `${filled} sur ${roles.length}`, good: filled === roles.length },
+          { label: "Marches dans le bon sens", value: `${good + flat} sur ${roles.length - 1}`, good: wrong === 0 && filled === roles.length },
+          ...(flat ? [{ label: "Marches trop faibles (moins de 10 %)", value: `${flat}`, good: false }] : []),
         ],
-        principle: `Le modèle utilise la ${s.t.name.toLowerCase().startsWith("nombre") ? "proportion du nombre d'or" : s.t.name.toLowerCase()}, un rapport ${s.t.use}. Les noms viennent de la musique : une échelle fonctionne comme une gamme, chaque taille garde le même intervalle avec la suivante.`,
+        principle: s.it.explain,
       };
     },
-    reveal(board, s) {
-      s.panel.classList.add("is-locked");
-      s.mine.classList.add("ts-done");
-      s.mine.insertAdjacentHTML("beforeend", `<div class="ts-ghost">${page(s.tBase, s.t.r)}</div>`);
-    },
+    items: [
+      scale([48, 30, 20, 16, 13], "Une échelle modulaire multiplie chaque taille par le même rapport (ici environ 1,5 puis 1,25). La hiérarchie se lit d'un coup d'œil, et les tailles intermédiaires inventées disparaissent.", "Attribue les tailles de l'échelle aux cinq niveaux de texte"),
+      scale([40, 28, 20, 16, 12, 18], "Une taille de trop (18 px) se glisse souvent entre le corps et le chapô : trop proche des deux, elle brouille la hiérarchie. Une bonne échelle garde des marches franches.", "Attribue les tailles aux niveaux. Attention, une taille est en trop"),
+      scale([64, 32, 22, 17, 13], "Un titre très grand (64 px) supporte un saut important vers le sous-titre : le contraste de taille crée l'entrée de page, le reste de l'échelle reste serré.", "Attribue les tailles de cette échelle contrastée"),
+      scale([36, 24, 18, 15, 12, 14], "Pour un texte d'interface dense, l'échelle est plus resserrée. 14 et 15 px côte à côte sont indiscernables : c'est l'intrus.", "Échelle d'interface : attribue les tailles (une est en trop)"),
+    ],
   });
 })();

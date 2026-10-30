@@ -3,14 +3,17 @@
   const W = 720, COLS = 12, GUT = 16, COL = (W - GUT * (COLS - 1)) / COLS;
   const edgeL = (i) => i * (COL + GUT);          // bord gauche de la colonne i
   const edgeR = (i) => i * (COL + GUT) + COL;    // bord droit de la colonne i
-  // La consigne décrit la maquette, comme un brief : à toi de la traduire en colonnes.
-  const LAYOUTS = Oeil.fresh("grid-snap", [
-    { brief: "Trois cartes de même largeur, sur toute la grille", blocks: [{ label: "Carte", span: [0, 4], h: 150 }, { label: "Carte", span: [4, 8], h: 150 }, { label: "Carte", span: [8, 12], h: 150 }], tip: "12 ÷ 3 = 4 : trois cartes font 4 colonnes chacune. C'est pour ça que 12 est si pratique : il se divise par 2, 3, 4 et 6." },
-    { brief: "Une barre latérale d'un quart, le contenu prend tout le reste", blocks: [{ label: "Barre latérale", span: [0, 3], h: 240 }, { label: "Contenu", span: [3, 12], h: 240 }], tip: "Un quart de 12 colonnes, c'est 3 colonnes. Le contenu garde les 9 autres : la proportion reste juste à toutes les tailles d'écran." },
-    { brief: "Un texte centré sur les deux tiers de la grille", blocks: [{ label: "Texte", span: [2, 10], h: 170 }], tip: "Deux tiers de 12 font 8 colonnes. Pour centrer, on laisse le même nombre de colonnes vides de chaque côté : 2 à gauche, 2 à droite." },
-    { brief: "Un bandeau pleine largeur, puis deux colonnes égales", blocks: [{ label: "Bandeau", span: [0, 12], h: 70 }, { label: "Colonne", span: [0, 6], h: 150 }, { label: "Colonne", span: [6, 12], h: 150 }], tip: "Deux colonnes égales font 6 colonnes de grille chacune. Le bandeau, lui, reprend les 12 : les bords s'alignent parfaitement." },
-    { brief: "Une image sur deux tiers, sa légende sur le tiers restant", blocks: [{ label: "Image", span: [0, 8], h: 220 }, { label: "Légende", span: [8, 12], h: 220 }], tip: "8 + 4 = 12 : deux tiers, un tiers. La gouttière entre les deux reste celle de la grille, sans réglage à la main." },
-  ]);
+  // La consigne décrit la maquette, comme un brief : à toi de la traduire en colonnes. Chaque maquette est tirée au sort.
+  const WORD = { 2: "Deux", 3: "Trois", 4: "Quatre", 6: "Six" };
+  const row = (label, n, h) => Array.from({ length: n }, (_, i) => ({ label, span: [(i * 12) / n, ((i + 1) * 12) / n], h }));
+  const MAKERS = [
+    () => { const n = Oeil.pick([2, 3, 4, 6]); return { brief: `${WORD[n]} cartes de même largeur, sur toute la grille`, blocks: row("Carte", n, n > 3 ? 64 : 110), tip: `12 ÷ ${n} = ${12 / n} : chaque carte fait ${12 / n} colonnes. C'est pour ça que 12 est si pratique : il se divise par 2, 3, 4 et 6.` }; },
+    () => { const [txt, c] = Oeil.pick([["d'un quart", 3], ["d'un tiers", 4]]), left = Math.random() < 0.5; return { brief: `Une barre latérale ${txt} à ${left ? "gauche" : "droite"}, le contenu prend le reste`, blocks: left ? [{ label: "Barre latérale", span: [0, c], h: 170 }, { label: "Contenu", span: [c, 12], h: 170 }] : [{ label: "Contenu", span: [0, 12 - c], h: 170 }, { label: "Barre latérale", span: [12 - c, 12], h: 170 }], tip: `La barre prend ${c} colonnes sur 12, le contenu garde les ${12 - c} autres : la proportion reste juste à toutes les tailles d'écran.` }; },
+    () => { const [txt, c] = Oeil.pick([["la moitié", 6], ["les deux tiers", 8], ["les cinq sixièmes", 10]]), m = (12 - c) / 2; return { brief: `Un texte centré sur ${txt} de la grille`, blocks: [{ label: "Texte", span: [m, 12 - m], h: 170 }], tip: `Ça fait ${c} colonnes. Pour centrer, on laisse le même nombre de colonnes vides de chaque côté : ${m} à gauche, ${m} à droite.` }; },
+    () => { const n = Oeil.pick([2, 3, 4]); return { brief: `Un bandeau pleine largeur, puis ${WORD[n].toLowerCase()} colonnes égales`, blocks: [{ label: "Bandeau", span: [0, 12], h: 70 }, ...row("Colonne", n, 80)], tip: `Le bandeau reprend les 12 colonnes, et chaque colonne en fait ${12 / n} : les bords s'alignent parfaitement.` }; },
+    () => { const [txt, rest, c] = Oeil.pick([["deux tiers", "tiers", 8], ["trois quarts", "quart", 9]]), first = Math.random() < 0.5; return { brief: `Une image sur ${txt}, sa légende sur le ${rest} restant, ${first ? "image à gauche" : "image à droite"}`, blocks: first ? [{ label: "Image", span: [0, c], h: 170 }, { label: "Légende", span: [c, 12], h: 170 }] : [{ label: "Légende", span: [0, 12 - c], h: 170 }, { label: "Image", span: [12 - c, 12], h: 170 }], tip: `${c} + ${12 - c} = 12. La gouttière entre les deux reste celle de la grille, sans réglage à la main.` }; },
+  ];
+  const MAKER_ORDER = Oeil.fresh("grid-snap", MAKERS);
   // Toute position calée sur la grille est juste : on cherche les bords de colonne les plus proches.
   const nearL = (x) => { let i = Oeil.clamp(Math.round(x / (COL + GUT)), 0, COLS - 1); return { i, x: edgeL(i) }; };
   const nearR = (x, from) => { let i = Oeil.clamp(Math.round((x - COL) / (COL + GUT)), from, COLS - 1); return { i, x: edgeR(i) }; };
@@ -23,14 +26,14 @@
   }
   function fit(board, s) { const pad = board.clientWidth < 600 ? 16 : 60; const k = Math.min(1.2, (board.clientWidth - pad) / W, (board.clientHeight - pad) / s.H); s.k = k; s.frame.style.transform = `translate(-50%, -50%) scale(${k})`; }
   Oeil.play({
-    id: "grid-snap", name: "Grid Snap",
+    id: "grid-snap", name: "Grid Snap", levels: true,
     howto: [
       { icon: "view_column", text: "Une grille de 12 colonnes, comme dans Figma. La consigne décrit une mise en page." },
       { icon: "drag_pan", text: "Déplace les blocs, tire leur poignée droite pour régler leur largeur. Ils s'aimantent aux colonnes." },
     ],
     brief: (s) => `${s.L.brief}.`,
-    setup(round) {
-      const L = LAYOUTS[round % LAYOUTS.length];
+    setup(round, api) {
+      const L = MAKER_ORDER[round % MAKER_ORDER.length]();
       let y = 0;
       const blocks = L.blocks.map((b) => {
         const tx = edgeL(b.span[0]), tw = edgeR(b.span[1] - 1) - tx;
@@ -39,10 +42,10 @@
         y += b.h + 16;
         return it;
       });
-      return { L, blocks, H: y - 16 };
+      return { L, blocks, H: y - 16, adv: api.level === "adv" };
     },
     mount(board, s, api) {
-      s.frame = api.h("div", "gs-frame");
+      s.frame = api.h("div", "gs-frame" + (s.adv ? " gs-adv" : ""));
       s.frame.style.cssText = `width:${W}px;height:${s.H}px`;
       s.frame.innerHTML = Array.from({ length: COLS }, (_, i) => `<span class="gs-col" style="left:${edgeL(i)}px;width:${COL}px"><i>${i + 1}</i></span>`).join("");
       s.blocks.forEach((b) => {

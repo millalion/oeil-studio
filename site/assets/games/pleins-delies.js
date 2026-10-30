@@ -68,20 +68,20 @@
     const r = ((p.axis - 90) * Math.PI) / 180;
     const ax = S / 2 + Math.cos(r) * R, ay = S / 2 + Math.sin(r) * R;
     pos(s.hA, ax, ay);
-    s.arms.innerHTML = `<path class="bz-arm" d="M${st.x} ${st.y} L${st.x + (st.nx * p.stem) / 2} ${st.y + (st.ny * p.stem) / 2}"/><path class="bz-arm" d="M${ha.x} ${ha.y} L${ha.x + (ha.nx * p.hair) / 2} ${ha.y + (ha.ny * p.hair) / 2}"/><path class="pd-axis" d="M${S - ax} ${S - ay} L${ax} ${ay}"/>`;
-    s.read.innerHTML = `<span>Plein <b>${Math.round(p.stem)}</b></span><span>Délié <b>${Math.round(p.hair)}</b></span><span>Axe <b>${Math.round(p.axis)}°</b></span>`;
+    s.arms.innerHTML = `<path class="bz-arm" d="M${st.x} ${st.y} L${st.x + (st.nx * p.stem) / 2} ${st.y + (st.ny * p.stem) / 2}"/><path class="bz-arm" d="M${ha.x} ${ha.y} L${ha.x + (ha.nx * p.hair) / 2} ${ha.y + (ha.ny * p.hair) / 2}"/>${s.adv ? `<path class="pd-axis" d="M${S - ax} ${S - ay} L${ax} ${ay}"/>` : ""}`;
+    s.read.innerHTML = `<span>Plein <b>${Math.round(p.stem)}</b></span><span>Délié <b>${Math.round(p.hair)}</b></span>${s.adv ? `<span>Axe <b>${Math.round(p.axis)}°</b></span>` : ""}`;
   }
   Oeil.play({
-    id: "pleins-delies", name: "Pleins et Déliés",
+    id: "pleins-delies", name: "Pleins et Déliés", levels: true,
     howto: [
       { icon: "ink_pen", text: "Ta lettre est tracée à la plume. Le modèle montre le style à retrouver." },
-      { icon: "drag_pan", text: "Tire les trois poignées : le plein (trait épais), le délié (trait fin) et l'axe de la plume." },
-      { icon: "lightbulb", text: "Regarde où tombent les parties fines : elles te donnent l'angle de la plume." },
+      { icon: "drag_pan", text: "Tire les poignées : le rond règle le plein (trait épais), le carré le délié (trait fin)." },
+      { icon: "lightbulb", text: "En mode Avancé, le losange règle aussi l'axe de la plume : regarde où tombent les parties fines." },
     ],
-    brief: (s) => `Retrouve le dosage de la ${s.g.name} : plein, délié et axe.`,
-    setup(round) {
-      const g = STYLES[round % STYLES.length];
-      return { g, pts: samples(LETTERS[g.letter]), p: { stem: 30, hair: 30, axis: 20 } };
+    brief: (s) => `Retrouve le dosage de la ${s.g.name} : ${s.adv ? "plein, délié et axe" : "plein et délié"}.`,
+    setup(round, api) {
+      const g = STYLES[round % STYLES.length], adv = api.level === "adv";
+      return { g, adv, pts: samples(LETTERS[g.letter]), p: { stem: 30, hair: 30, axis: adv ? 20 : g.axis } };
     },
     mount(board, s, api) {
       const wrap = api.h("div", "pd-wrap");
@@ -108,9 +108,10 @@
           draw(s);
         },
       });
+      if (!s.adv) s.hA.hidden = true;
       board.append(wrap);
       draw(s);
-      api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Rond : plein. Carré : délié. Losange : axe de la plume</span>`;
+      api.controls.innerHTML = `<span class="ctl-hint"><span class="material-symbols-outlined">drag_pan</span>Rond : plein. Carré : délié.${s.adv ? " Losange : axe de la plume" : ""}</span>`;
     },
     evaluate(s) {
       const p = s.p, g = s.g;
@@ -121,7 +122,7 @@
         metrics: [
           { label: "Plein", value: `${Math.round(p.stem)} (modèle ${g.stem})`, good: ds <= 5 },
           { label: "Délié", value: `${Math.round(p.hair)} (modèle ${g.hair})`, good: dh <= 4 },
-          { label: "Axe de la plume", value: `${Math.round(p.axis)}° (modèle ${g.axis}°)`, good: da <= 7 },
+          ...(s.adv ? [{ label: "Axe de la plume", value: `${Math.round(p.axis)}° (modèle ${g.axis}°)`, good: da <= 7 }] : []),
         ],
         principle: g.tip,
       };

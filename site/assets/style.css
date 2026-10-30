@@ -1611,3 +1611,63 @@ a.who:hover { text-decoration: underline; text-underline-offset: 3px; }
   .insp { order: 2; border-right: 0; border-top: 1px solid #141413; }
   .ts-page > span, .ts-ghost span { white-space: normal; }
 }
+/* Modes, inspecteur revu, nouveaux jeux */
+.level-seg button { height: 34px; padding: 0 12px; font-size: 13px; }
+.level-seg[hidden] { display: none; }
+.insp-wrap.is-plain { grid-template-columns: minmax(0, 1fr); }
+.insp-wrap.is-plain .insp { display: none; }
+.insp { gap: 16px; padding: 18px 16px; }
+.insp-field { display: block; }
+.insp-field label { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.insp-field span { cursor: default; }
+.insp-val { display: inline-flex; align-items: center; gap: 4px; }
+.insp-field input[type=text] { width: 58px; min-height: 30px; }
+.insp-field input[type=range] { display: block; width: 100%; height: 20px; margin: 0; accent-color: #141413; cursor: pointer; }
+.wm-gauge { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); }
+.wm-canvas { padding-bottom: 72px; }
+.wm-fix { color: #F0447A; pointer-events: none; }
+.wm-cell { position: relative; }
+.cc-ref { fill: none; stroke: #F0447A; stroke-width: 2.5; stroke-dasharray: 6 5; }
+.nb-count { gap: 0; }
+.nb-count > span { padding: 0 10px; font-size: 13px; font-weight: 500; }
+.nb-count button { width: 38px; height: 38px; background: #141413; color: #fff; font-size: 20px; }
+.nb-count button:hover { background: #F0447A; }
+.nb-count b { min-width: 40px; }
+.nb-hint { fill: #fff; stroke: #F0447A; stroke-width: 1.5; stroke-dasharray: 2 2; }
+.nb-sol { fill: none; stroke: #F0447A; stroke-width: 3; }
+.nb-sol-pt { fill: #F0447A; stroke: #fff; stroke-width: 2; }
+.gs-adv .gs-col i, .gs-adv .gs-span { display: none; }
+.ci-format.is-ok { background: #F0447A; }
+.bl-ghost .tag-you { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap; }
+.mt-wrap { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 20px; padding: 24px clamp(16px, 6vw, 72px); overflow: auto; }
+.mt-line { font-size: clamp(18px, 2.4vw, 24px); line-height: 1.7; color: #141413; }
+.mt-word { padding: 0 3px; border-radius: 3px; font: inherit; color: inherit; }
+.mt-word:hover { background: #F0EFEA; }
+.mt-word[aria-pressed="true"] { background: #141413; color: #fff; }
+.mt-word.mt-found { background: #141413; color: #fff; }
+.mt-word.mt-missed { background: #F7B4CC; color: #141413; font-weight: 500; }
+.mt-word.mt-false { text-decoration: line-through; color: #F0447A; background: none; }
+.al-wrap { position: absolute; inset: 0; display: grid; grid-template-columns: minmax(0, 1fr) 280px; }
+.al-stage { display: grid; grid-template-columns: 1fr 1fr; min-width: 0; }
+.al-stage figure { margin: 0; padding: 14px 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; min-width: 0; overflow: hidden; }
+.al-stage figure + figure { border-left: 1px solid #E0DFD8; }
+.al-stage figcaption { order: 2; font-size: 13px; color: #5E5D59; }
+.al-box { display: inline-flex; border: 1.5px solid #F0447A; border-radius: 6px; background: #fff; }
+.al-box i { display: block; flex-shrink: 0; background: #141413; border-radius: 3px; }
+.al-av { width: 36px; height: 36px; border-radius: 999px !important; }
+.al-ic { width: 26px; height: 26px; }
+.al-im { width: 74px; height: 50px; background: #B9D9FF !important; }
+.al-tx { width: 64px; height: 12px; background: #8A8983 !important; }
+.al-s { width: 42px; }
+.al-bt { width: 54px; height: 26px; }
+.al-q { background: #C9C8C1 !important; }
+.al-panel { display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 16px; background: #fff; border-left: 1px solid #141413; overflow: auto; }
+.al-panel.is-locked { pointer-events: none; }
+.al-group p { margin-bottom: 6px; font-size: 13px; color: #5E5D59; }
+.al-group .seg-line { display: flex; }
+.al-group .seg-line button { flex: 1; min-width: 0; height: 36px; padding: 0 2px; font-size: 13px; }
+.al-group .al-right { box-shadow: inset 0 0 0 2px #F0447A; }
+@media (max-width: 720px) {
+  .al-wrap { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; }
+  .al-panel { border-left: 0; border-top: 1px solid #141413; gap: 8px; padding: 10px; }
+}

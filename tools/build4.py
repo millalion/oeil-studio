@@ -8,7 +8,7 @@ head, header, FOOTER, W = ns["head"], ns["header"], ns["FOOTER"], ns["W"]
 cat = (site / "assets/catalog.js").read_text()
 DOMAINS = {m[0]: {"label": m[1], "field": m[2]} for m in re.findall(r'(\w+): \{ label: "([^"]+)", field: "(#[0-9A-F]+)" \}', cat)}
 GAMES = [dict(zip(("id", "name", "domain", "level", "min", "desc", "pro"), m[:6] + (bool(m[6]),))) for m in re.findall(r'\{ id: "([^"]+)", name: "([^"]+)", domain: "([^"]+)", level: "([^"]+)", min: (\d+), desc: "([^"]+)"(, pro: true)? \}', cat)]
-assert len(GAMES) == 45, len(GAMES)
+assert len(GAMES) == 48, len(GAMES)
 LEVEL_KEY = {"Débutant": "debutant", "Intermédiaire": "intermediaire", "Avancé": "avance", "Tous niveaux": "all"}
 CUR, CHK, MIXA = ' aria-current="page"', ' checked=""', ' data-mix=""'
 MAIL = "bonjour@oeil.studio"  # adresse provisoire, à remplacer
@@ -91,7 +91,7 @@ def app_shell(title_html, sub_html, mix=False, current_id=None):
 <p class="coach-kicker"><span class="pro-badge">Pro</span> Jeu réservé à Œil Pro</p>
 <h2 id="paywall-title">{title_html}</h2>
 <p class="coach-goal">Ce jeu fait partie d'Œil Pro. Les {sum(1 for x in GAMES if not x["pro"])} jeux gratuits restent ouverts à tous, et ce jeu peut aussi tomber dans le défi du jour.</p>
-<ul class="paywall-list"><li>Les 45 jeux, sans limite</li><li>Historique et progression par discipline</li><li>Résiliable à tout moment</li></ul>
+<ul class="paywall-list"><li>Les 48 jeux, sans limite</li><li>Historique et progression par discipline</li><li>Résiliable à tout moment</li></ul>
 <a class="btn w-full" href="tarifs.html#pro">Passer à Pro · 3 €/mois</a>
 <a class="btn-line w-full mt-2" href="jeux.html">Jouer à un jeu gratuit</a>
 </div>

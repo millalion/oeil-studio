@@ -513,7 +513,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
 <div class="dash-card c-3 dash-kpi"><span>Sessions jouées</span><b id="k-sessions">0</b><small id="k-sessions-sub">aucune pour l'instant</small></div>
 <div class="dash-card c-3 dash-kpi"><span>Moyenne sur 30 jours</span><b id="k-avg">–</b><small id="k-avg-sub">toutes sessions : –</small></div>
 <div class="dash-card c-3 dash-kpi"><span>Série du défi du jour</span><b id="k-streak">0 jour</b><small id="k-streak-sub">record : 0 jour</small></div>
-<div class="dash-card c-3 dash-kpi"><span>Jeux essayés</span><b id="k-games">0 sur 45</b><small id="k-badges">0 badge débloqué</small></div>
+<div class="dash-card c-3 dash-kpi"><span>Jeux essayés</span><b id="k-games">0 sur 48</b><small id="k-badges">0 badge débloqué</small></div>
 
 <div class="dash-card c-7"><h2>Ta courbe</h2><p class="text-body-sm text-text-muted mt-1">Moyenne de tes 30 dernières sessions.</p><div id="spark"></div></div>
 <div class="dash-card c-5"><h2>Tes disciplines</h2><p class="text-body-sm text-text-muted mt-1">Moyenne de tes records, et jeux essayés.</p><div class="dom-bars" id="dom-bars"></div></div>
@@ -548,7 +548,7 @@ page("compte.html", "Mon compte — Œil Studio", None, f'''<section class="{W} 
     const $ = (id) => document.getElementById(id);
     const games = window.OEIL_GAMES, doms = window.OEIL_DOMAINS;
     const ROLES = { etudiant: "Étudiant·e", enseignant: "Enseignant·e", pro: "Designer en poste" };
-    const PLANS = { free: ["Gratuit", "__NFREE__ jeux gratuits, le défi du jour et les parties en direct."], pro: ["Œil Pro", "Les 45 jeux, le parcours et ta progression sur tous tes appareils."], parcours: ["Parcours intensif", "Le parcours de 14 jours et tous les jeux, à vie."], classe: ["Offre Classe", "Œil Pro pour toi et 40 étudiants par classe."], ecole: ["Offre École", "Œil Pro pour toute l'équipe et les étudiants."], "classe-eleve": ["Pro via ta classe", "L'accès Pro t'est offert par ta classe."] };
+    const PLANS = { free: ["Gratuit", "__NFREE__ jeux gratuits, le défi du jour et les parties en direct."], pro: ["Œil Pro", "Les 48 jeux, le parcours et ta progression sur tous tes appareils."], parcours: ["Parcours intensif", "Le parcours de 14 jours et tous les jeux, à vie."], classe: ["Offre Classe", "Œil Pro pour toi et 40 étudiants par classe."], ecole: ["Offre École", "Œil Pro pour toute l'équipe et les étudiants."], "classe-eleve": ["Pro via ta classe", "L'accès Pro t'est offert par ta classe."] };
     const plural = (n, w) => `${n} ${w}${n > 1 ? "s" : ""}`;
 
     function header() {
@@ -786,7 +786,7 @@ page("profil.html", "Profil — Œil Studio", None, f"""<section class="{W} pt-6
 <div class="dash-grid">
 <div class="dash-card c-4 dash-kpi"><span>Sessions jouées</span><b id="pp-sessions">0</b></div>
 <div class="dash-card c-4 dash-kpi"><span>Points cette semaine</span><b id="pp-week">0</b><small><a class="underline" href="classement.html">Voir le classement</a></small></div>
-<div class="dash-card c-4 dash-kpi"><span>Jeux essayés</span><b id="pp-games">0 sur 45</b></div>
+<div class="dash-card c-4 dash-kpi"><span>Jeux essayés</span><b id="pp-games">0 sur 48</b></div>
 <div class="dash-card c-6"><h2>Ses disciplines</h2><p class="text-body-sm text-text-muted mt-1">Moyenne de ses records.</p><div class="dom-bars" id="pp-doms"></div></div>
 <div class="dash-card c-6"><h2>Ses meilleurs records</h2><ol class="records" id="pp-records"></ol></div>
 </div>

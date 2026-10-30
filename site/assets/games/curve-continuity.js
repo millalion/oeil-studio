@@ -65,6 +65,11 @@
         principle: "Quand les deux poignées d'un point sont alignées, la courbe passe sans à-coup : c'est la continuité de tangente. Des poignées de même longueur en plus donnent une courbure égale des deux côtés, encore plus douce.",
       };
     },
-    reveal(board, s) { s.handles.forEach(({ el }) => el.classList.add("is-locked")); },
+    reveal(board, s) {
+      s.handles.forEach(({ el }) => el.classList.add("is-locked"));
+      // Courbe corrigée : la poignée sortante dans le prolongement de la poignée entrante
+      const fixed = s.pts.map((p, i) => { if (!s.broken.includes(i)) return p; const r = Math.hypot(p[4], p[5]), l = Math.hypot(p[2], p[3]) || 1; return [p[0], p[1], p[2], p[3], (-p[2] / l) * r, (-p[3] / l) * r]; });
+      s.path.insertAdjacentHTML("afterend", `<path class="cc-ref" d="${dPath(fixed)}"/>`);
+    },
   });
 })();

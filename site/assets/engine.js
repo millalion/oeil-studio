@@ -130,7 +130,7 @@
   }
 
   // Sens du geste montré par l'animation, quand il n'est pas libre
-  const CUE_AXIS = { "leading-lab": "y", "spacing-repair": "y", "contrast-rescue": "y", "kern-clinic": "x", "type-scale": "x", "weight-match": "x", "grid-snap": "x", "pixel-guess": "x", "rag-rescue": "x", "weight-match": "x", "whitespace-budget": "x" };
+  const CUE_AXIS = { "leading-lab": "y", "spacing-repair": "y", "contrast-rescue": "y", "kern-clinic": "x", "weight-match": "x", "grid-snap": "x", "pixel-guess": "x", "rag-rescue": "x", "weight-match": "x", "whitespace-budget": "x" };
   const VERDICTS = [[97, "Impeccable"], [90, "Très juste"], [75, "Pas loin"], [50, "À reprendre"], [0, "Raté, rejoue-la"]];
   const verdictFor = (s) => VERDICTS.find(([min]) => s >= min)[1];
   const gradeFor = (p) => (p >= 97 ? "A+" : p >= 92 ? "A" : p >= 85 ? "B" : p >= 75 ? "C" : "D");
@@ -152,6 +152,12 @@
     const plan = Array.from({ length: ROUNDS }, (_, i) => ids[i % ids.length]);
     let round = 0, scores = [], state = null, phase = "play", hintUsed = false, game = null;
     const challenge = S.challenge;
+    const canLevel = !mix && !challenge && !S.daily;
+    const levelSeg = h("div", "seg-line level-seg", `<button data-level="easy" type="button">Facile</button><button data-level="adv" type="button">Avancé</button>`);
+    levelSeg.setAttribute("role", "group"); levelSeg.setAttribute("aria-label", "Niveau"); levelSeg.hidden = true;
+    const howBtn = $("#btn-howto");
+    if (howBtn) howBtn.before(levelSeg);
+    levelSeg.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { store.set("level:" + game.id, b.dataset.level); startRound(); }));
 
     const api = {
       board, controls, stage, drag, sortable, color, rand, randi, pick, shuffle, clamp, h,
@@ -169,6 +175,8 @@
       setBrief(text) { brief.textContent = text; },
       submit: () => submit(),
       get phase() { return phase; },
+      // Facile : le geste simple. Avancé : l'interface de logiciel. Les défis partagés restent en Facile pour être équitables.
+      get level() { return canLevel && game && game.levels && store.get("level:" + game.id) === "adv" ? "adv" : "easy"; },
       get round() { return round; },
       get hintUsed() { return hintUsed; },
     };
@@ -246,6 +254,8 @@
       board.innerHTML = ""; controls.innerHTML = "";
       stage.classList.remove("is-result");
       setGame(plan[round]);
+      levelSeg.hidden = !(canLevel && game.levels);
+      levelSeg.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.level === api.level)));
       submitBtn.disabled = false;
       submitBtn.firstChild.textContent = "Valider";
       hintBtn.disabled = false;
@@ -268,6 +278,7 @@
     function submit() {
       if (phase !== "play" || submitBtn.disabled) return;
       phase = "result";
+      clearTimeout(cueTimer); stage.querySelectorAll(".cue").forEach((n) => n.remove());
       const r = game.evaluate(state, api);
       const score = clamp(r.score, 0, 100);
       scores[round] = score;
@@ -460,14 +471,14 @@
     start({ ids: [def.id] });
   }
 
-  // Champ d'inspecteur, comme dans Figma : glisser sur le libellé, taper la valeur, ou flèches haut et bas.
+  // Champ d'inspecteur : un curseur et sa valeur, modifiable au clavier.
   function field({ label, unit = "", min, max, step = 1, value, onChange }) {
-    const el = h("label", "insp-field", `<span class="grab">${label}</span><input inputmode="decimal" type="text" aria-label="${label}"/><i>${unit}</i>`);
-    const input = el.querySelector("input"), grip = el.querySelector("span");
+    const el = h("div", "insp-field", `<label><span>${label}</span><span class="insp-val"><input inputmode="decimal" type="text" aria-label="${label}"/><i>${unit}</i></span></label><input class="grab" type="range" min="${min}" max="${max}" step="${step}" aria-hidden="true" tabindex="-1"/>`);
+    const input = el.querySelector("input[type=text]"), slider = el.querySelector("input[type=range]");
     const dec = String(step).split(".")[1]?.length || 0;
-    const show = (v) => { input.value = v.toFixed(dec).replace(".", ","); };
+    const show = (v) => { input.value = v.toFixed(dec).replace(".", ","); slider.value = v; };
     const set = (v, silent) => { value = clamp(Math.round(v / step) * step, min, max); show(value); if (!silent) onChange(value); };
-    drag(grip, { start: () => ({ v: value }), move: (dx, dy, ev, c) => set(c.v + (dx / 4) * step) });
+    slider.addEventListener("input", () => set(+slider.value));
     input.addEventListener("change", () => { const v = parseFloat(input.value.replace(",", ".")); set(Number.isNaN(v) ? value : v); });
     input.addEventListener("keydown", (e) => {
       if (e.key === "ArrowUp" || e.key === "ArrowDown") { e.preventDefault(); e.stopPropagation(); set(value + (e.key === "ArrowUp" ? 1 : -1) * (e.shiftKey ? 10 : 1) * step); }

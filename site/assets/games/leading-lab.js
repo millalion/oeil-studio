@@ -25,24 +25,25 @@
   }
 
   Oeil.play({
-    id: "leading-lab", name: "Leading Lab",
+    id: "leading-lab", name: "Leading Lab", levels: true,
     howto: [
       { icon: "format_line_spacing", text: "L'interlignage, c'est l'espace entre deux lignes de texte. Trop serré, les lignes se collent ; trop lâche, le paragraphe se disloque." },
       { icon: "height", text: "Attrape la poignée rose à gauche du texte et glisse-la vers le bas pour écarter les lignes, vers le haut pour les rapprocher." },
-      { icon: "tune", text: "Dans le panneau, règle la hauteur de ligne et l'interlettrage en %, comme dans Figma : glisse sur le libellé ou tape la valeur." },
+      { icon: "tune", text: "En mode Avancé, le panneau ajoute l'interlettrage, en %, comme dans Figma." },
       { icon: "article", text: "L'usage est indiqué en haut (texte courant, titre, légende…). Plusieurs réglages sont acceptés." },
     ],
-    brief: (s) => `${s.c.name} en ${s.c.size} px : règle la hauteur de ligne et l'interlettrage.`,
-    setup(round) {
+    brief: (s) => (s.adv ? `${s.c.name} en ${s.c.size} px : règle la hauteur de ligne et l'interlettrage.` : `${s.c.name} (${s.c.size} px) : écarte ou rapproche les lignes pour qu'elles soient confortables à lire.`),
+    setup(round, api) {
       const k = KINDS[round % KINDS.length];
       const c = { ...k, size: Oeil.pick(k.sizes) };
       const off = Math.random() < 0.5 ? -1 : 1;
       const lh = Oeil.clamp((off < 0 ? c.min : c.max) + off * (0.22 + Math.random() * 0.3), 0.75, 2.4);
-      const ls = Oeil.pick([c.track[0] - Oeil.randi(2, 3), c.track[1] + Oeil.randi(2, 3)]);
-      return { c, lh: Math.round(lh * 100) / 100, ls };
+      const adv = api.level === "adv";
+      const ls = adv ? Oeil.pick([c.track[0] - Oeil.randi(2, 3), c.track[1] + Oeil.randi(2, 3)]) : (c.track[0] + c.track[1]) / 2;
+      return { c, adv, lh: Math.round(lh * 100) / 100, ls };
     },
     mount(board, s, api) {
-      const shell = api.h("div", "insp-wrap"), panel = api.h("div", "insp", `<p class="insp-title">Texte</p><p class="insp-row"><span>Corps</span><b>${s.c.size} px</b></p>`);
+      const shell = api.h("div", "insp-wrap" + (s.adv ? "" : " is-plain")), panel = api.h("div", "insp", `<p class="insp-title">Texte</p><p class="insp-row"><span>Corps</span><b>${s.c.size} px</b></p>`);
       s.fLh = Oeil.field({ label: "Hauteur de ligne", unit: "%", min: 75, max: 260, value: Math.round(s.lh * 100), onChange: (v) => { s.lh = v / 100; apply(s); } });
       s.fLs = Oeil.field({ label: "Interlettrage", unit: "%", min: -8, max: 8, step: 0.1, value: s.ls, onChange: (v) => { s.ls = v; apply(s); } });
       panel.append(s.fLh.el, s.fLs.el);
@@ -80,12 +81,11 @@
       const pc = (x) => `${Math.round(x * 100)} %`, fr = (x) => `${x.toFixed(1).replace(".", ",")} %`;
       const [t0, t1] = s.c.track, tOk = s.ls >= t0 - 0.05 && s.ls <= t1 + 0.05, tDist = tOk ? 0 : s.ls < t0 ? t0 - s.ls : s.ls - t1;
       return {
-        score: 0.7 * (inside ? 100 : Math.max(0, 100 - dist * 260)) + 0.3 * Math.max(0, 100 - tDist * 40),
+        score: (s.adv ? 0.7 : 1) * (inside ? 100 : Math.max(0, 100 - dist * 260)) + (s.adv ? 0.3 * Math.max(0, 100 - tDist * 40) : 0),
         metrics: [
           { label: "Hauteur de ligne", value: `${pc(s.lh)} (${Math.round(s.lh * s.c.size)} px)`, good: inside },
           { label: "Plage conseillée", value: `${pc(min)} à ${pc(max)}` },
-          { label: "Interlettrage", value: fr(s.ls), good: tOk },
-          { label: "Plage conseillée", value: `${fr(t0)} à ${fr(t1)}` },
+          ...(s.adv ? [{ label: "Interlettrage", value: fr(s.ls), good: tOk }, { label: "Plage conseillée", value: `${fr(t0)} à ${fr(t1)}` }] : []),
         ],
         principle: s.c.tip,
       };

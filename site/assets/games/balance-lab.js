@@ -37,7 +37,7 @@
     s.movEl.style.left = `${s.pos.x - s.mov.w / 2}px`; s.movEl.style.top = `${s.pos.y - s.mov.h / 2}px`;
     // Le cadre est posé sur une pointe : il penche du côté où il y a trop de poids
     const c = centroid(s, s.pos);
-    s.tilt = Oeil.clamp((c.x - TX) * 0.22, -9, 9);
+    s.tilt = s.adv && !s.done ? 0 : Oeil.clamp((c.x - TX) * 0.22, -9, 9);
     s.frame.style.transform = `translate(-50%, -50%) scale(${s.k}) rotate(${s.tilt}deg)`;
   }
   function fit(board, s) {
@@ -47,14 +47,14 @@
   }
 
   Oeil.play({
-    id: "balance-lab", name: "Balance Lab",
+    id: "balance-lab", name: "Balance Lab", levels: true,
     howto: [
       { icon: "balance", text: "Ta composition est posée sur une pointe : elle penche du côté le plus lourd." },
       { icon: "drag_pan", text: "Déplace le disque pointillé pour la remettre à plat." },
       { icon: "lightbulb", text: "Comme sur une balance : un petit poids loin du centre compense un gros poids proche." },
     ],
-    brief: "La composition penche : déplace le disque pointillé pour la remettre à plat.",
-    setup() { return makeRound(); },
+    brief: (s) => (s.adv ? "Sans aide : équilibre la composition à l'œil en déplaçant le disque pointillé." : "La composition penche : déplace le disque pointillé pour la remettre à plat."),
+    setup(round, api) { return { ...makeRound(), adv: api.level === "adv" }; },
     mount(board, s, api) {
       s.frame = api.h("div", "bl-frame");
       s.frame.style.cssText = `width:${FW}px;height:${FH}px`;
@@ -108,9 +108,12 @@
     },
     reveal(board, s, r, api) {
       s.movEl.classList.remove("grab");
-      // Ton disque reste marqué en pointillé, le disque revient à la position qui équilibre
-      s.frame.insertAdjacentHTML("beforeend", `<span class="bl-ghost" style="left:${s.pos.x - s.mov.w / 2}px;top:${s.pos.y - s.mov.h / 2}px;width:${s.mov.w}px;height:${s.mov.h}px"></span>`);
-      s.pos = { ...s.target }; place(s);
+      s.done = true;
+      // Le disque glisse sur la position qui équilibre ; si tu en étais loin, ta position reste marquée
+      if (Math.abs(s.pos.x - s.target.x) > 12) s.frame.insertAdjacentHTML("beforeend", `<span class="bl-ghost" style="left:${s.pos.x - s.mov.w / 2}px;top:${s.pos.y - s.mov.h / 2}px;width:${s.mov.w}px;height:${s.mov.h}px"><span class="tag-you">Ta position</span></span>`);
+      // Seule la position horizontale compte : le disque garde sa hauteur
+      const centerX = s.pos.x + (TX - centroid(s, s.pos).x) * (s.fixed.reduce((a, o) => a + mass(o), 0) + mass(s.mov)) / mass(s.mov);
+      s.pos = { x: Oeil.clamp(centerX, s.mov.w / 2, FW - s.mov.w / 2), y: s.pos.y }; place(s);
     },
   });
 })();
